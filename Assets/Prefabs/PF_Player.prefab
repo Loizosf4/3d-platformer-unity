@@ -148,6 +148,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8137904099589009306}
   - component: {fileID: 6195767068460698057}
+  - component: {fileID: 5121583129836092809}
+  - component: {fileID: 7219574011954472574}
   m_Layer: 8
   m_Name: PF_Player
   m_TagString: Untagged
@@ -198,3 +200,46 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &5121583129836092809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5737800785262966541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e423475c0b4aca4691c49cc51cb9b38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actions: {fileID: -944628639613478452, guid: e4ac78cb8f2d92d4ba24af6b264c4256, type: 3}
+  actionMapName: Gameplay
+  moveActionName: Move
+  jumpActionName: Jump
+--- !u!114 &7219574011954472574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5737800785262966541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d0ec5b74842c14db9bdcf554018500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input: {fileID: 5121583129836092809}
+  cameraTransform: {fileID: 0}
+  cameraTarget: {fileID: 6899242699806718272}
+  maxMoveSpeed: 7
+  acceleration: 25
+  deceleration: 30
+  airControlMultiplier: 0.6
+  rotationSpeed: 12
+  gravity: -25
+  jumpHeight: 1.6
+  coyoteTime: 0.12
+  jumpBufferTime: 0.12
+  variableJumpHeight: 1
+  jumpCutGravityMultiplier: 2.2
+  groundedStickForce: -2
