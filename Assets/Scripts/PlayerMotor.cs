@@ -53,6 +53,46 @@ public class PlayerMotorCC : MonoBehaviour
     private float _dashCooldownTimer;
     private Vector3 _dashDirection;
 
+    [Header("Wall Jump (Unlockable)")]
+    [SerializeField] private bool wallJumpUnlocked = false;
+
+    [Tooltip("Which layers count as walls for wall jumping.")]
+    [SerializeField] private LayerMask wallLayers;
+
+    [Tooltip("How far to check for a wall from the player's center.")]
+    [SerializeField] private float wallCheckDistance = 0.6f;
+
+    [Tooltip("Vertical offset for the wall check (relative to player position).")]
+    [SerializeField] private float wallCheckHeightOffset = 0.9f;
+
+    [Tooltip("How long after leaving a wall you can still wall jump.")]
+    [SerializeField] private float wallCoyoteTime = 0.12f;
+
+    [Tooltip("Horizontal push away from the wall.")]
+    [SerializeField] private float wallJumpHorizontalForce = 8f;
+
+    [Tooltip("Vertical jump velocity added when wall jumping.")]
+    [SerializeField] private float wallJumpUpwardVelocity = 9f;
+
+    [Tooltip("Seconds to lock movement input after wall jump (helps control).")]
+    [SerializeField] private float wallJumpInputLockTime = 0.10f;
+
+    [Tooltip("If true, wall jump direction is away from wall normal. If false, uses player forward + up.")]
+    [SerializeField] private bool wallJumpUsesWallNormal = true;
+
+    private float _wallCoyoteTimer;
+    private bool _isTouchingWall;
+    private Vector3 _lastWallNormal;
+
+    // Mario-style rule: only one wall jump per wall contact
+    private bool _wallJumpConsumedThisContact;
+
+    private float _wallJumpInputLockTimer;
+    private bool _wasTouchingWall;
+    private Collider _currentWallCollider;
+
+
+
 
     [Header("Jump Feel")]
     [Tooltip("How long after leaving ground you can still jump.")]
@@ -120,6 +160,7 @@ public class PlayerMotorCC : MonoBehaviour
         }
 
         UpdateTimers();
+        UpdateWallCheck();
         TryStartDash();     // dash check happens before movement/jump
         HandleMovement();
         HandleJump();
@@ -156,6 +197,21 @@ public class PlayerMotorCC : MonoBehaviour
 
     private void HandleMovement()
     {
+        if (_wallJumpInputLockTimer > 0f)
+        {
+            _wallJumpInputLockTimer -= Time.deltaTime;
+
+            // Still rotate to movement direction if we have velocity
+            Vector3 faceDirLocked = new Vector3(_planarVelocity.x, 0f, _planarVelocity.z);
+            if (faceDirLocked.sqrMagnitude > 0.0001f)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(faceDirLocked, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+            }
+
+            return;
+        }
+
         Vector2 moveInput = input.Move;
         Vector3 desiredDir = new Vector3(moveInput.x, 0f, moveInput.y);
 
@@ -200,6 +256,13 @@ public class PlayerMotorCC : MonoBehaviour
         // Ground / coyote jump
         bool canCoyoteJump = _coyoteTimer > 0f;
 
+        // Wall jump
+        bool canWallJump =
+            wallJumpUnlocked &&
+            !_cc.isGrounded &&
+            _wallCoyoteTimer > 0f &&
+            !_wallJumpConsumedThisContact;
+
         // Air jump (double jump)
         bool canAirJump = !_cc.isGrounded && _extraJumpsRemaining > 0;
 
@@ -210,6 +273,18 @@ public class PlayerMotorCC : MonoBehaviour
                 DoJump();
                 _jumpBufferTimer = 0f;
                 _coyoteTimer = 0f;
+            }
+            else if (canWallJump)
+            {
+                DoWallJump();
+                _jumpBufferTimer = 0f;
+
+                // Consume for this wall contact (Mario rule)
+                _wallJumpConsumedThisContact = true;
+                _wallCoyoteTimer = 0f;
+
+                // Reset double jump after wall jump
+                _extraJumpsRemaining = doubleJumpUnlocked ? Mathf.Max(0, extraJumpsAllowed) : 0;
             }
             else if (canAirJump)
             {
@@ -222,16 +297,33 @@ public class PlayerMotorCC : MonoBehaviour
         // Variable jump height (jump cut)
         if (variableJumpHeight && !input.JumpHeld && _velocity.y > 0f)
         {
-            // Apply extra gravity while rising if jump released early
             _velocity.y += gravity * (jumpCutGravityMultiplier - 1f) * Time.deltaTime;
         }
     }
+
 
     private void DoJump()
     {
         // v = sqrt(2 * h * -g)
         float jumpVelocity = Mathf.Sqrt(2f * jumpHeight * -gravity);
         _velocity.y = jumpVelocity;
+    }
+
+
+    private void DoWallJump()
+    {
+        Vector3 away = wallJumpUsesWallNormal ? _lastWallNormal : -transform.forward;
+        away.y = 0f;
+        away.Normalize();
+
+        // Horizontal push away from the wall
+        _planarVelocity = away * wallJumpHorizontalForce;
+
+        // Vertical boost
+        _velocity.y = wallJumpUpwardVelocity;
+
+        // Lock movement input briefly for better feel
+        _wallJumpInputLockTimer = wallJumpInputLockTime;
     }
 
 
@@ -338,6 +430,82 @@ public class PlayerMotorCC : MonoBehaviour
             // Small grounded stick if we ended dash on ground
             if (_cc.isGrounded && _velocity.y < 0f)
                 _velocity.y = groundedStickForce;
+        }
+    }
+
+    private void UpdateWallCheck()
+    {
+        if (!wallJumpUnlocked)
+        {
+            _wasTouchingWall = false;
+            _currentWallCollider = null;
+            _isTouchingWall = false;
+            _wallCoyoteTimer -= Time.deltaTime;
+            return;
+        }
+
+        bool foundWall = false;
+        Vector3 bestNormal = Vector3.zero;
+        Collider bestCollider = null;
+
+        Vector3 origin = transform.position + Vector3.up * wallCheckHeightOffset;
+
+        // Check in 4 directions around the player
+        Vector3[] dirs =
+        {
+        transform.forward,
+        -transform.forward,
+        transform.right,
+        -transform.right
+    };
+
+        float bestScore = float.NegativeInfinity;
+
+        for (int i = 0; i < dirs.Length; i++)
+        {
+            if (Physics.Raycast(origin, dirs[i], out RaycastHit hit, wallCheckDistance, wallLayers, QueryTriggerInteraction.Ignore))
+            {
+                foundWall = true;
+
+                // Score to pick the "best" wall hit (stable choice)
+                float score = -hit.distance; // prefer closer
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestNormal = hit.normal;
+                    bestCollider = hit.collider;
+                }
+            }
+        }
+
+        _isTouchingWall = foundWall;
+
+        if (_isTouchingWall)
+        {
+            // Determine if this is a NEW wall contact (enter) or a DIFFERENT wall
+            bool enteredWallThisFrame = !_wasTouchingWall;
+            bool switchedToDifferentWall = (_currentWallCollider != null && bestCollider != _currentWallCollider);
+
+            _lastWallNormal = bestNormal != Vector3.zero ? bestNormal : _lastWallNormal;
+            _wallCoyoteTimer = wallCoyoteTime;
+
+            if (enteredWallThisFrame || switchedToDifferentWall)
+            {
+                // Only reset "consumed" when you newly contact a wall (or change walls)
+                _wallJumpConsumedThisContact = false;
+            }
+
+            _currentWallCollider = bestCollider;
+            _wasTouchingWall = true;
+        }
+        else
+        {
+            // Not touching a wall this frame
+            _wallCoyoteTimer -= Time.deltaTime;
+
+            // If we fully left the wall, clear current collider so next touch counts as a new contact
+            _wasTouchingWall = false;
+            _currentWallCollider = null;
         }
     }
 
