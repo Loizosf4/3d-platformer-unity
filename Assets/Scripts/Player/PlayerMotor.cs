@@ -658,9 +658,13 @@ public class PlayerMotorCC : MonoBehaviour
         _velocity.y = 0f;
 
         // Optional: also reset these if you want ZERO launch/momentum at all
-        // _extraUpwardVelocity = 0f;
+        _extraUpwardVelocity = 0f;
         // _planarVelocity = Vector3.zero;
     }
+
+    public void UnlockDoubleJump() => doubleJumpUnlocked = true;
+    public void UnlockDash() => dashUnlocked = true;
+    public void UnlockWallJump() => wallJumpUnlocked = true;
 
 
 }

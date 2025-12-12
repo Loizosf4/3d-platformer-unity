@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 6195767068460698057}
   - component: {fileID: 5121583129836092809}
   - component: {fileID: 7219574011954472574}
+  - component: {fileID: 6470620357848056396}
   m_Layer: 8
   m_Name: PF_Player
   m_TagString: Untagged
@@ -216,6 +217,8 @@ MonoBehaviour:
   actionMapName: Gameplay
   moveActionName: Move
   jumpActionName: Jump
+  dashActionName: Dash
+  interactActionName: Interact
 --- !u!114 &7219574011954472574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,10 +239,41 @@ MonoBehaviour:
   deceleration: 30
   airControlMultiplier: 0.6
   rotationSpeed: 12
+  doubleJumpUnlocked: 0
+  extraJumpsAllowed: 1
   gravity: -25
   jumpHeight: 1.6
+  dashUnlocked: 0
+  dashSpeed: 16
+  dashDuration: 0.18
+  dashCooldown: 0.6
+  dashUsesMoveInput: 1
+  dashPreserveVerticalVelocity: 0
+  wallJumpUnlocked: 0
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  wallCheckDistance: 0.6
+  wallCheckHeightOffset: 0.9
+  wallCoyoteTime: 0.12
+  wallJumpHorizontalForce: 8
+  wallJumpUpwardVelocity: 9
+  wallJumpInputLockTime: 0.1
+  wallJumpUsesWallNormal: 1
   coyoteTime: 0.12
   jumpBufferTime: 0.12
   variableJumpHeight: 1
   jumpCutGravityMultiplier: 2.2
   groundedStickForce: -2
+--- !u!114 &6470620357848056396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5737800785262966541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9eb70e7b6c349a43a4dc1e62f0a7f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

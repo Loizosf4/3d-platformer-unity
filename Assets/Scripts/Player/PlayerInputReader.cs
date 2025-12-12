@@ -19,6 +19,9 @@ public class PlayerInputReader : MonoBehaviour
     [Tooltip("Action name for Dash (Button).")]
     [SerializeField] private string dashActionName = "Dash";
 
+    [Tooltip("Action name for Interact (Button).")]
+    [SerializeField] private string interactActionName = "Interact";
+
     public Vector2 Move { get; private set; }
 
     public bool JumpPressedThisFrame { get; private set; }
@@ -27,9 +30,12 @@ public class PlayerInputReader : MonoBehaviour
     public bool DashPressedThisFrame { get; private set; }
     public bool DashHeld { get; private set; }
 
+    public bool InteractPressedThisFrame { get; private set; }
+
     private InputAction _moveAction;
     private InputAction _jumpAction;
     private InputAction _dashAction;
+    private InputAction _interactAction;
 
     private void OnEnable()
     {
@@ -40,19 +46,24 @@ public class PlayerInputReader : MonoBehaviour
         }
 
         var map = actions.FindActionMap(actionMapName, true);
+
         _moveAction = map.FindAction(moveActionName, true);
         _jumpAction = map.FindAction(jumpActionName, true);
         _dashAction = map.FindAction(dashActionName, true);
+        _interactAction = map.FindAction(interactActionName, true);
 
         _moveAction.Enable();
         _jumpAction.Enable();
         _dashAction.Enable();
+        _interactAction.Enable();
 
         _jumpAction.started += OnJumpStarted;
         _jumpAction.canceled += OnJumpCanceled;
 
         _dashAction.started += OnDashStarted;
         _dashAction.canceled += OnDashCanceled;
+
+        _interactAction.started += OnInteractStarted;
     }
 
     private void OnDisable()
@@ -68,6 +79,11 @@ public class PlayerInputReader : MonoBehaviour
             _dashAction.started -= OnDashStarted;
             _dashAction.canceled -= OnDashCanceled;
         }
+
+        if (_interactAction != null)
+        {
+            _interactAction.started -= OnInteractStarted;
+        }
     }
 
     private void Update()
@@ -78,9 +94,9 @@ public class PlayerInputReader : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Clear one-frame press flags here so they're valid for the whole Update of other scripts.
         JumpPressedThisFrame = false;
         DashPressedThisFrame = false;
+        InteractPressedThisFrame = false;
     }
 
     private void OnJumpStarted(InputAction.CallbackContext ctx)
@@ -103,6 +119,11 @@ public class PlayerInputReader : MonoBehaviour
     private void OnDashCanceled(InputAction.CallbackContext ctx)
     {
         DashHeld = false;
+    }
+
+    private void OnInteractStarted(InputAction.CallbackContext ctx)
+    {
+        InteractPressedThisFrame = true;
     }
 
     public void AssignActions(InputActionAsset newActions) => actions = newActions;
