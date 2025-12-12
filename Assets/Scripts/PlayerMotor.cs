@@ -585,6 +585,19 @@ public class PlayerMotorCC : MonoBehaviour
         _extraUpwardVelocity += upwardVel;
     }
     
+    public void AddDirectionalForce(Vector3 force)
+    {
+        // Add horizontal force to planar velocity
+        Vector3 horizontalForce = new Vector3(force.x, 0f, force.z);
+        _planarVelocity += horizontalForce;
+        
+        // Add vertical force separately
+        if (force.y != 0f)
+        {
+            _extraUpwardVelocity += force.y;
+        }
+    }
+    
     public void ApplyPlatformMovement(Vector3 movement)
     {
         _platformMovement = movement;
