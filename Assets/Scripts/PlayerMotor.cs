@@ -127,6 +127,10 @@ public class PlayerMotorCC : MonoBehaviour
     private float _iceEffect = 0f; // 0 = normal, 1 = full ice
     private float _iceEffectTimer = 0f;
 
+    // Gravity override (used by volumes)
+    private bool _gravityOverrideActive = false;
+    private float _gravityOverrideValue = -25f; // should be negative for "normal down" gravity
+    private float CurrentGravity => _gravityOverrideActive ? _gravityOverrideValue : gravity;
 
     private void Awake()
     {
@@ -188,9 +192,11 @@ public class PlayerMotorCC : MonoBehaviour
             // Reset extra jumps when grounded
             _extraJumpsRemaining = doubleJumpUnlocked ? Mathf.Max(0, extraJumpsAllowed) : 0;
 
-            // reset downward velocity so we "stick" to ground
-            if (_velocity.y < 0f)
+            // Stick to ground ONLY when gravity pulls DOWN.
+            // When gravity is reversed (positive), do NOT clamp to groundedStickForce.
+            if (CurrentGravity < 0f && _velocity.y < 0f)
                 _velocity.y = groundedStickForce;
+
         }
         else
         {
@@ -336,10 +342,17 @@ public class PlayerMotorCC : MonoBehaviour
         }
 
         // Variable jump height (jump cut)
-        if (variableJumpHeight && !input.JumpHeld && _velocity.y > 0f)
+        if (variableJumpHeight && !input.JumpHeld)
         {
-            _velocity.y += gravity * (jumpCutGravityMultiplier - 1f) * Time.deltaTime;
+            // If gravity is down (negative), cut when moving up (+y).
+            // If gravity is up (positive), cut when moving down (-y).
+            bool movingAgainstGravity = (CurrentGravity < 0f && _velocity.y > 0f) ||
+                                       (CurrentGravity > 0f && _velocity.y < 0f);
+
+            if (movingAgainstGravity)
+                _velocity.y += CurrentGravity * (jumpCutGravityMultiplier - 1f) * Time.deltaTime;
         }
+
     }
 
 
@@ -378,9 +391,12 @@ public class PlayerMotorCC : MonoBehaviour
     private void ApplyGravityAndMove()
     {
         // Apply gravity
-        _velocity.y += gravity * Time.deltaTime;
+        float g = _gravityOverrideActive ? _gravityOverrideValue : gravity;
+        _velocity.y += CurrentGravity * Time.deltaTime;
+
+
         // Add any external upward velocity (magnet platforms)
-        _velocity.y += _extraUpwardVelocity;
+        //_velocity.y += _extraUpwardVelocity;
 
         Vector3 totalMove = _planarVelocity;
         totalMove.y = _velocity.y;
@@ -395,7 +411,7 @@ public class PlayerMotorCC : MonoBehaviour
             _platformMovement = Vector3.zero; // Reset for next frame
         }
 
-        _extraUpwardVelocity = 0f;
+        //_extraUpwardVelocity = 0f;
 
     }
 
@@ -615,4 +631,37 @@ public class PlayerMotorCC : MonoBehaviour
             _speedMultiplierTimer = duration;
         }
     }
+    public void SetGravityOverride(float gravityValue)
+    {
+        _gravityOverrideActive = true;
+        _gravityOverrideValue = gravityValue;
+    }
+
+    public void ClearGravityOverride()
+    {
+        _gravityOverrideActive = false;
+    }
+
+    public void ResetAfterGravityVolumeExit(bool resetPlanar = false)
+    {
+        _gravityOverrideActive = false;   // same as ClearGravityOverride()
+        _velocity.y = 0f;
+        _extraUpwardVelocity = 0f;
+
+        if (resetPlanar)
+            _planarVelocity = Vector3.zero;
+    }
+
+
+    public void ResetVerticalVelocity()
+    {
+        _velocity.y = 0f;
+
+        // Optional: also reset these if you want ZERO launch/momentum at all
+        // _extraUpwardVelocity = 0f;
+        // _planarVelocity = Vector3.zero;
+    }
+
+
 }
+
