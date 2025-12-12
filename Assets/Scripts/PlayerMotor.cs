@@ -86,13 +86,9 @@ public class PlayerMotorCC : MonoBehaviour
 
     // Mario-style rule: only one wall jump per wall contact
     private bool _wallJumpConsumedThisContact;
-
     private float _wallJumpInputLockTimer;
     private bool _wasTouchingWall;
     private Collider _currentWallCollider;
-
-
-
 
     [Header("Jump Feel")]
     [Tooltip("How long after leaving ground you can still jump.")]
@@ -117,6 +113,13 @@ public class PlayerMotorCC : MonoBehaviour
     private Vector3 _planarVelocity;    // xz movement we smooth
     private float _coyoteTimer;
     private float _jumpBufferTimer;
+
+    // External modifiers (platforms, powerups)
+    private float _speedMultiplier = 1f;
+    private float _speedMultiplierTimer = 0f;
+
+    private float _extraUpwardVelocity = 0f; // used for magnet lift this frame
+
 
     private void Awake()
     {
@@ -193,6 +196,14 @@ public class PlayerMotorCC : MonoBehaviour
             _jumpBufferTimer = jumpBufferTime;
         else
             _jumpBufferTimer -= Time.deltaTime;
+
+        if (_speedMultiplierTimer > 0f)
+        {
+            _speedMultiplierTimer -= Time.deltaTime;
+            if (_speedMultiplierTimer <= 0f)
+                _speedMultiplier = 1f;
+        }
+
     }
 
     private void HandleMovement()
@@ -229,7 +240,9 @@ public class PlayerMotorCC : MonoBehaviour
         }
 
         float desiredMagnitude = Mathf.Clamp01(desiredDir.magnitude);
-        Vector3 desiredVelocity = desiredDir.normalized * (maxMoveSpeed * desiredMagnitude);
+
+        float currentSpeed = maxMoveSpeed * _speedMultiplier;
+        Vector3 desiredVelocity = desiredDir.normalized * (currentSpeed * desiredMagnitude);
 
         // Accel/decel
         float accel = (_planarVelocity.magnitude < desiredVelocity.magnitude) ? acceleration : deceleration;
@@ -332,12 +345,17 @@ public class PlayerMotorCC : MonoBehaviour
     {
         // Apply gravity
         _velocity.y += gravity * Time.deltaTime;
+        // Add any external upward velocity (magnet platforms)
+        _velocity.y += _extraUpwardVelocity;
 
         Vector3 totalMove = _planarVelocity;
         totalMove.y = _velocity.y;
 
         // CharacterController.Move expects displacement, not velocity
         _cc.Move(totalMove * Time.deltaTime);
+
+        _extraUpwardVelocity = 0f;
+
     }
 
     private void AutoHookCinemachine()
@@ -507,6 +525,17 @@ public class PlayerMotorCC : MonoBehaviour
             _wasTouchingWall = false;
             _currentWallCollider = null;
         }
+    }
+
+    public void ApplySpeedMultiplier(float multiplier, float duration)
+    {
+        _speedMultiplier = Mathf.Max(0.1f, multiplier);
+        _speedMultiplierTimer = Mathf.Max(0f, duration);
+    }
+
+    public void AddUpwardVelocityThisFrame(float upwardVel)
+    {
+        _extraUpwardVelocity += upwardVel;
     }
 
 }
