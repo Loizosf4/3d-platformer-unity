@@ -66,8 +66,6 @@ public class MovingPlatform : MonoBehaviour
         {
             _platformBounds = mainCollider.bounds;
         }
-        
-        Debug.Log("MovingPlatform initialized");
     }
     
     private void FixedUpdate()
@@ -167,26 +165,19 @@ public class MovingPlatform : MonoBehaviour
         
         Collider[] colliders = Physics.OverlapBox(center, halfExtents, transform.rotation);
         
-        Debug.Log($"Platform moved {_platformMovement.magnitude:F4}, found {colliders.Length} colliders nearby");
-        
         foreach (Collider col in colliders)
         {
             CharacterController cc = col.GetComponent<CharacterController>();
             if (cc != null)
             {
-                Debug.Log($"Found CharacterController: {cc.name}, isGrounded: {cc.isGrounded}");
-                
                 // Check if grounded on this platform using a raycast
                 RaycastHit hit;
                 Vector3 rayStart = cc.transform.position;
                 
                 if (Physics.Raycast(rayStart, Vector3.down, out hit, 2f))
                 {
-                    Debug.Log($"Raycast hit: {hit.collider.name}");
-                    
                     if (hit.collider != null && hit.collider.gameObject == gameObject)
                     {
-                        Debug.Log($"Player IS on platform! Moving by {_platformMovement}");
                         cc.Move(_platformMovement);
                     }
                 }

@@ -25,6 +25,7 @@ public class DisappearingPlatform : MonoBehaviour
     private float _timePlayerOnPlatform = 0f;
     private bool _isDisappeared = false;
     private float _disappearTimer = 0f;
+    private bool _disappearanceTriggered = false; // Track if disappearance has been initiated
     
     // Components
     private Collider _collider;
@@ -83,11 +84,16 @@ public class DisappearingPlatform : MonoBehaviour
         {
             if (!_playerOnPlatform)
             {
-                // Player just landed on platform
+                // Player just landed on platform - trigger inevitable disappearance
                 _playerOnPlatform = true;
                 _timePlayerOnPlatform = 0f;
+                _disappearanceTriggered = true;
             }
-            
+        }
+        
+        // Continue countdown even if player leaves once triggered
+        if (_disappearanceTriggered)
+        {
             _timePlayerOnPlatform += Time.fixedDeltaTime;
             
             // Visual feedback - blink when close to disappearing
@@ -106,21 +112,6 @@ public class DisappearingPlatform : MonoBehaviour
             if (_timePlayerOnPlatform >= timeBeforeDisappear)
             {
                 Disappear();
-            }
-        }
-        else
-        {
-            // Player left platform before it disappeared
-            if (_playerOnPlatform)
-            {
-                _playerOnPlatform = false;
-                _timePlayerOnPlatform = 0f;
-                
-                // Restore original color
-                if (_material != null)
-                {
-                    _material.color = _originalColor;
-                }
             }
         }
     }
@@ -161,6 +152,7 @@ public class DisappearingPlatform : MonoBehaviour
         _disappearTimer = 0f;
         _playerOnPlatform = false;
         _timePlayerOnPlatform = 0f;
+        _disappearanceTriggered = false; // Reset for next cycle
         
         // Disable collider so player falls through
         if (_collider != null)
@@ -247,6 +239,7 @@ public class DisappearingPlatform : MonoBehaviour
         _playerOnPlatform = false;
         _timePlayerOnPlatform = 0f;
         _disappearTimer = 0f;
+        _disappearanceTriggered = false;
         
         if (_collider != null) _collider.enabled = true;
         if (_renderer != null) _renderer.enabled = true;

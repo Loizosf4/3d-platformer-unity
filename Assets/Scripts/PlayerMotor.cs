@@ -322,7 +322,13 @@ public class PlayerMotorCC : MonoBehaviour
     {
         // v = sqrt(2 * h * -g)
         float jumpVelocity = Mathf.Sqrt(2f * jumpHeight * -gravity);
-        _velocity.y = jumpVelocity;
+        
+        // Only replace velocity if it would increase the upward speed
+        // This preserves trampoline momentum or other external upward forces
+        if (jumpVelocity > _velocity.y)
+        {
+            _velocity.y = jumpVelocity;
+        }
     }
 
 
