@@ -119,6 +119,9 @@ public class PlayerMotorCC : MonoBehaviour
     private float _speedMultiplierTimer = 0f;
 
     private float _extraUpwardVelocity = 0f; // used for magnet lift this frame
+    
+    // Platform movement support
+    private Vector3 _platformMovement = Vector3.zero;
 
 
     private void Awake()
@@ -353,6 +356,13 @@ public class PlayerMotorCC : MonoBehaviour
 
         // CharacterController.Move expects displacement, not velocity
         _cc.Move(totalMove * Time.deltaTime);
+        
+        // Apply platform movement if any
+        if (_platformMovement.sqrMagnitude > 0.0001f)
+        {
+            _cc.Move(_platformMovement);
+            _platformMovement = Vector3.zero; // Reset for next frame
+        }
 
         _extraUpwardVelocity = 0f;
 
@@ -537,6 +547,10 @@ public class PlayerMotorCC : MonoBehaviour
     {
         _extraUpwardVelocity += upwardVel;
     }
+    
+    public void ApplyPlatformMovement(Vector3 movement)
+    {
+        _platformMovement = movement;
+    }
 
 }
-

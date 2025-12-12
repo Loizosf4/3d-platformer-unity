@@ -41,6 +41,13 @@ public class MovingPlatform : MonoBehaviour
     // Platform movement tracking for CharacterController
     private Vector3 _lastPosition;
     private Vector3 _platformVelocity;
+    private Vector3 _platformMovement;
+    
+    // Track objects on the platform
+    private System.Collections.Generic.HashSet<CharacterController> _controllersOnPlatform = new System.Collections.Generic.HashSet<CharacterController>();
+    
+    // Platform bounds for detection
+    private Bounds _platformBounds;
 
     private void Start()
     {
@@ -52,8 +59,17 @@ public class MovingPlatform : MonoBehaviour
         _endPosition = _startPosition + (moveDirection * moveDistance);
         
         _lastPosition = transform.position;
+        
+        // Get platform bounds
+        BoxCollider mainCollider = GetComponent<BoxCollider>();
+        if (mainCollider != null)
+        {
+            _platformBounds = mainCollider.bounds;
+        }
+        
+        Debug.Log("MovingPlatform initialized");
     }
-
+    
     private void FixedUpdate()
     {
         // Handle pause at endpoints
@@ -67,6 +83,7 @@ public class MovingPlatform : MonoBehaviour
                 _movingForward = !_movingForward;
             }
             _platformVelocity = Vector3.zero;
+            _platformMovement = Vector3.zero;
             return;
         }
 
@@ -124,18 +141,56 @@ public class MovingPlatform : MonoBehaviour
             transform.position = Vector3.Lerp(_startPosition, _endPosition, _progress);
         }
         
-        // Calculate platform velocity for moving objects
-        _platformVelocity = (transform.position - _lastPosition) / Time.fixedDeltaTime;
+        // Calculate platform movement
+        _platformMovement = transform.position - _lastPosition;
+        _platformVelocity = _platformMovement / Time.fixedDeltaTime;
         _lastPosition = transform.position;
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        // Move CharacterController-based objects (like the player) with the platform
-        CharacterController cc = other.GetComponent<CharacterController>();
-        if (cc != null)
+        
+        // Update platform bounds
+        BoxCollider mainCollider = GetComponent<BoxCollider>();
+        if (mainCollider != null)
         {
-            cc.Move(_platformVelocity * Time.fixedDeltaTime);
+            _platformBounds = mainCollider.bounds;
+        }
+        
+        // Immediately move any objects on the platform
+        MoveObjectsOnPlatform();
+    }
+    
+    private void MoveObjectsOnPlatform()
+    {
+        if (_platformMovement.sqrMagnitude < 0.0001f) return;
+        
+        // Create an overlap box slightly above the platform
+        Vector3 center = _platformBounds.center + Vector3.up * (_platformBounds.extents.y + 0.1f);
+        Vector3 halfExtents = new Vector3(_platformBounds.extents.x, 0.5f, _platformBounds.extents.z);
+        
+        Collider[] colliders = Physics.OverlapBox(center, halfExtents, transform.rotation);
+        
+        Debug.Log($"Platform moved {_platformMovement.magnitude:F4}, found {colliders.Length} colliders nearby");
+        
+        foreach (Collider col in colliders)
+        {
+            CharacterController cc = col.GetComponent<CharacterController>();
+            if (cc != null)
+            {
+                Debug.Log($"Found CharacterController: {cc.name}, isGrounded: {cc.isGrounded}");
+                
+                // Check if grounded on this platform using a raycast
+                RaycastHit hit;
+                Vector3 rayStart = cc.transform.position;
+                
+                if (Physics.Raycast(rayStart, Vector3.down, out hit, 2f))
+                {
+                    Debug.Log($"Raycast hit: {hit.collider.name}");
+                    
+                    if (hit.collider != null && hit.collider.gameObject == gameObject)
+                    {
+                        Debug.Log($"Player IS on platform! Moving by {_platformMovement}");
+                        cc.Move(_platformMovement);
+                    }
+                }
+            }
         }
     }
 
