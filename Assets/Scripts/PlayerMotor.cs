@@ -122,6 +122,10 @@ public class PlayerMotorCC : MonoBehaviour
     
     // Platform movement support
     private Vector3 _platformMovement = Vector3.zero;
+    
+    // Ice platform support
+    private float _iceEffect = 0f; // 0 = normal, 1 = full ice
+    private float _iceEffectTimer = 0f;
 
 
     private void Awake()
@@ -206,7 +210,14 @@ public class PlayerMotorCC : MonoBehaviour
             if (_speedMultiplierTimer <= 0f)
                 _speedMultiplier = 1f;
         }
-
+        
+        // Ice effect timer
+        if (_iceEffectTimer > 0f)
+        {
+            _iceEffectTimer -= Time.deltaTime;
+            if (_iceEffectTimer <= 0f)
+                _iceEffect = 0f;
+        }
     }
 
     private void HandleMovement()
@@ -239,16 +250,30 @@ public class PlayerMotorCC : MonoBehaviour
             camForward.Normalize();
             camRight.Normalize();
 
-            desiredDir = (camRight * desiredDir.x + camForward * desiredDir.z);
+            desiredDir = camRight * moveInput.x + camForward * moveInput.y;
         }
 
-        float desiredMagnitude = Mathf.Clamp01(desiredDir.magnitude);
-
+        float desiredMagnitude = Mathf.Clamp01(moveInput.magnitude);
         float currentSpeed = maxMoveSpeed * _speedMultiplier;
         Vector3 desiredVelocity = desiredDir.normalized * (currentSpeed * desiredMagnitude);
 
-        // Accel/decel
-        float accel = (_planarVelocity.magnitude < desiredVelocity.magnitude) ? acceleration : deceleration;
+        // Accel/decel - modified by ice effect
+        float baseAccel = (_planarVelocity.magnitude < desiredVelocity.magnitude) ? acceleration : deceleration;
+        float baseDecel = deceleration;
+        
+        // Ice reduces acceleration and deceleration dramatically
+        float iceMultiplier = 1f - (_iceEffect * 0.9f); // Ice reduces control by up to 90%
+        float accel = baseAccel * iceMultiplier;
+        
+        // On ice, deceleration is much lower (player keeps sliding)
+        if (_iceEffect > 0f)
+        {
+            float iceDecel = baseDecel * (0.1f + (1f - _iceEffect) * 0.9f); // Ice reduces decel by up to 90%
+            if (_planarVelocity.magnitude >= desiredVelocity.magnitude)
+            {
+                accel = iceDecel;
+            }
+        }
 
         // Air control
         if (!_cc.isGrounded)
@@ -460,6 +485,12 @@ public class PlayerMotorCC : MonoBehaviour
         if (_dashTimer <= 0f)
         {
             _isDashing = false;
+            
+            // If on ice, preserve dash momentum as planar velocity
+            if (_iceEffect > 0f)
+            {
+                _planarVelocity = new Vector3(dashVel.x, 0f, dashVel.z);
+            }
 
             // Small grounded stick if we ended dash on ground
             if (_cc.isGrounded && _velocity.y < 0f)
@@ -558,5 +589,17 @@ public class PlayerMotorCC : MonoBehaviour
     {
         _platformMovement = movement;
     }
-
+    
+    public void ApplyIceEffect(float slipperiness, float duration, float speedBoost = 1.0f)
+    {
+        _iceEffect = Mathf.Clamp01(slipperiness);
+        _iceEffectTimer = duration;
+        
+        // Apply speed boost while on ice
+        if (speedBoost > 1.0f)
+        {
+            _speedMultiplier = speedBoost;
+            _speedMultiplierTimer = duration;
+        }
+    }
 }
