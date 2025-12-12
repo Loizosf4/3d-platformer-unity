@@ -30,6 +30,30 @@ public class PlayerMotorCC : MonoBehaviour
     [SerializeField] private float gravity = -25f;
     [SerializeField] private float jumpHeight = 1.6f;
 
+    [Header("Dash (Unlockable)")]
+    [SerializeField] private bool dashUnlocked = false;
+
+    [Tooltip("Dash speed in meters/second.")]
+    [SerializeField] private float dashSpeed = 16f;
+
+    [Tooltip("How long the dash lasts (seconds).")]
+    [SerializeField] private float dashDuration = 0.18f;
+
+    [Tooltip("Cooldown after dash ends (seconds).")]
+    [SerializeField] private float dashCooldown = 0.6f;
+
+    [Tooltip("If true, dash direction uses input. If no input, dashes forward.")]
+    [SerializeField] private bool dashUsesMoveInput = true;
+
+    [Tooltip("If true, player keeps current vertical velocity during dash. If false, vertical is zeroed while dashing.")]
+    [SerializeField] private bool dashPreserveVerticalVelocity = false;
+
+    private bool _isDashing;
+    private float _dashTimer;
+    private float _dashCooldownTimer;
+    private Vector3 _dashDirection;
+
+
     [Header("Jump Feel")]
     [Tooltip("How long after leaving ground you can still jump.")]
     [SerializeField] private float coyoteTime = 0.12f;
@@ -84,11 +108,24 @@ public class PlayerMotorCC : MonoBehaviour
             return;
         }
 
+        // Cooldown timer
+        if (_dashCooldownTimer > 0f)
+            _dashCooldownTimer -= Time.deltaTime;
+
+        // If currently dashing, we override normal movement/jump/gravity
+        if (_isDashing)
+        {
+            UpdateDash();
+            return;
+        }
+
         UpdateTimers();
+        TryStartDash();     // dash check happens before movement/jump
         HandleMovement();
         HandleJump();
         ApplyGravityAndMove();
     }
+
 
     private void UpdateTimers()
     {
@@ -229,6 +266,78 @@ public class PlayerMotorCC : MonoBehaviour
         {
             vcam.Follow = cameraTarget;
             vcam.LookAt = cameraTarget;
+        }
+    }
+
+    private void TryStartDash()
+    {
+        if (!dashUnlocked) return;
+        if (!input.DashPressedThisFrame) return;
+        if (_dashCooldownTimer > 0f) return;
+
+        // Start dash
+        _isDashing = true;
+        _dashTimer = dashDuration;
+        _dashCooldownTimer = dashCooldown;
+
+        // Determine dash direction
+        Vector3 dir = transform.forward;
+
+        if (dashUsesMoveInput)
+        {
+            Vector2 moveInput = input.Move;
+            Vector3 desiredDir = new Vector3(moveInput.x, 0f, moveInput.y);
+
+            if (cameraTransform != null)
+            {
+                Vector3 camForward = cameraTransform.forward;
+                Vector3 camRight = cameraTransform.right;
+                camForward.y = 0f;
+                camRight.y = 0f;
+                camForward.Normalize();
+                camRight.Normalize();
+
+                desiredDir = (camRight * desiredDir.x + camForward * desiredDir.z);
+            }
+
+            if (desiredDir.sqrMagnitude > 0.0001f)
+                dir = desiredDir.normalized;
+        }
+
+        _dashDirection = dir;
+
+        // Optional: remove vertical motion during dash
+        if (!dashPreserveVerticalVelocity)
+            _velocity.y = 0f;
+    }
+
+    private void UpdateDash()
+    {
+        _dashTimer -= Time.deltaTime;
+
+        // Move during dash (ignore normal accel/decel & usually ignore gravity)
+        Vector3 dashVel = _dashDirection * dashSpeed;
+
+        if (dashPreserveVerticalVelocity)
+        {
+            // Still apply gravity if preserving vertical motion (optional feel)
+            _velocity.y += gravity * Time.deltaTime;
+            dashVel.y = _velocity.y;
+        }
+        else
+        {
+            dashVel.y = 0f;
+        }
+
+        _cc.Move(dashVel * Time.deltaTime);
+
+        if (_dashTimer <= 0f)
+        {
+            _isDashing = false;
+
+            // Small grounded stick if we ended dash on ground
+            if (_cc.isGrounded && _velocity.y < 0f)
+                _velocity.y = groundedStickForce;
         }
     }
 

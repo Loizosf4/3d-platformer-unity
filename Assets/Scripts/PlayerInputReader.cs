@@ -16,12 +16,20 @@ public class PlayerInputReader : MonoBehaviour
     [Tooltip("Action name for Jump (Button).")]
     [SerializeField] private string jumpActionName = "Jump";
 
+    [Tooltip("Action name for Dash (Button).")]
+    [SerializeField] private string dashActionName = "Dash";
+
     public Vector2 Move { get; private set; }
+
     public bool JumpPressedThisFrame { get; private set; }
     public bool JumpHeld { get; private set; }
 
+    public bool DashPressedThisFrame { get; private set; }
+    public bool DashHeld { get; private set; }
+
     private InputAction _moveAction;
     private InputAction _jumpAction;
+    private InputAction _dashAction;
 
     private void OnEnable()
     {
@@ -34,12 +42,17 @@ public class PlayerInputReader : MonoBehaviour
         var map = actions.FindActionMap(actionMapName, true);
         _moveAction = map.FindAction(moveActionName, true);
         _jumpAction = map.FindAction(jumpActionName, true);
+        _dashAction = map.FindAction(dashActionName, true);
 
         _moveAction.Enable();
         _jumpAction.Enable();
+        _dashAction.Enable();
 
         _jumpAction.started += OnJumpStarted;
         _jumpAction.canceled += OnJumpCanceled;
+
+        _dashAction.started += OnDashStarted;
+        _dashAction.canceled += OnDashCanceled;
     }
 
     private void OnDisable()
@@ -49,19 +62,25 @@ public class PlayerInputReader : MonoBehaviour
             _jumpAction.started -= OnJumpStarted;
             _jumpAction.canceled -= OnJumpCanceled;
         }
+
+        if (_dashAction != null)
+        {
+            _dashAction.started -= OnDashStarted;
+            _dashAction.canceled -= OnDashCanceled;
+        }
     }
 
     private void Update()
     {
-        JumpPressedThisFrame = false;
         if (_moveAction != null)
             Move = _moveAction.ReadValue<Vector2>();
     }
 
     private void LateUpdate()
     {
-        // LateUpdate is a good place to clear one-frame flags, but we already reset in Update.
-        // Keeping this here for clarity/extension.
+        // Clear one-frame press flags here so they're valid for the whole Update of other scripts.
+        JumpPressedThisFrame = false;
+        DashPressedThisFrame = false;
     }
 
     private void OnJumpStarted(InputAction.CallbackContext ctx)
@@ -75,8 +94,16 @@ public class PlayerInputReader : MonoBehaviour
         JumpHeld = false;
     }
 
-    public void AssignActions(InputActionAsset newActions)
+    private void OnDashStarted(InputAction.CallbackContext ctx)
     {
-        actions = newActions;
+        DashPressedThisFrame = true;
+        DashHeld = true;
     }
+
+    private void OnDashCanceled(InputAction.CallbackContext ctx)
+    {
+        DashHeld = false;
+    }
+
+    public void AssignActions(InputActionAsset newActions) => actions = newActions;
 }

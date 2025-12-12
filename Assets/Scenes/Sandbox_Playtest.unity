@@ -140,6 +140,10 @@ PrefabInstance:
       value: PF_Player
       objectReference: {fileID: 0}
     - target: {fileID: 7219574011954472574, guid: fcef7093e8b3e48449bf359142213582, type: 3}
+      propertyPath: dashUnlocked
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7219574011954472574, guid: fcef7093e8b3e48449bf359142213582, type: 3}
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 45259294}
