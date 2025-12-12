@@ -19,6 +19,14 @@ public class PlayerMotorCC : MonoBehaviour
     [SerializeField] private float rotationSpeed = 12f;
 
     [Header("Gravity & Jump")]
+    [Header("Double Jump (Unlockable)")]
+    [SerializeField] private bool doubleJumpUnlocked = false;
+
+    [Tooltip("How many extra jumps in the air (1 = double jump).")]
+    [SerializeField] private int extraJumpsAllowed = 1;
+
+    private int _extraJumpsRemaining;
+
     [SerializeField] private float gravity = -25f;
     [SerializeField] private float jumpHeight = 1.6f;
 
@@ -88,6 +96,10 @@ public class PlayerMotorCC : MonoBehaviour
         if (_cc.isGrounded)
         {
             _coyoteTimer = coyoteTime;
+
+            // Reset extra jumps when grounded
+            _extraJumpsRemaining = doubleJumpUnlocked ? Mathf.Max(0, extraJumpsAllowed) : 0;
+
             // reset downward velocity so we "stick" to ground
             if (_velocity.y < 0f)
                 _velocity.y = groundedStickForce;
@@ -96,6 +108,7 @@ public class PlayerMotorCC : MonoBehaviour
         {
             _coyoteTimer -= Time.deltaTime;
         }
+
 
         // Jump buffer
         if (input.JumpPressedThisFrame)
@@ -146,17 +159,27 @@ public class PlayerMotorCC : MonoBehaviour
     private void HandleJump()
     {
         bool wantsJump = _jumpBufferTimer > 0f;
-        bool canJump = _coyoteTimer > 0f;
 
-        if (wantsJump && canJump)
+        // Ground / coyote jump
+        bool canCoyoteJump = _coyoteTimer > 0f;
+
+        // Air jump (double jump)
+        bool canAirJump = !_cc.isGrounded && _extraJumpsRemaining > 0;
+
+        if (wantsJump)
         {
-            // consume buffer + coyote
-            _jumpBufferTimer = 0f;
-            _coyoteTimer = 0f;
-
-            // v = sqrt(2 * h * -g)
-            float jumpVelocity = Mathf.Sqrt(2f * jumpHeight * -gravity);
-            _velocity.y = jumpVelocity;
+            if (canCoyoteJump)
+            {
+                DoJump();
+                _jumpBufferTimer = 0f;
+                _coyoteTimer = 0f;
+            }
+            else if (canAirJump)
+            {
+                DoJump();
+                _jumpBufferTimer = 0f;
+                _extraJumpsRemaining--;
+            }
         }
 
         // Variable jump height (jump cut)
@@ -166,6 +189,15 @@ public class PlayerMotorCC : MonoBehaviour
             _velocity.y += gravity * (jumpCutGravityMultiplier - 1f) * Time.deltaTime;
         }
     }
+
+    private void DoJump()
+    {
+        // v = sqrt(2 * h * -g)
+        float jumpVelocity = Mathf.Sqrt(2f * jumpHeight * -gravity);
+        _velocity.y = jumpVelocity;
+    }
+
+
 
     private void ApplyGravityAndMove()
     {

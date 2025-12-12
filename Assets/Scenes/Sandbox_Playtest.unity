@@ -143,6 +143,10 @@ PrefabInstance:
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 45259294}
+    - target: {fileID: 7219574011954472574, guid: fcef7093e8b3e48449bf359142213582, type: 3}
+      propertyPath: doubleJumpUnlocked
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8137904099589009306, guid: fcef7093e8b3e48449bf359142213582, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
