@@ -181,15 +181,24 @@ public class PlayerMotorCC : MonoBehaviour
 
     private void AutoHookCinemachine()
     {
-        // Find a Cinemachine Virtual Camera and assign follow/lookAt to our cameraTarget
         if (cameraTarget == null) return;
 
-        CinemachineVirtualCamera vcam = FindObjectOfType<CinemachineVirtualCamera>();
+        // Works for both VirtualCamera and FreeLook
+        var freeLook = FindObjectOfType<CinemachineFreeLook>();
+        if (freeLook != null)
+        {
+            freeLook.Follow = cameraTarget;
+            freeLook.LookAt = cameraTarget;
+            return;
+        }
+
+        var vcam = FindObjectOfType<CinemachineVirtualCamera>();
         if (vcam != null)
         {
             vcam.Follow = cameraTarget;
             vcam.LookAt = cameraTarget;
         }
     }
+
 }
 
