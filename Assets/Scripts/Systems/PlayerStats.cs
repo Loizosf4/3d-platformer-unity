@@ -124,11 +124,13 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int amount = 1)
     {
-        if (amount <= 0) return;
-
         currentHearts = Mathf.Clamp(currentHearts - amount, 0, maxHearts);
+
+        Debug.Log($"[PlayerStats] TakeDamage -> Hearts now {currentHearts}");
+
         OnHeartsChanged?.Invoke(currentHearts, maxHearts);
     }
+
 
     public void Heal(int amount = 1)
     {

@@ -10,23 +10,17 @@ public class PlayerHealthController : MonoBehaviour
 
     [Header("Invincibility Frames")]
     [SerializeField] private float invincibilityDuration = 1.0f;
-
-    [Tooltip("Optional simple blink by toggling renderers.")]
     [SerializeField] private bool blinkDuringInvincibility = true;
-
     [SerializeField] private float blinkRate = 0.12f;
 
     [Header("Knockback (tune in Inspector)")]
     [SerializeField] private float knockbackHorizontalStrength = 8f;
     [SerializeField] private float knockbackVerticalStrength = 6f;
-
-    [Tooltip("Lock movement input briefly so knockback isn't overwritten.")]
     [SerializeField] private float knockbackControlLockTime = 0.18f;
 
-    [Header("Death Placeholder (until Checkpoints phase)")]
-    [SerializeField] private bool healAndLogOnDeath = true;
-
     private bool _invincible;
+    private bool _handlingDeath;
+
     private Coroutine _blinkRoutine;
     private Renderer[] _renderers;
 
@@ -35,7 +29,7 @@ public class PlayerHealthController : MonoBehaviour
         if (motor == null)
             motor = GetComponent<PlayerMotorCC>();
 
-        // Try to get stats in the most reliable way
+        // Always try to find stats reliably
         if (stats == null)
             stats = PlayerStats.Instance;
 
@@ -45,6 +39,58 @@ public class PlayerHealthController : MonoBehaviour
         _renderers = GetComponentsInChildren<Renderer>(true);
     }
 
+    private void OnEnable()
+    {
+        StartCoroutine(BindToStatsWhenReady());
+    }
+
+    private System.Collections.IEnumerator BindToStatsWhenReady()
+    {
+        // Try for up to 2 seconds (plenty)
+        float timeout = 2f;
+
+        while (stats == null && timeout > 0f)
+        {
+            stats = PlayerStats.Instance;
+            if (stats == null)
+                stats = FindObjectOfType<PlayerStats>(true);
+
+            if (stats != null)
+                break;
+
+            timeout -= Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        if (stats == null)
+        {
+            Debug.LogError("[PlayerHealthController] PlayerStats still not found after waiting. GameState is missing in this scene.");
+            yield break;
+        }
+
+        stats.OnHeartsChanged += OnHeartsChanged;
+        Debug.Log("[PlayerHealthController] Subscribed to PlayerStats.OnHeartsChanged");
+    }
+
+
+
+    private void OnDisable()
+    {
+        if (stats != null)
+            stats.OnHeartsChanged -= OnHeartsChanged;
+    }
+
+
+    private void OnHeartsChanged(int current, int max)
+    {
+        Debug.Log($"[PlayerHealthController] OnHeartsChanged -> {current}/{max}");
+
+        if (_handlingDeath) return;
+
+        if (current <= 0)
+            HandleDeath();
+    }
+
 
     public bool IsInvincible => _invincible;
 
@@ -52,22 +98,21 @@ public class PlayerHealthController : MonoBehaviour
     {
         if (amount <= 0) return;
         if (_invincible) return;
+        if (_handlingDeath) return;
 
         if (stats == null)
         {
             stats = PlayerStats.Instance;
-            if (stats == null)
-                stats = FindObjectOfType<PlayerStats>(true);
+            if (stats == null) stats = FindObjectOfType<PlayerStats>(true);
         }
 
         if (stats == null)
         {
-            Debug.LogError($"{nameof(PlayerHealthController)}: PlayerStats not found. Add GameState with PlayerStats to the scene.");
+            Debug.LogError($"{nameof(PlayerHealthController)}: PlayerStats not found. Make sure GameState exists.");
             return;
         }
 
-
-        // 1) Apply damage to numbers
+        // 1) Numbers
         stats.TakeDamage(amount);
 
         // 2) Knockback away from source (XZ) + upward
@@ -80,25 +125,34 @@ public class PlayerHealthController : MonoBehaviour
         away.Normalize();
 
         Vector3 impulse = away * knockbackHorizontalStrength + Vector3.up * knockbackVerticalStrength;
-
-        // Uses the new motor method we added
         motor.ApplyExternalImpulse(impulse, knockbackControlLockTime);
 
-        // 3) Invincibility frames
+        // 3) I-frames
         StartInvincibility(invincibilityDuration);
+    }
 
-        // 4) Temporary death behavior (real respawn next phase)
-        if (stats.CurrentHearts <= 0)
-        {
+    private void HandleDeath()
+    {
+        _handlingDeath = true;
+
+        // Stop invincibility visuals
+        StopInvincibilityVisuals();
+
+        if (stats != null)
             stats.RegisterDeath();
 
-            if (RespawnManager.Instance != null)
-                RespawnManager.Instance.RespawnPlayer(gameObject);
-            else
-                stats.FullHeal();
+        if (RespawnManager.Instance != null)
+        {
+            RespawnManager.Instance.RespawnPlayer(gameObject);
+        }
+        else
+        {
+            // Fallback: at least heal so you aren't stuck at 0
+            if (stats != null) stats.FullHeal();
+            Debug.LogWarning("[PlayerHealthController] RespawnManager not found. FullHeal fallback used.");
         }
 
-
+        _handlingDeath = false;
     }
 
     private void StartInvincibility(float duration)
@@ -135,6 +189,18 @@ public class PlayerHealthController : MonoBehaviour
             float wait = Mathf.Max(0.02f, blinkRate);
             yield return new WaitForSeconds(wait);
             timer += wait;
+        }
+
+        SetRenderersVisible(true);
+        _invincible = false;
+    }
+
+    private void StopInvincibilityVisuals()
+    {
+        if (_blinkRoutine != null)
+        {
+            StopCoroutine(_blinkRoutine);
+            _blinkRoutine = null;
         }
 
         SetRenderersVisible(true);
