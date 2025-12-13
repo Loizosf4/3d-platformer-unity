@@ -132,6 +132,8 @@ public class PlayerMotorCC : MonoBehaviour
     private float _gravityOverrideValue = -25f; // should be negative for "normal down" gravity
     private float CurrentGravity => _gravityOverrideActive ? _gravityOverrideValue : gravity;
 
+    private float _externalControlLockTimer = 0f;
+
     private void Awake()
     {
         _cc = GetComponent<CharacterController>();
@@ -165,6 +167,10 @@ public class PlayerMotorCC : MonoBehaviour
         // Cooldown timer
         if (_dashCooldownTimer > 0f)
             _dashCooldownTimer -= Time.deltaTime;
+
+        if (_externalControlLockTimer > 0f)
+            _externalControlLockTimer -= Time.deltaTime;
+
 
         // If currently dashing, we override normal movement/jump/gravity
         if (_isDashing)
@@ -228,6 +234,20 @@ public class PlayerMotorCC : MonoBehaviour
 
     private void HandleMovement()
     {
+        if (_externalControlLockTimer > 0f)
+        {
+            // Still rotate to movement direction if we have velocity
+            Vector3 faceDirLocked = new Vector3(_planarVelocity.x, 0f, _planarVelocity.z);
+            if (faceDirLocked.sqrMagnitude > 0.0001f)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(faceDirLocked, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+            }
+
+            return;
+        }
+
+
         if (_wallJumpInputLockTimer > 0f)
         {
             _wallJumpInputLockTimer -= Time.deltaTime;
@@ -665,6 +685,12 @@ public class PlayerMotorCC : MonoBehaviour
     public void UnlockDoubleJump() => doubleJumpUnlocked = true;
     public void UnlockDash() => dashUnlocked = true;
     public void UnlockWallJump() => wallJumpUnlocked = true;
+
+    public void ApplyExternalImpulse(Vector3 impulse, float controlLockTime)
+    {
+        AddDirectionalForce(impulse);
+        _externalControlLockTimer = Mathf.Max(_externalControlLockTimer, Mathf.Max(0f, controlLockTime));
+    }
 
 
 }
