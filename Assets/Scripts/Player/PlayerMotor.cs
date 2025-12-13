@@ -692,6 +692,30 @@ public class PlayerMotorCC : MonoBehaviour
         _externalControlLockTimer = Mathf.Max(_externalControlLockTimer, Mathf.Max(0f, controlLockTime));
     }
 
+    public void ResetMovementState()
+    {
+        _planarVelocity = Vector3.zero;
+        _velocity = Vector3.zero;
+
+        _isDashing = false;
+        _dashTimer = 0f;
+
+        _externalControlLockTimer = 0f;
+        _wallJumpInputLockTimer = 0f;
+
+        _platformMovement = Vector3.zero;
+
+        // Clear wall timers (prevents instant wall jump after respawn)
+        _wallCoyoteTimer = 0f;
+        _isTouchingWall = false;
+        _wallJumpConsumedThisContact = false;
+        _wasTouchingWall = false;
+        _currentWallCollider = null;
+
+        // Clear buffered jump
+        _jumpBufferTimer = 0f;
+        _coyoteTimer = 0f;
+    }
 
 }
 

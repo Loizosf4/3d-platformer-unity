@@ -88,12 +88,17 @@ public class PlayerHealthController : MonoBehaviour
         StartInvincibility(invincibilityDuration);
 
         // 4) Temporary death behavior (real respawn next phase)
-        if (stats.CurrentHearts <= 0 && healAndLogOnDeath)
+        if (stats.CurrentHearts <= 0)
         {
             stats.RegisterDeath();
-            Debug.Log("[PlayerHealthController] Died (placeholder). Full heal for now. Respawn comes next phase.");
-            stats.FullHeal();
+
+            if (RespawnManager.Instance != null)
+                RespawnManager.Instance.RespawnPlayer(gameObject);
+            else
+                stats.FullHeal();
         }
+
+
     }
 
     private void StartInvincibility(float duration)

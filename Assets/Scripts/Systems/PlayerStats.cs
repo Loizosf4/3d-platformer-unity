@@ -42,6 +42,9 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Checkpoint")]
     [SerializeField] private CheckpointData lastCheckpoint;
+    [SerializeField] private bool hasCheckpoint = false;
+    public bool HasCheckpoint => hasCheckpoint;
+
 
     // ===== Public read-only accessors (useful for UI later) =====
     public int CurrentHearts => currentHearts;
@@ -154,6 +157,8 @@ public class PlayerStats : MonoBehaviour
         };
 
         lastCheckpoint = data;
+        hasCheckpoint = true;
+
         OnCheckpointChanged?.Invoke(lastCheckpoint);
     }
 
@@ -169,6 +174,8 @@ public class PlayerStats : MonoBehaviour
             position = position,
             rotation = rotation
         };
+        hasCheckpoint = true;
+
 
         OnCheckpointChanged?.Invoke(lastCheckpoint);
     }
