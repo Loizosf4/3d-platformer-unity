@@ -521,7 +521,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 20, y: -20}
-  m_SizeDelta: {x: 400, y: 200}
+  m_SizeDelta: {x: 500, y: 160}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &5452135911895219592
 CanvasRenderer:
@@ -1107,7 +1107,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2815351498040283034}
   - component: {fileID: 7422525982605502485}
-  - component: {fileID: 2878056840696221897}
   - component: {fileID: 5080421610597981708}
   m_Layer: 5
   m_Name: HeartsUI
@@ -1133,7 +1132,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &7422525982605502485
 MonoBehaviour:
@@ -1153,7 +1152,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 8
+  m_Spacing: 1
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -1161,20 +1160,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &2878056840696221897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6402758398922394169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
 --- !u!114 &5080421610597981708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1188,8 +1173,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heartSlotPrefab: {fileID: 4155307229863351617, guid: 27c2547cbe8ec3c418a610b4b10a7bc6, type: 3}
-  fullSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  emptySprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  fullSprite: {fileID: 0}
+  emptySprite: {fileID: 0}
+  fullColor: {r: 1, g: 1, b: 1, a: 1}
+  emptyColor: {r: 1, g: 1, b: 1, a: 0.25}
   maxSupportedHearts: 5
 --- !u!1 &8372198956346413539
 GameObject:
