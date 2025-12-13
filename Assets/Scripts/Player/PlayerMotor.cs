@@ -396,7 +396,7 @@ public class PlayerMotorCC : MonoBehaviour
 
 
         // Add any external upward velocity (magnet platforms)
-        //_velocity.y += _extraUpwardVelocity;
+        _velocity.y += _extraUpwardVelocity;
 
         Vector3 totalMove = _planarVelocity;
         totalMove.y = _velocity.y;
@@ -411,7 +411,7 @@ public class PlayerMotorCC : MonoBehaviour
             _platformMovement = Vector3.zero; // Reset for next frame
         }
 
-        //_extraUpwardVelocity = 0f;
+        _extraUpwardVelocity = 0f;
 
     }
 

@@ -4148,7 +4148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4567890123456789017, guid: b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1, type: 3}
       propertyPath: slipperiness
-      value: 1
+      value: 0.85
       objectReference: {fileID: 0}
     - target: {fileID: 4567890123456789017, guid: b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1, type: 3}
       propertyPath: speedMultiplier
