@@ -59,16 +59,19 @@ public class DamageBarrier : MonoBehaviour
     {
         _busy = true;
 
-        // Optional damage
-        bool canDamage = true;
-
-        if (useInvincibilityCheck && player.IsInvincible)
-            canDamage = false;
-
-        if (canDamage)
+        // Optional damage (only if damageAmount > 0)
+        if (damageAmount > 0)
         {
-            Vector3 src = useBarrierPositionAsHitSource ? transform.position : player.transform.position;
-            player.TryTakeDamage(src, Mathf.Max(1, damageAmount));
+            bool canDamage = true;
+
+            if (useInvincibilityCheck && player.IsInvincible)
+                canDamage = false;
+
+            if (canDamage)
+            {
+                Vector3 src = useBarrierPositionAsHitSource ? transform.position : player.transform.position;
+                player.TryTakeDamage(src, damageAmount);
+            }
         }
 
         // Respawn (even if invincible, if forceRespawn = true)

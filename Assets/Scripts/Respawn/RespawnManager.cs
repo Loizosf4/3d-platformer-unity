@@ -96,13 +96,22 @@ public class RespawnManager : MonoBehaviour
         var cc = player.GetComponent<CharacterController>();
         if (cc != null) cc.enabled = false;
 
-        // Clear motor velocity/state
+        // Clear motor velocity/state BEFORE teleport
         var motor = player.GetComponent<PlayerMotorCC>();
         if (motor != null)
             motor.ResetMovementState();
 
         player.transform.SetPositionAndRotation(pos, rot);
 
-        if (cc != null) cc.enabled = true;
+        if (cc != null) 
+        {
+            cc.enabled = true;
+            // Force CharacterController to clear its internal velocity
+            cc.Move(Vector3.zero);
+        }
+        
+        // Clear velocity again AFTER teleport to ensure no momentum carries over
+        if (motor != null)
+            motor.ResetMovementState();
     }
 }

@@ -696,9 +696,11 @@ public class PlayerMotorCC : MonoBehaviour
     {
         _planarVelocity = Vector3.zero;
         _velocity = Vector3.zero;
+        _extraUpwardVelocity = 0f;
 
         _isDashing = false;
         _dashTimer = 0f;
+        _dashCooldownTimer = 0f;
 
         _externalControlLockTimer = 0f;
         _wallJumpInputLockTimer = 0f;

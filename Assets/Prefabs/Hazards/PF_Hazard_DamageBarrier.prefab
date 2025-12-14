@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bae77d739ff399498720f1db271dd4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 1
+  damageAmount: 0
   forceRespawn: 1
   useInvincibilityCheck: 1
   respawnDelay: 0
