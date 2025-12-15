@@ -504,9 +504,14 @@ public class PlayerAnimator : MonoBehaviour
     
     private void HandleDash()
     {
-        // Could add dash animation state here
+        // Play running animation while dashing
+        if (_currentState == AnimState.Idle || _currentState == AnimState.Run)
+        {
+            TransitionTo(AnimState.Run, 0f);  // Instant transition to run
+        }
+        
         if (showDebugInfo)
-            Debug.Log("Dash triggered");
+            Debug.Log("Dash triggered - playing run animation");
     }
     
     private void HandleLand()
