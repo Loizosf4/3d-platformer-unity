@@ -424,7 +424,15 @@ public class PlayerAnimator : MonoBehaviour
             Debug.Log($"Animation: {_currentState} -> {newState} (duration: {duration}s)");
         }
         
-        _animator.CrossFadeInFixedTime(stateHash, duration);
+        // Use Play() for instant transitions, CrossFade for smooth ones
+        if (duration <= 0f)
+        {
+            _animator.Play(stateHash);
+        }
+        else
+        {
+            _animator.CrossFadeInFixedTime(stateHash, duration);
+        }
         _currentState = newState;
     }
     
