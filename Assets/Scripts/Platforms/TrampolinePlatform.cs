@@ -127,6 +127,9 @@ public class TrampolinePlatform : MonoBehaviour
                 _playerOnPlatform = true;
                 _isCompressed = true;
                 _hasLaunched = false;
+                
+                // Immediately notify the motor to lock animator (prevents landing animation glitch)
+                NotifyPlayerLandedOnTrampoline();
             }
             
             // Compress the platform
@@ -228,6 +231,28 @@ public class TrampolinePlatform : MonoBehaviour
         }
         
         return false;
+    }
+    
+    /// <summary>
+    /// Notify the player motor that they've landed on a trampoline.
+    /// This locks the animator to prevent landing animation from playing.
+    /// </summary>
+    private void NotifyPlayerLandedOnTrampoline()
+    {
+        Vector3 center = _platformBounds.center + Vector3.up * (_platformBounds.extents.y + 0.1f);
+        Vector3 halfExtents = new Vector3(_platformBounds.extents.x, 0.5f, _platformBounds.extents.z);
+        
+        Collider[] colliders = Physics.OverlapBox(center, halfExtents, transform.rotation);
+        
+        foreach (Collider col in colliders)
+        {
+            PlayerMotorCC motor = col.GetComponent<PlayerMotorCC>();
+            if (motor != null)
+            {
+                motor.OnLandOnTrampoline();
+                return;
+            }
+        }
     }
 
     private void LaunchPlayer()

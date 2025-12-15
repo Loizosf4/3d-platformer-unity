@@ -56,8 +56,8 @@ public class PlayerMotorCC : MonoBehaviour
     [Header("Wall Jump (Unlockable)")]
     [SerializeField] private bool wallJumpUnlocked = false;
 
-    [Tooltip("Which layers count as walls for wall jumping.")]
-    [SerializeField] private LayerMask wallLayers;
+    [Tooltip("Which layers count as walls for wall jumping. If empty, defaults to Default layer.")]
+    [SerializeField] private LayerMask wallLayers = 1;  // Default layer (bit 0)
 
     [Tooltip("How far to check for a wall from the player's center.")]
     [SerializeField] private float wallCheckDistance = 0.6f;
@@ -106,6 +106,9 @@ public class PlayerMotorCC : MonoBehaviour
     [Header("Grounding")]
     [Tooltip("Small downward force to keep controller grounded on slopes.")]
     [SerializeField] private float groundedStickForce = -2f;
+    
+    [Header("Debug")]
+    [SerializeField] private bool debugWallJump = false;
 
     private CharacterController _cc;
 
@@ -146,6 +149,12 @@ public class PlayerMotorCC : MonoBehaviour
     private bool _hasJumpedThisGrounding = false;  // Prevents double-triggering jump while grounded grace period is active
 
     // ========== ANIMATION EVENTS ==========
+    /// <summary>Invoked just before a launch (trampoline, etc.) to prepare the animator</summary>
+    public event System.Action OnPrepareLaunch;
+    
+    /// <summary>Invoked when player lands on a trampoline (to lock animator before launch)</summary>
+    public event System.Action OnTrampolineLand;
+    
     /// <summary>Invoked when the player jumps (ground, wall, or air jump)</summary>
     public event System.Action OnJump;
     
@@ -214,6 +223,16 @@ public class PlayerMotorCC : MonoBehaviour
     private void Start()
     {
         AutoHookCinemachine();
+        
+        // If wallLayers is not configured, default to Default layer
+        if (wallLayers == 0)
+        {
+            wallLayers = 1; // Default layer
+            Debug.LogWarning("[PlayerMotor] wallLayers was 0, defaulting to Default layer. Please configure Wall Layers in the Inspector.");
+        }
+        
+        // Debug info on start
+        Debug.Log($"[PlayerMotor] Started. wallJumpUnlocked={wallJumpUnlocked}, wallLayers={(int)wallLayers}, debugWallJump={debugWallJump}");
     }
 
     private void Update()
@@ -415,7 +434,7 @@ public class PlayerMotorCC : MonoBehaviour
         // Ground / coyote jump - also check we haven't already jumped this grounding
         bool canCoyoteJump = _coyoteTimer > 0f && !_hasJumpedThisGrounding;
 
-        // Wall jump
+        // Wall jump - check if we can wall jump
         bool canWallJump =
             wallJumpUnlocked &&
             !_cc.isGrounded &&
@@ -424,16 +443,20 @@ public class PlayerMotorCC : MonoBehaviour
 
         // Air jump (double jump)
         bool canAirJump = !_cc.isGrounded && _extraJumpsRemaining > 0;
+        
+        // Debug wall jump - ALWAYS log when jumping in air with wall jump unlocked
+        if (wantsJump && wallJumpUnlocked && !_cc.isGrounded)
+        {
+            Debug.Log($"[WallJump] JUMP ATTEMPT: wallCoyoteTimer={_wallCoyoteTimer:F2}, " +
+                     $"isTouchingWall={_isTouchingWall}, wallJumpConsumed={_wallJumpConsumedThisContact}, " +
+                     $"canWallJump={canWallJump}, wallLayers={(int)wallLayers}");
+        }
 
         if (wantsJump)
         {
-            if (canCoyoteJump)
-            {
-                DoJump();
-                _jumpBufferTimer = 0f;
-                _coyoteTimer = 0f;
-            }
-            else if (canWallJump)
+            // PRIORITY: Wall jump takes precedence when touching/near a wall
+            // This prevents coyote jump from "stealing" wall jumps
+            if (canWallJump)
             {
                 DoWallJump();
                 _jumpBufferTimer = 0f;
@@ -441,9 +464,16 @@ public class PlayerMotorCC : MonoBehaviour
                 // Consume for this wall contact (Mario rule)
                 _wallJumpConsumedThisContact = true;
                 _wallCoyoteTimer = 0f;
+                _coyoteTimer = 0f;  // Also clear coyote timer
 
                 // Reset double jump after wall jump
                 _extraJumpsRemaining = doubleJumpUnlocked ? Mathf.Max(0, extraJumpsAllowed) : 0;
+            }
+            else if (canCoyoteJump)
+            {
+                DoJump();
+                _jumpBufferTimer = 0f;
+                _coyoteTimer = 0f;
             }
             else if (canAirJump)
             {
@@ -644,6 +674,10 @@ public class PlayerMotorCC : MonoBehaviour
             _currentWallCollider = null;
             _isTouchingWall = false;
             _wallCoyoteTimer -= Time.deltaTime;
+            if (debugWallJump)
+            {
+                Debug.Log("[WallJump] wallJumpUnlocked is FALSE - wall jump disabled");
+            }
             return;
         }
 
@@ -656,19 +690,37 @@ public class PlayerMotorCC : MonoBehaviour
         // Check in 4 directions around the player
         Vector3[] dirs =
         {
-        transform.forward,
-        -transform.forward,
-        transform.right,
-        -transform.right
-    };
+            transform.forward,
+            -transform.forward,
+            transform.right,
+            -transform.right
+        };
 
         float bestScore = float.NegativeInfinity;
+        
+        // Use configured wallLayers, or ALL layers except Player (layer 8 typically) if not configured
+        LayerMask effectiveWallLayers = wallLayers;
+        if (wallLayers == 0 || wallLayers == 1)
+        {
+            // If default or not configured, use everything except triggers
+            // This is a broad check - configure wallLayers properly for production
+            effectiveWallLayers = ~0; // All layers
+        }
 
         for (int i = 0; i < dirs.Length; i++)
         {
-            if (Physics.Raycast(origin, dirs[i], out RaycastHit hit, wallCheckDistance, wallLayers, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(origin, dirs[i], out RaycastHit hit, wallCheckDistance, effectiveWallLayers, QueryTriggerInteraction.Ignore))
             {
+                // Skip if we hit ourselves
+                if (hit.collider.gameObject == gameObject || hit.collider.transform.IsChildOf(transform))
+                    continue;
+                    
                 foundWall = true;
+                
+                if (debugWallJump)
+                {
+                    Debug.Log($"[WallJump] Raycast HIT: {hit.collider.name} (layer={hit.collider.gameObject.layer}) dir={dirs[i]}, dist={hit.distance:F2}");
+                }
 
                 // Score to pick the "best" wall hit (stable choice)
                 float score = -hit.distance; // prefer closer
@@ -679,6 +731,11 @@ public class PlayerMotorCC : MonoBehaviour
                     bestCollider = hit.collider;
                 }
             }
+        }
+        
+        if (debugWallJump && !foundWall)
+        {
+            Debug.Log($"[WallJump] No wall found. wallLayers mask={(int)wallLayers}, checkDistance={wallCheckDistance}, origin={origin}");
         }
 
         _isTouchingWall = foundWall;
@@ -724,10 +781,20 @@ public class PlayerMotorCC : MonoBehaviour
     }
     
     /// <summary>
+    /// Called by trampoline when player first lands on it (before compression/launch).
+    /// This locks the animator to prevent landing animation from playing.
+    /// </summary>
+    public void OnLandOnTrampoline()
+    {
+        OnTrampolineLand?.Invoke();
+    }
+    
+    /// <summary>
     /// Trigger the jump animation event (useful for trampolines and other launchers)
     /// </summary>
     public void TriggerJumpAnimation()
     {
+        OnPrepareLaunch?.Invoke();  // Signal animator to lock state BEFORE jump
         OnJump?.Invoke();
     }
     
@@ -840,7 +907,11 @@ public class PlayerMotorCC : MonoBehaviour
 
     public void UnlockDoubleJump() => doubleJumpUnlocked = true;
     public void UnlockDash() => dashUnlocked = true;
-    public void UnlockWallJump() => wallJumpUnlocked = true;
+    public void UnlockWallJump()
+    {
+        wallJumpUnlocked = true;
+        Debug.Log($"[PlayerMotor] Wall Jump UNLOCKED! wallJumpUnlocked={wallJumpUnlocked}, wallLayers={(int)wallLayers}");
+    }
 
     public void ApplyExternalImpulse(Vector3 impulse, float controlLockTime)
     {
@@ -879,5 +950,41 @@ public class PlayerMotorCC : MonoBehaviour
         _coyoteTimer = 0f;
     }
 
+    // Debug visualization for wall jump raycasts
+    private void OnDrawGizmosSelected()
+    {
+        if (!wallJumpUnlocked && !debugWallJump) return;
+        
+        Vector3 origin = transform.position + Vector3.up * wallCheckHeightOffset;
+        
+        Vector3[] dirs = {
+            transform.forward,
+            -transform.forward,
+            transform.right,
+            -transform.right
+        };
+        
+        foreach (var dir in dirs)
+        {
+            if (Physics.Raycast(origin, dir, out RaycastHit hit, wallCheckDistance, ~0, QueryTriggerInteraction.Ignore))
+            {
+                // Hit something - green line to hit point, red from there
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(origin, hit.point);
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(hit.point, origin + dir * wallCheckDistance);
+                Gizmos.DrawWireSphere(hit.point, 0.05f);
+            }
+            else
+            {
+                // No hit - yellow line
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(origin, origin + dir * wallCheckDistance);
+            }
+        }
+        
+        // Draw origin point
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(origin, 0.1f);
+    }
 }
-

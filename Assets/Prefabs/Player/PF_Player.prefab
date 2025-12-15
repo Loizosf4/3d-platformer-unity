@@ -545,10 +545,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   motor: {fileID: 0}
+  inputReader: {fileID: 0}
   characterController: {fileID: 0}
-  speedSmoothTime: 0.1
+  inputDeadzone: 0.1
+  runThreshold: 0.1
   idleThreshold: 0.1
-  landingDelay: 0.05
+  fallVelocityThreshold: -0.1
+  jumpVelocityThreshold: 0.1
+  idleToRunDuration: 0.05
+  runToIdleDuration: 0.05
+  jumpTransitionDuration: 0.02
+  fallTransitionDuration: 0.05
+  landTransitionDuration: 0.02
+  speedSmoothTime: 0.1
+  minAirTimeForLand: 0.1
+  skipLandIfMoving: 1
+  groundedVelocityTolerance: 2
+  groundedGracePeriod: 0.1
+  showDebugInfo: 0
 --- !u!4 &1864085661703363076 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: add9f09372edacd4f9103b12ddb696e1, type: 3}

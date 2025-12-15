@@ -145,6 +145,8 @@ public class PlayerAnimator : MonoBehaviour
     {
         if (motor != null)
         {
+            motor.OnTrampolineLand += HandleTrampolineLand;
+            motor.OnPrepareLaunch += HandlePrepareLaunch;
             motor.OnJump += HandleJump;
             motor.OnDash += HandleDash;
             motor.OnLand += HandleLand;
@@ -155,6 +157,8 @@ public class PlayerAnimator : MonoBehaviour
     {
         if (motor != null)
         {
+            motor.OnTrampolineLand -= HandleTrampolineLand;
+            motor.OnPrepareLaunch -= HandlePrepareLaunch;
             motor.OnJump -= HandleJump;
             motor.OnDash -= HandleDash;
             motor.OnLand -= HandleLand;
@@ -298,6 +302,12 @@ public class PlayerAnimator : MonoBehaviour
         
         if (isGrounded)
         {
+            // If jump lock is active (trampoline about to launch), don't process ANY ground transitions
+            if (_jumpLockTimer > 0f)
+            {
+                return;
+            }
+            
             // Ground states: Idle or Run
             if (_currentState == AnimState.Land)
             {
@@ -376,9 +386,16 @@ public class PlayerAnimator : MonoBehaviour
                 }
                 else if (_currentState == AnimState.Jump && verticalVelocity < 0)
                 {
-                    // Transitioning from jump to fall
+                    // Transitioning from jump to fall (going down after jumping)
                     targetState = AnimState.Fall;
                     transitionDuration = fallTransitionDuration;
+                }
+                else if (_currentState == AnimState.Fall && verticalVelocity > jumpVelocityThreshold)
+                {
+                    // Transitioning from fall to jump (bounced by trampoline or launched while falling)
+                    // Use instant transition for snappy response
+                    targetState = AnimState.Jump;
+                    transitionDuration = 0f;
                 }
             }
         }
@@ -425,11 +442,38 @@ public class PlayerAnimator : MonoBehaviour
     }
     
     // Event handlers called by PlayerMotorCC
+    
+    /// <summary>
+    /// Called when player first lands on a trampoline (before compression starts).
+    /// Locks the animator immediately to prevent any landing/run/idle transitions.
+    /// </summary>
+    private void HandleTrampolineLand()
+    {
+        _jumpLockTimer = 0.5f;  // Lock for longer since trampoline has compression delay
+        if (showDebugInfo)
+        {
+            Debug.Log("HandleTrampolineLand - locking animator for trampoline");
+        }
+    }
+    
+    /// <summary>
+    /// Called BEFORE the jump event when using TriggerJumpAnimation (trampolines).
+    /// Locks the animator to prevent flickering when landing while running.
+    /// </summary>
+    private void HandlePrepareLaunch()
+    {
+        _jumpLockTimer = 0.35f;
+        if (showDebugInfo)
+        {
+            Debug.Log("HandlePrepareLaunch - locking animator for incoming launch");
+        }
+    }
+    
     private void HandleJump()
     {
         // If already in jump state with active lock, just refresh the lock timer
         // This prevents animation restart/glitching on trampolines
-        if (_currentState == AnimState.Jump)
+        if (_currentState == AnimState.Jump && _jumpLockTimer > 0f)
         {
             _jumpLockTimer = 0.3f;
             _airborneTimer = 0f;
