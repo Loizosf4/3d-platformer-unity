@@ -1422,6 +1422,7 @@ Material:
     - _RimPower: 3
     - _ShadowSoftness: 0.01
     - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
     m_Colors:
     - _Color: {r: 0.4339622, g: 0.4339622, b: 0.4339622, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -3441,6 +3442,64 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4, type: 3}
+--- !u!1 &571455647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 571455649}
+  - component: {fileID: 571455648}
+  m_Layer: 0
+  m_Name: GameState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &571455648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571455647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49c4d17f35c84fb4c95e34f80dc5c5c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHearts: 3
+  maxHearts: 3
+  healthShardCount: 0
+  starsTotal: 0
+  coinsHub: 0
+  coinsBiome1: 0
+  coinsBiome2: 0
+  coinsBiome3: 0
+  deathsTotal: 0
+  lastCheckpoint:
+    sceneName: 
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+  hasCheckpoint: 0
+--- !u!4 &571455649
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571455647}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!21 &593385137
 Material:
   serializedVersion: 8
@@ -4066,6 +4125,7 @@ Material:
     - _RimPower: 3
     - _ShadowSoftness: 0.01
     - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
     m_Colors:
     - _Color: {r: 0.4339622, g: 0.4339622, b: 0.4339622, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -4377,6 +4437,7 @@ Material:
     - _RimPower: 3
     - _ShadowSoftness: 0.01
     - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
     m_Colors:
     - _Color: {r: 0.4339622, g: 0.4339622, b: 0.4339622, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -8638,6 +8699,7 @@ Material:
     - _RimPower: 3
     - _ShadowSoftness: 0.01
     - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
     m_Colors:
     - _Color: {r: 0.4339622, g: 0.4339622, b: 0.4339622, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -9834,6 +9896,7 @@ Material:
     - _RimPower: 3
     - _ShadowSoftness: 0.01
     - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
     m_Colors:
     - _Color: {r: 0.4339622, g: 0.4339622, b: 0.4339622, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -10182,6 +10245,7 @@ Material:
     - _RimPower: 3
     - _ShadowSoftness: 0.01
     - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
     m_Colors:
     - _Color: {r: 0.4339622, g: 0.4339622, b: 0.4339622, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -11318,6 +11382,7 @@ Material:
     - _RimPower: 3
     - _ShadowSoftness: 0.01
     - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
     m_Colors:
     - _Color: {r: 0.4339622, g: 0.4339622, b: 0.4339622, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -11566,6 +11631,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3761217425219261490, guid: 8686201ef960385469215aa797700267, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.063
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232511416438903097, guid: 8686201ef960385469215aa797700267, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.089
+      objectReference: {fileID: 0}
     - target: {fileID: 4464269474023359335, guid: 8686201ef960385469215aa797700267, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -11748,3 +11821,4 @@ SceneRoots:
   - {fileID: 181866923}
   - {fileID: 1947599232}
   - {fileID: 381123158}
+  - {fileID: 571455649}
