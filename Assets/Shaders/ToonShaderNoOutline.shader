@@ -1,4 +1,4 @@
-Shader "Custom/ToonShader"
+Shader "Custom/ToonShaderNoOutline"
 {
     Properties
     {
@@ -19,12 +19,6 @@ Shader "Custom/ToonShader"
         _RimColor ("Rim Color", Color) = (1, 1, 1, 1)
         _RimPower ("Rim Power", Range(0.5, 8)) = 3
         _RimIntensity ("Rim Intensity", Range(0, 1)) = 0.5
-        
-        [Header(Outline)]
-        [Toggle(OUTLINE_ON)] _OutlineEnabled ("Enable Outline", Float) = 1
-        _OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
-        _OutlineWidth ("Outline Width", Range(0, 0.03)) = 0.005
-        [KeywordEnum(Normal, Position, UV2)] _OutlineMode ("Outline Mode", Float) = 0
     }
     
     SubShader
@@ -32,76 +26,7 @@ Shader "Custom/ToonShader"
         Tags { "RenderType"="Opaque" "Queue"="Geometry" }
         LOD 200
         
-        // Outline Pass - uses clip space offset for accuracy
-        Pass
-        {
-            Name "OUTLINE"
-            Tags { "LightMode"="Always" }
-            Cull Front
-            ZWrite On
-            
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #pragma shader_feature OUTLINE_ON
-            #pragma shader_feature _OUTLINEMODE_NORMAL _OUTLINEMODE_POSITION _OUTLINEMODE_UV2
-            #include "UnityCG.cginc"
-            
-            float _OutlineWidth;
-            float4 _OutlineColor;
-            float _OutlineEnabled;
-            
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-                float2 uv2 : TEXCOORD1;
-            };
-            
-            struct v2f
-            {
-                float4 pos : SV_POSITION;
-            };
-            
-            v2f vert(appdata v)
-            {
-                v2f o;
-                
-                #ifdef OUTLINE_ON
-                    // Transform to clip space first
-                    float4 clipPos = UnityObjectToClipPos(v.vertex);
-                    
-                    // Get normal in clip space for screen-space consistent outlines
-                    float3 clipNormal = mul((float3x3)UNITY_MATRIX_VP, mul((float3x3)unity_ObjectToWorld, v.normal));
-                    
-                    // Calculate outline offset in clip space (screen-space consistent)
-                    float2 offset = normalize(clipNormal.xy) * _OutlineWidth * clipPos.w * 2;
-                    
-                    // Apply offset
-                    clipPos.xy += offset;
-                    
-                    o.pos = clipPos;
-                #else
-                    // No outline - collapse to zero
-                    o.pos = float4(0, 0, 0, 1);
-                #endif
-                
-                return o;
-            }
-            
-            fixed4 frag(v2f i) : SV_Target
-            {
-                #ifdef OUTLINE_ON
-                    return _OutlineColor;
-                #else
-                    discard;
-                    return fixed4(0,0,0,0);
-                #endif
-            }
-            ENDCG
-        }
-        
-        // Main Toon Pass
+        // Main Toon Pass - NO OUTLINE
         Pass
         {
             Name "TOON"

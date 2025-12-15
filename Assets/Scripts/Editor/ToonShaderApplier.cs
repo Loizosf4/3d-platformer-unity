@@ -10,18 +10,20 @@ public class ToonShaderApplier : EditorWindow
 {
     private enum ToonShaderType
     {
-        Standard,       // Full toon with outline, shadows, highlights, rim
-        Transparent,    // For transparent objects
-        Unlit           // Simple unlit with outline only
+        Standard,           // Full toon with optional outline, shadows, highlights, rim
+        NoOutline,          // Toon shading without any outline
+        Transparent,        // For transparent objects
+        Unlit               // Simple unlit with optional outline
     }
     
     private ToonShaderType selectedShaderType = ToonShaderType.Standard;
     private bool includeChildren = true;
     private bool createMaterialCopies = true;
+    private bool enableOutline = true;
     
     private Color shadowColor = new Color(0.3f, 0.3f, 0.4f, 1f);
     private Color outlineColor = Color.black;
-    private float outlineWidth = 0.02f;
+    private float outlineWidth = 0.005f;
     private Color rimColor = Color.white;
     private float rimIntensity = 0.5f;
     
@@ -31,10 +33,16 @@ public class ToonShaderApplier : EditorWindow
         GetWindow<ToonShaderApplier>("Toon Shader Applier");
     }
     
-    [MenuItem("Tools/Toon Shader/Apply Standard Toon to Selected")]
-    public static void ApplyToSelectedQuick()
+    [MenuItem("Tools/Toon Shader/Apply Toon WITH Outline to Selected")]
+    public static void ApplyWithOutlineQuick()
     {
-        ApplyToonShaderToSelected(ToonShaderType.Standard, true, true);
+        ApplyToonShaderToSelected(ToonShaderType.Standard, true, true, true);
+    }
+    
+    [MenuItem("Tools/Toon Shader/Apply Toon WITHOUT Outline to Selected")]
+    public static void ApplyNoOutlineQuick()
+    {
+        ApplyToonShaderToSelected(ToonShaderType.NoOutline, true, true, false);
     }
     
     [MenuItem("Tools/Toon Shader/Apply Toon to All Renderers in Scene")]
@@ -50,7 +58,7 @@ public class ToonShaderApplier : EditorWindow
         
         foreach (Renderer renderer in allRenderers)
         {
-            if (ApplyToonToRenderer(renderer, ToonShaderType.Standard, true))
+            if (ApplyToonToRenderer(renderer, ToonShaderType.Standard, true, true))
                 count++;
         }
         
@@ -68,11 +76,26 @@ public class ToonShaderApplier : EditorWindow
         createMaterialCopies = EditorGUILayout.Toggle("Create Material Copies", createMaterialCopies);
         
         EditorGUILayout.Space();
-        GUILayout.Label("Shader Parameters", EditorStyles.boldLabel);
         
+        // Only show outline options for shaders that support it
+        if (selectedShaderType == ToonShaderType.Standard || selectedShaderType == ToonShaderType.Unlit)
+        {
+            GUILayout.Label("Outline Settings", EditorStyles.boldLabel);
+            enableOutline = EditorGUILayout.Toggle("Enable Outline", enableOutline);
+            
+            if (enableOutline)
+            {
+                EditorGUI.indentLevel++;
+                outlineColor = EditorGUILayout.ColorField("Outline Color", outlineColor);
+                outlineWidth = EditorGUILayout.Slider("Outline Width", outlineWidth, 0f, 0.03f);
+                EditorGUI.indentLevel--;
+            }
+            
+            EditorGUILayout.Space();
+        }
+        
+        GUILayout.Label("Shading Parameters", EditorStyles.boldLabel);
         shadowColor = EditorGUILayout.ColorField("Shadow Color", shadowColor);
-        outlineColor = EditorGUILayout.ColorField("Outline Color", outlineColor);
-        outlineWidth = EditorGUILayout.Slider("Outline Width", outlineWidth, 0f, 0.1f);
         rimColor = EditorGUILayout.ColorField("Rim Color", rimColor);
         rimIntensity = EditorGUILayout.Slider("Rim Intensity", rimIntensity, 0f, 1f);
         
@@ -89,16 +112,25 @@ public class ToonShaderApplier : EditorWindow
         {
             RemoveFromSelected();
         }
+        
+        EditorGUILayout.Space();
+        EditorGUILayout.HelpBox(
+            "Shader Types:\n" +
+            "• Standard: Full cel shading with optional outline\n" +
+            "• No Outline: Cel shading without outline pass (better performance)\n" +
+            "• Transparent: For transparent/alpha objects\n" +
+            "• Unlit: Flat color with optional outline", 
+            MessageType.Info);
     }
     
     private void ApplyToSelected()
     {
-        ApplyToonShaderToSelected(selectedShaderType, includeChildren, createMaterialCopies, 
+        ApplyToonShaderToSelected(selectedShaderType, includeChildren, createMaterialCopies, enableOutline,
             shadowColor, outlineColor, outlineWidth, rimColor, rimIntensity);
     }
     
-    private static void ApplyToonShaderToSelected(ToonShaderType shaderType, bool includeChildren, bool createCopies,
-        Color? shadow = null, Color? outline = null, float? outlineW = null, Color? rim = null, float? rimInt = null)
+    private static void ApplyToonShaderToSelected(ToonShaderType shaderType, bool includeChildren, bool createCopies, bool outline,
+        Color? shadow = null, Color? outlineCol = null, float? outlineW = null, Color? rim = null, float? rimInt = null)
     {
         GameObject[] selectedObjects = Selection.gameObjects;
         
@@ -121,7 +153,7 @@ public class ToonShaderApplier : EditorWindow
                 
             foreach (Renderer renderer in renderers)
             {
-                if (ApplyToonToRenderer(renderer, shaderType, createCopies, shadow, outline, outlineW, rim, rimInt))
+                if (ApplyToonToRenderer(renderer, shaderType, createCopies, outline, shadow, outlineCol, outlineW, rim, rimInt))
                     count++;
             }
         }
@@ -129,7 +161,7 @@ public class ToonShaderApplier : EditorWindow
         Debug.Log($"Applied toon shader to {count} renderers.");
     }
     
-    private static bool ApplyToonToRenderer(Renderer renderer, ToonShaderType shaderType, bool createCopy,
+    private static bool ApplyToonToRenderer(Renderer renderer, ToonShaderType shaderType, bool createCopy, bool enableOutline,
         Color? shadow = null, Color? outline = null, float? outlineW = null, Color? rim = null, float? rimInt = null)
     {
         if (renderer == null) return false;
@@ -141,6 +173,7 @@ public class ToonShaderApplier : EditorWindow
         string shaderName = shaderType switch
         {
             ToonShaderType.Standard => "Custom/ToonShader",
+            ToonShaderType.NoOutline => "Custom/ToonShaderNoOutline",
             ToonShaderType.Transparent => "Custom/ToonShaderTransparent",
             ToonShaderType.Unlit => "Custom/ToonShaderUnlit",
             _ => "Custom/ToonShader"
@@ -185,6 +218,21 @@ public class ToonShaderApplier : EditorWindow
             {
                 toonMat = originalMat;
                 toonMat.shader = toonShader;
+            }
+            
+            // Enable/disable outline keyword for shaders that support it
+            if (shaderType == ToonShaderType.Standard || shaderType == ToonShaderType.Unlit)
+            {
+                if (enableOutline)
+                {
+                    toonMat.EnableKeyword("OUTLINE_ON");
+                    toonMat.SetFloat("_OutlineEnabled", 1f);
+                }
+                else
+                {
+                    toonMat.DisableKeyword("OUTLINE_ON");
+                    toonMat.SetFloat("_OutlineEnabled", 0f);
+                }
             }
             
             // Apply custom parameters if provided
