@@ -120,8 +120,15 @@ public class PlayerMotorCC : MonoBehaviour
 
     private float _extraUpwardVelocity = 0f; // used for magnet lift this frame
     
-    // Platform movement support
+    // Platform movement support - improved for stability
     private Vector3 _platformMovement = Vector3.zero;
+    private bool _isOnPlatform = false;
+    private float _groundedStableTimer = 0f;  // Time since last confirmed grounded
+    private const float GROUNDED_STABLE_TIME = 0.15f;  // Grace period for grounded state
+    private Transform _currentPlatform;
+    private Vector3 _platformLastPosition;
+    private Quaternion _platformLastRotation;
+    private Vector3 _platformVelocity;
     
     // Ice platform support
     private float _iceEffect = 0f; // 0 = normal, 1 = full ice
@@ -133,6 +140,58 @@ public class PlayerMotorCC : MonoBehaviour
     private float CurrentGravity => _gravityOverrideActive ? _gravityOverrideValue : gravity;
 
     private float _externalControlLockTimer = 0f;
+
+    // Landing detection for animations
+    private bool _wasGroundedLastFrame = true;
+
+    // ========== ANIMATION EVENTS ==========
+    /// <summary>Invoked when the player jumps (ground, wall, or air jump)</summary>
+    public event System.Action OnJump;
+    
+    /// <summary>Invoked when the player starts a dash</summary>
+    public event System.Action OnDash;
+    
+    /// <summary>Invoked when the player lands on the ground</summary>
+    public event System.Action OnLand;
+
+    // ========== PUBLIC PROPERTIES FOR ANIMATION ==========
+    /// <summary>Is the player currently grounded (with stability for moving platforms)</summary>
+    public bool IsGrounded
+    {
+        get
+        {
+            // If CharacterController says grounded, we're grounded
+            if (_cc != null && _cc.isGrounded)
+            {
+                return true;
+            }
+            // If we were recently grounded or on a platform, maintain grounded state briefly
+            // This prevents flickering on moving platforms
+            if (_groundedStableTimer > 0f || _isOnPlatform)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+    
+    /// <summary>Is the player on a moving platform</summary>
+    public bool IsOnPlatform => _isOnPlatform;
+    
+    /// <summary>Is the player currently dashing</summary>
+    public bool IsDashing => _isDashing;
+    
+    /// <summary>Is the player touching a wall (for wall slide animations)</summary>
+    public bool IsTouchingWall => _isTouchingWall;
+    
+    /// <summary>Current horizontal movement speed</summary>
+    public float HorizontalSpeed => _planarVelocity.magnitude;
+    
+    /// <summary>Current vertical velocity (positive = up, negative = down)</summary>
+    public float VerticalVelocity => _velocity.y;
+    
+    /// <summary>Full velocity vector (planar + vertical)</summary>
+    public Vector3 Velocity => new Vector3(_planarVelocity.x, _velocity.y, _planarVelocity.z);
 
     private void Awake()
     {
@@ -190,9 +249,25 @@ public class PlayerMotorCC : MonoBehaviour
 
     private void UpdateTimers()
     {
-        // Grounded checks
-        if (_cc.isGrounded)
+        // Update stable grounded timer for platform handling
+        if (_cc.isGrounded || _isOnPlatform)
         {
+            _groundedStableTimer = GROUNDED_STABLE_TIME;
+        }
+        else
+        {
+            _groundedStableTimer -= Time.deltaTime;
+        }
+        
+        // Grounded checks (use IsGrounded which includes platform stability)
+        if (IsGrounded)
+        {
+            // Detect landing (was airborne, now grounded)
+            if (!_wasGroundedLastFrame)
+            {
+                OnLand?.Invoke();
+            }
+
             _coyoteTimer = coyoteTime;
 
             // Reset extra jumps when grounded
@@ -208,6 +283,9 @@ public class PlayerMotorCC : MonoBehaviour
         {
             _coyoteTimer -= Time.deltaTime;
         }
+
+        // Update grounded state for next frame
+        _wasGroundedLastFrame = _cc.isGrounded;
 
 
         // Jump buffer
@@ -386,6 +464,7 @@ public class PlayerMotorCC : MonoBehaviour
         if (jumpVelocity > _velocity.y)
         {
             _velocity.y = jumpVelocity;
+            OnJump?.Invoke(); // Trigger jump animation
         }
     }
 
@@ -404,6 +483,8 @@ public class PlayerMotorCC : MonoBehaviour
 
         // Lock movement input briefly for better feel
         _wallJumpInputLockTimer = wallJumpInputLockTime;
+        
+        OnJump?.Invoke(); // Trigger jump animation for wall jump
     }
 
 
@@ -466,6 +547,8 @@ public class PlayerMotorCC : MonoBehaviour
         _isDashing = true;
         _dashTimer = dashDuration;
         _dashCooldownTimer = dashCooldown;
+        
+        OnDash?.Invoke(); // Trigger dash animation
 
         // Determine dash direction
         Vector3 dir = transform.forward;
@@ -639,6 +722,52 @@ public class PlayerMotorCC : MonoBehaviour
         _platformMovement = movement;
     }
     
+    /// <summary>
+    /// Alias for ApplyPlatformMovement (for compatibility with platform scripts)
+    /// </summary>
+    public void SetPlatformMovement(Vector3 movement)
+    {
+        _platformMovement = movement;
+    }
+    
+    /// <summary>
+    /// Called by moving platform when player steps onto it
+    /// </summary>
+    public void SetOnPlatform(Transform platform)
+    {
+        _isOnPlatform = true;
+        _currentPlatform = platform;
+        _platformLastPosition = platform.position;
+        _platformLastRotation = platform.rotation;
+        _platformVelocity = Vector3.zero;
+    }
+    
+    /// <summary>
+    /// Called by moving platform when player leaves it
+    /// </summary>
+    public void ClearPlatform(Vector3 exitVelocity)
+    {
+        _isOnPlatform = false;
+        _currentPlatform = null;
+        _platformVelocity = exitVelocity;
+        // Keep grounded stable timer active for smooth transition
+        _groundedStableTimer = GROUNDED_STABLE_TIME;
+    }
+    
+    /// <summary>
+    /// Update platform tracking. Call from platform's Update if needed.
+    /// </summary>
+    public void UpdatePlatformTracking()
+    {
+        if (_currentPlatform != null && _isOnPlatform)
+        {
+            Vector3 deltaPos = _currentPlatform.position - _platformLastPosition;
+            _platformVelocity = deltaPos / Time.deltaTime;
+            _platformLastPosition = _currentPlatform.position;
+            _platformLastRotation = _currentPlatform.rotation;
+        }
+    }
+    
     public void ApplyIceEffect(float slipperiness, float duration, float speedBoost = 1.0f)
     {
         _iceEffect = Mathf.Clamp01(slipperiness);
@@ -706,6 +835,10 @@ public class PlayerMotorCC : MonoBehaviour
         _wallJumpInputLockTimer = 0f;
 
         _platformMovement = Vector3.zero;
+        _isOnPlatform = false;
+        _currentPlatform = null;
+        _platformVelocity = Vector3.zero;
+        _groundedStableTimer = 0f;
 
         // Clear wall timers (prevents instant wall jump after respawn)
         _wallCoyoteTimer = 0f;

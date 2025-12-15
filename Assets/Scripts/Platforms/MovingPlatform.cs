@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// A platform that moves back and forth between two points.
-/// Supports players with CharacterController by moving them along with the platform.
+/// Supports players with CharacterController by parenting them to the platform.
 /// </summary>
 public class MovingPlatform : MonoBehaviour
 {
@@ -24,6 +24,13 @@ public class MovingPlatform : MonoBehaviour
     [Tooltip("Time to wait at each endpoint before reversing")]
     [SerializeField] private float pauseTime = 0.5f;
     
+    [Header("Player Detection")]
+    [Tooltip("Layer mask for detecting player")]
+    [SerializeField] private LayerMask playerLayer = -1;
+    
+    [Tooltip("Extra height above platform to check for player")]
+    [SerializeField] private float detectionHeight = 0.5f;
+    
     [Header("Gizmo Visualization")]
     [Tooltip("Show movement path in Scene view")]
     [SerializeField] private bool showDebugPath = true;
@@ -38,38 +45,29 @@ public class MovingPlatform : MonoBehaviour
     private float _pauseTimer = 0f;
     private bool _isPaused = false;
     
-    // Platform movement tracking for CharacterController
+    // Platform movement tracking
     private Vector3 _lastPosition;
     private Vector3 _platformVelocity;
-    private Vector3 _platformMovement;
+    private Vector3 _deltaMovement;
     
-    // Track objects on the platform
-    private System.Collections.Generic.HashSet<CharacterController> _controllersOnPlatform = new System.Collections.Generic.HashSet<CharacterController>();
-    
-    // Platform bounds for detection
-    private Bounds _platformBounds;
+    // Track player on platform
+    private Transform _playerOnPlatform;
+    private PlayerMotorCC _playerMotor;
+    private Vector3 _playerLocalPos;
+    private bool _playerWasParented;
 
     private void Start()
     {
-        // Store initial position as start point
         _startPosition = transform.position;
-        
-        // Normalize direction and calculate end position
         moveDirection = moveDirection.normalized;
         _endPosition = _startPosition + (moveDirection * moveDistance);
-        
         _lastPosition = transform.position;
-        
-        // Get platform bounds
-        BoxCollider mainCollider = GetComponent<BoxCollider>();
-        if (mainCollider != null)
-        {
-            _platformBounds = mainCollider.bounds;
-        }
     }
     
     private void FixedUpdate()
     {
+        Vector3 previousPosition = transform.position;
+        
         // Handle pause at endpoints
         if (_isPaused)
         {
@@ -81,107 +79,127 @@ public class MovingPlatform : MonoBehaviour
                 _movingForward = !_movingForward;
             }
             _platformVelocity = Vector3.zero;
-            _platformMovement = Vector3.zero;
+            _deltaMovement = Vector3.zero;
             return;
         }
 
-        // Calculate movement
+        // Calculate movement progress
         float step = moveSpeed * Time.fixedDeltaTime;
         
-        if (useSmoothMovement)
+        if (_movingForward)
         {
-            // Use smooth interpolation
-            if (_movingForward)
+            _progress += step / moveDistance;
+            if (_progress >= 1f)
             {
-                _progress += step / moveDistance;
-                if (_progress >= 1f)
-                {
-                    _progress = 1f;
-                    _isPaused = true;
-                }
+                _progress = 1f;
+                _isPaused = true;
             }
-            else
-            {
-                _progress -= step / moveDistance;
-                if (_progress <= 0f)
-                {
-                    _progress = 0f;
-                    _isPaused = true;
-                }
-            }
-            
-            // Apply smooth easing
-            float smoothProgress = Mathf.SmoothStep(0f, 1f, _progress);
-            transform.position = Vector3.Lerp(_startPosition, _endPosition, smoothProgress);
         }
         else
         {
-            // Constant speed movement
-            if (_movingForward)
+            _progress -= step / moveDistance;
+            if (_progress <= 0f)
             {
-                _progress += step / moveDistance;
-                if (_progress >= 1f)
-                {
-                    _progress = 1f;
-                    _isPaused = true;
-                }
+                _progress = 0f;
+                _isPaused = true;
             }
-            else
-            {
-                _progress -= step / moveDistance;
-                if (_progress <= 0f)
-                {
-                    _progress = 0f;
-                    _isPaused = true;
-                }
-            }
-            
-            transform.position = Vector3.Lerp(_startPosition, _endPosition, _progress);
         }
         
-        // Calculate platform movement
-        _platformMovement = transform.position - _lastPosition;
-        _platformVelocity = _platformMovement / Time.fixedDeltaTime;
+        // Apply position
+        float t = useSmoothMovement ? Mathf.SmoothStep(0f, 1f, _progress) : _progress;
+        transform.position = Vector3.Lerp(_startPosition, _endPosition, t);
+        
+        // Calculate delta movement
+        _deltaMovement = transform.position - previousPosition;
+        _platformVelocity = _deltaMovement / Time.fixedDeltaTime;
         _lastPosition = transform.position;
         
-        // Update platform bounds
-        BoxCollider mainCollider = GetComponent<BoxCollider>();
-        if (mainCollider != null)
-        {
-            _platformBounds = mainCollider.bounds;
-        }
-        
-        // Immediately move any objects on the platform
-        MoveObjectsOnPlatform();
+        // Move player with platform
+        MovePlayerWithPlatform();
     }
     
-    private void MoveObjectsOnPlatform()
+    private void MovePlayerWithPlatform()
     {
-        if (_platformMovement.sqrMagnitude < 0.0001f) return;
+        if (_deltaMovement.sqrMagnitude < 0.00001f) return;
         
-        // Create an overlap box slightly above the platform
-        Vector3 center = _platformBounds.center + Vector3.up * (_platformBounds.extents.y + 0.1f);
-        Vector3 halfExtents = new Vector3(_platformBounds.extents.x, 0.5f, _platformBounds.extents.z);
+        // Find player on platform using overlap box
+        BoxCollider col = GetComponent<BoxCollider>();
+        if (col == null) return;
         
-        Collider[] colliders = Physics.OverlapBox(center, halfExtents, transform.rotation);
+        Vector3 center = col.bounds.center + Vector3.up * (col.bounds.extents.y + detectionHeight * 0.5f);
+        Vector3 halfExtents = new Vector3(col.bounds.extents.x * 0.95f, detectionHeight * 0.5f, col.bounds.extents.z * 0.95f);
         
-        foreach (Collider col in colliders)
+        Collider[] hits = Physics.OverlapBox(center, halfExtents, transform.rotation, playerLayer);
+        
+        bool foundPlayer = false;
+        
+        foreach (Collider hit in hits)
         {
-            CharacterController cc = col.GetComponent<CharacterController>();
-            if (cc != null)
+            // Check for PlayerMotorCC and use its platform movement system
+            PlayerMotorCC motor = hit.GetComponent<PlayerMotorCC>();
+            if (motor != null)
             {
-                // Check if grounded on this platform using a raycast
-                RaycastHit hit;
-                Vector3 rayStart = cc.transform.position;
-                
-                if (Physics.Raycast(rayStart, Vector3.down, out hit, 2f))
+                // Verify the player is actually standing on this platform
+                if (IsPlayerOnPlatform(hit.transform))
                 {
-                    if (hit.collider != null && hit.collider.gameObject == gameObject)
+                    foundPlayer = true;
+                    motor.SetPlatformMovement(_deltaMovement);
+                    
+                    // Set platform state if not already set
+                    if (_playerMotor != motor)
                     {
-                        cc.Move(_platformMovement);
+                        _playerMotor = motor;
+                        motor.SetOnPlatform(transform);
                     }
                 }
             }
+        }
+        
+        // If no player found and we had one, clear the platform state
+        if (!foundPlayer && _playerMotor != null)
+        {
+            _playerMotor.ClearPlatform(_platformVelocity);
+            _playerMotor = null;
+        }
+    }
+    
+    private bool IsPlayerOnPlatform(Transform player)
+    {
+        // Raycast down from player to check if they're on this platform
+        RaycastHit hit;
+        Vector3 rayStart = player.position + Vector3.up * 0.1f;
+        
+        if (Physics.Raycast(rayStart, Vector3.down, out hit, 1.5f))
+        {
+            return hit.collider != null && hit.collider.transform == transform;
+        }
+        return false;
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        // Alternative detection using trigger
+        if (other.CompareTag("Player"))
+        {
+            _playerOnPlatform = other.transform;
+            _playerMotor = other.GetComponent<PlayerMotorCC>();
+            if (_playerMotor != null)
+            {
+                _playerMotor.SetOnPlatform(transform);
+            }
+        }
+    }
+    
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") && _playerOnPlatform == other.transform)
+        {
+            if (_playerMotor != null)
+            {
+                _playerMotor.ClearPlatform(_platformVelocity);
+            }
+            _playerOnPlatform = null;
+            _playerMotor = null;
         }
     }
 
@@ -189,59 +207,25 @@ public class MovingPlatform : MonoBehaviour
     {
         if (!showDebugPath) return;
 
-        // Calculate positions for gizmo
         Vector3 startPos = Application.isPlaying ? _startPosition : transform.position;
         Vector3 direction = moveDirection.normalized;
         Vector3 endPos = startPos + (direction * moveDistance);
 
-        // Draw line showing movement path
         Gizmos.color = gizmoColor;
         Gizmos.DrawLine(startPos, endPos);
-        
-        // Draw spheres at endpoints
         Gizmos.DrawWireSphere(startPos, 0.3f);
         Gizmos.DrawWireSphere(endPos, 0.3f);
         
-        // Draw arrow indicating direction
-        Vector3 arrowMid = startPos + (direction * moveDistance * 0.5f);
+        // Draw arrow
         Vector3 perpendicular = Vector3.Cross(direction, Vector3.up).normalized;
         if (perpendicular == Vector3.zero) perpendicular = Vector3.Cross(direction, Vector3.right).normalized;
-        
         Gizmos.DrawLine(endPos, endPos - direction * 0.5f + perpendicular * 0.25f);
         Gizmos.DrawLine(endPos, endPos - direction * 0.5f - perpendicular * 0.25f);
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (!showDebugPath) return;
+    public Vector3 GetPlatformVelocity() => _platformVelocity;
+    public Vector3 GetDeltaMovement() => _deltaMovement;
 
-        // Draw more detailed info when selected
-        Vector3 startPos = Application.isPlaying ? _startPosition : transform.position;
-        Vector3 direction = moveDirection.normalized;
-        Vector3 endPos = startPos + (direction * moveDistance);
-
-        // Draw distance markers
-        Gizmos.color = Color.cyan;
-        int markers = Mathf.Max(2, Mathf.CeilToInt(moveDistance / 2f));
-        for (int i = 0; i <= markers; i++)
-        {
-            float t = i / (float)markers;
-            Vector3 markerPos = Vector3.Lerp(startPos, endPos, t);
-            Gizmos.DrawWireCube(markerPos, Vector3.one * 0.2f);
-        }
-    }
-
-    /// <summary>
-    /// Get the current velocity of the platform (useful for external scripts)
-    /// </summary>
-    public Vector3 GetPlatformVelocity()
-    {
-        return _platformVelocity;
-    }
-
-    /// <summary>
-    /// Reset the platform to its starting position
-    /// </summary>
     public void ResetPlatform()
     {
         _progress = 0f;
