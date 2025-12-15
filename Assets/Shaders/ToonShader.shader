@@ -9,6 +9,7 @@ Shader "Custom/ToonShader"
         _ShadowColor ("Shadow Color", Color) = (0.3, 0.3, 0.4, 1)
         _ShadowThreshold ("Shadow Threshold", Range(0, 1)) = 0.5
         _ShadowSoftness ("Shadow Softness", Range(0, 0.5)) = 0.01
+        _ShadowTolerance ("Shadow Tolerance", Range(0, 1)) = 0.0
         
         [Header(Highlight)]
         _HighlightColor ("Highlight Color", Color) = (1, 1, 1, 1)
@@ -123,6 +124,7 @@ Shader "Custom/ToonShader"
             float4 _ShadowColor;
             float _ShadowThreshold;
             float _ShadowSoftness;
+            float _ShadowTolerance;
             
             float4 _HighlightColor;
             float _HighlightThreshold;
@@ -176,6 +178,9 @@ Shader "Custom/ToonShader"
                 
                 // Shadow with hard edge (cel shading)
                 float shadow = smoothstep(_ShadowThreshold - _ShadowSoftness, _ShadowThreshold + _ShadowSoftness, NdotL * 0.5 + 0.5);
+                
+                // Apply shadow tolerance - reduces shadow intensity
+                shadow = lerp(shadow, 1.0, _ShadowTolerance);
                 
                 // Highlight with hard edge
                 float highlight = smoothstep(_HighlightThreshold - _HighlightSoftness, _HighlightThreshold + _HighlightSoftness, NdotL);

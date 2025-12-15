@@ -9,6 +9,7 @@ Shader "Custom/ToonShaderTransparent"
         _ShadowColor ("Shadow Color", Color) = (0.3, 0.3, 0.4, 1)
         _ShadowThreshold ("Shadow Threshold", Range(0, 1)) = 0.5
         _ShadowSoftness ("Shadow Softness", Range(0, 0.5)) = 0.01
+        _ShadowTolerance ("Shadow Tolerance", Range(0, 1)) = 0.0
         
         [Header(Rim Light)]
         _RimColor ("Rim Color", Color) = (1, 1, 1, 1)
@@ -42,6 +43,7 @@ Shader "Custom/ToonShaderTransparent"
             float4 _ShadowColor;
             float _ShadowThreshold;
             float _ShadowSoftness;
+            float _ShadowTolerance;
             
             float4 _RimColor;
             float _RimPower;
@@ -82,6 +84,9 @@ Shader "Custom/ToonShaderTransparent"
                 
                 float NdotL = dot(normal, lightDir);
                 float shadow = smoothstep(_ShadowThreshold - _ShadowSoftness, _ShadowThreshold + _ShadowSoftness, NdotL * 0.5 + 0.5);
+                
+                // Apply shadow tolerance - reduces shadow intensity
+                shadow = lerp(shadow, 1.0, _ShadowTolerance);
                 
                 float rim = 1.0 - saturate(dot(viewDir, normal));
                 rim = pow(rim, _RimPower) * _RimIntensity;

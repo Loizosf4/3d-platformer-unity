@@ -244,7 +244,8 @@ public class PlayerAnimator : MonoBehaviour
         }
         
         // Detect landing - but skip land animation if player is holding movement and skipLandIfMoving is true
-        if (isGrounded && !_wasGrounded && _airborneTimer >= minAirTimeForLand)
+        // Also don't trigger landing if we're in a locked jump state (e.g., just hit a trampoline)
+        if (isGrounded && !_wasGrounded && _airborneTimer >= minAirTimeForLand && _jumpLockTimer <= 0f)
         {
             if (skipLandIfMoving && hasMovementInput)
             {
@@ -394,6 +395,10 @@ public class PlayerAnimator : MonoBehaviour
         // Don't transition to the same state (prevents animation restart/glitching)
         if (newState == _currentState)
             return;
+        
+        // Don't transition away from Jump if locked (prevents trampoline glitching)
+        if (_currentState == AnimState.Jump && _jumpLockTimer > 0f && newState != AnimState.Fall)
+            return;
             
         int stateHash = GetStateHash(newState);
         
@@ -422,6 +427,15 @@ public class PlayerAnimator : MonoBehaviour
     // Event handlers called by PlayerMotorCC
     private void HandleJump()
     {
+        // If already in jump state with active lock, just refresh the lock timer
+        // This prevents animation restart/glitching on trampolines
+        if (_currentState == AnimState.Jump)
+        {
+            _jumpLockTimer = 0.3f;
+            _airborneTimer = 0f;
+            return;
+        }
+        
         // Force transition to jump state using CrossFade
         // The _jumpLockTimer prevents UpdateAnimationState from overriding this
         int stateHash = GetStateHash(AnimState.Jump);

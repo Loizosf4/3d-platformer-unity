@@ -22,6 +22,7 @@ public class ToonShaderApplier : EditorWindow
     private bool enableOutline = true;
     
     private Color shadowColor = new Color(0.3f, 0.3f, 0.4f, 1f);
+    private float shadowTolerance = 0f;
     private Color outlineColor = Color.black;
     private float outlineWidth = 0.005f;
     private Color rimColor = Color.white;
@@ -96,6 +97,8 @@ public class ToonShaderApplier : EditorWindow
         
         GUILayout.Label("Shading Parameters", EditorStyles.boldLabel);
         shadowColor = EditorGUILayout.ColorField("Shadow Color", shadowColor);
+        shadowTolerance = EditorGUILayout.Slider("Shadow Tolerance", shadowTolerance, 0f, 1f);
+        EditorGUILayout.HelpBox("Shadow Tolerance: 0 = full shadows, 1 = no shadows", MessageType.None);
         rimColor = EditorGUILayout.ColorField("Rim Color", rimColor);
         rimIntensity = EditorGUILayout.Slider("Rim Intensity", rimIntensity, 0f, 1f);
         
@@ -126,11 +129,11 @@ public class ToonShaderApplier : EditorWindow
     private void ApplyToSelected()
     {
         ApplyToonShaderToSelected(selectedShaderType, includeChildren, createMaterialCopies, enableOutline,
-            shadowColor, outlineColor, outlineWidth, rimColor, rimIntensity);
+            shadowColor, shadowTolerance, outlineColor, outlineWidth, rimColor, rimIntensity);
     }
     
     private static void ApplyToonShaderToSelected(ToonShaderType shaderType, bool includeChildren, bool createCopies, bool outline,
-        Color? shadow = null, Color? outlineCol = null, float? outlineW = null, Color? rim = null, float? rimInt = null)
+        Color? shadow = null, float? shadowTol = null, Color? outlineCol = null, float? outlineW = null, Color? rim = null, float? rimInt = null)
     {
         GameObject[] selectedObjects = Selection.gameObjects;
         
@@ -153,7 +156,7 @@ public class ToonShaderApplier : EditorWindow
                 
             foreach (Renderer renderer in renderers)
             {
-                if (ApplyToonToRenderer(renderer, shaderType, createCopies, outline, shadow, outlineCol, outlineW, rim, rimInt))
+                if (ApplyToonToRenderer(renderer, shaderType, createCopies, outline, shadow, shadowTol, outlineCol, outlineW, rim, rimInt))
                     count++;
             }
         }
@@ -162,7 +165,7 @@ public class ToonShaderApplier : EditorWindow
     }
     
     private static bool ApplyToonToRenderer(Renderer renderer, ToonShaderType shaderType, bool createCopy, bool enableOutline,
-        Color? shadow = null, Color? outline = null, float? outlineW = null, Color? rim = null, float? rimInt = null)
+        Color? shadow = null, float? shadowTol = null, Color? outline = null, float? outlineW = null, Color? rim = null, float? rimInt = null)
     {
         if (renderer == null) return false;
         
@@ -238,6 +241,9 @@ public class ToonShaderApplier : EditorWindow
             // Apply custom parameters if provided
             if (shadow.HasValue && toonMat.HasProperty("_ShadowColor"))
                 toonMat.SetColor("_ShadowColor", shadow.Value);
+                
+            if (shadowTol.HasValue && toonMat.HasProperty("_ShadowTolerance"))
+                toonMat.SetFloat("_ShadowTolerance", shadowTol.Value);
                 
             if (outline.HasValue && toonMat.HasProperty("_OutlineColor"))
                 toonMat.SetColor("_OutlineColor", outline.Value);
