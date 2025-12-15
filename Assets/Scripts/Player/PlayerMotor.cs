@@ -143,6 +143,7 @@ public class PlayerMotorCC : MonoBehaviour
 
     // Landing detection for animations
     private bool _wasGroundedLastFrame = true;
+    private bool _hasJumpedThisGrounding = false;  // Prevents double-triggering jump while grounded grace period is active
 
     // ========== ANIMATION EVENTS ==========
     /// <summary>Invoked when the player jumps (ground, wall, or air jump)</summary>
@@ -284,7 +285,20 @@ public class PlayerMotorCC : MonoBehaviour
             _coyoteTimer -= Time.deltaTime;
         }
 
-        // Update grounded state for next frame
+        // Reset jump flag when we land (CC says grounded after being airborne)
+        // This allows jumping again after landing
+        if (_cc.isGrounded && !_wasGroundedLastFrame)
+        {
+            _hasJumpedThisGrounding = false;
+        }
+        
+        // Also reset when truly airborne for a while (fallback)
+        if (!_cc.isGrounded && _groundedStableTimer <= 0f)
+        {
+            _hasJumpedThisGrounding = false;
+        }
+        
+        // Update grounded state for next frame (must be after the landing check)
         _wasGroundedLastFrame = _cc.isGrounded;
 
 
@@ -398,8 +412,8 @@ public class PlayerMotorCC : MonoBehaviour
     {
         bool wantsJump = _jumpBufferTimer > 0f;
 
-        // Ground / coyote jump
-        bool canCoyoteJump = _coyoteTimer > 0f;
+        // Ground / coyote jump - also check we haven't already jumped this grounding
+        bool canCoyoteJump = _coyoteTimer > 0f && !_hasJumpedThisGrounding;
 
         // Wall jump
         bool canWallJump =
@@ -464,8 +478,13 @@ public class PlayerMotorCC : MonoBehaviour
         if (jumpVelocity > _velocity.y)
         {
             _velocity.y = jumpVelocity;
-            OnJump?.Invoke(); // Trigger jump animation
         }
+        
+        // Mark that we've jumped - prevents re-triggering during grounded grace period
+        _hasJumpedThisGrounding = true;
+        
+        // Always trigger jump animation when DoJump is called
+        OnJump?.Invoke();
     }
 
 
@@ -702,6 +721,14 @@ public class PlayerMotorCC : MonoBehaviour
     public void AddUpwardVelocityThisFrame(float upwardVel)
     {
         _extraUpwardVelocity += upwardVel;
+    }
+    
+    /// <summary>
+    /// Trigger the jump animation event (useful for trampolines and other launchers)
+    /// </summary>
+    public void TriggerJumpAnimation()
+    {
+        OnJump?.Invoke();
     }
     
     public void AddDirectionalForce(Vector3 force)

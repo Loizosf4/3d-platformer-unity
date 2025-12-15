@@ -260,6 +260,7 @@ public class TrampolinePlatform : MonoBehaviour
                             // Calculate launch velocity: v = sqrt(2 * g * h) * speed multiplier
                             float launchVelocity = Mathf.Sqrt(2f * 25f * bounceHeight) * bounceSpeed;
                             motor.AddUpwardVelocityThisFrame(launchVelocity);
+                            motor.TriggerJumpAnimation(); // Trigger jump animation for trampoline bounce
                             
                             Debug.Log($"Trampoline launched player with velocity: {launchVelocity}");
                         }

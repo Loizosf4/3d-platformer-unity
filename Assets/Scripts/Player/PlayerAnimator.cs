@@ -89,6 +89,7 @@ public class PlayerAnimator : MonoBehaviour
     private float _airborneTimer;
     private float _groundedTimer;  // Time since becoming grounded
     private bool _isRunning;       // Cached for use in UpdateAnimationState
+    private float _jumpLockTimer;  // Prevents immediate override of jump animation
     
     // Animation state hashes
     private static readonly int IdleState = Animator.StringToHash("Idle");
@@ -106,6 +107,7 @@ public class PlayerAnimator : MonoBehaviour
     private static readonly int IsDashingHash = Animator.StringToHash("IsDashing");
     private static readonly int IsFallingHash = Animator.StringToHash("IsFalling");
     private static readonly int IsWallSlidingHash = Animator.StringToHash("IsWallSliding");
+    private static readonly int JumpTrigger = Animator.StringToHash("Jump");  // Trigger parameter for jump
     
     private enum AnimState
     {
@@ -273,6 +275,23 @@ public class PlayerAnimator : MonoBehaviour
         if (isDashing)
             return;
         
+        // Decrement jump lock timer
+        if (_jumpLockTimer > 0f)
+        {
+            _jumpLockTimer -= Time.deltaTime;
+        }
+        
+        // If we're in jump state and locked, don't allow ground states to override
+        if (_currentState == AnimState.Jump && _jumpLockTimer > 0f)
+        {
+            // Only allow transition to fall if velocity is negative
+            if (verticalVelocity < 0f)
+            {
+                TransitionTo(AnimState.Fall, fallTransitionDuration);
+            }
+            return;
+        }
+        
         AnimState targetState = _currentState;
         float transitionDuration = 0.1f;
         
@@ -372,6 +391,10 @@ public class PlayerAnimator : MonoBehaviour
     
     private void TransitionTo(AnimState newState, float duration)
     {
+        // Don't transition to the same state (prevents animation restart/glitching)
+        if (newState == _currentState)
+            return;
+            
         int stateHash = GetStateHash(newState);
         
         if (showDebugInfo)
@@ -399,7 +422,18 @@ public class PlayerAnimator : MonoBehaviour
     // Event handlers called by PlayerMotorCC
     private void HandleJump()
     {
-        TransitionTo(AnimState.Jump, jumpTransitionDuration);
+        // Force transition to jump state using CrossFade
+        // The _jumpLockTimer prevents UpdateAnimationState from overriding this
+        int stateHash = GetStateHash(AnimState.Jump);
+        _animator.CrossFadeInFixedTime(stateHash, jumpTransitionDuration);
+        _currentState = AnimState.Jump;
+        _jumpLockTimer = 0.3f;  // Lock to prevent state machine from overriding
+        _airborneTimer = 0f;    // Reset airborne timer on jump
+        
+        if (showDebugInfo)
+        {
+            Debug.Log($"HandleJump called - transitioning to Jump state (hash: {stateHash})");
+        }
     }
     
     private void HandleDash()
