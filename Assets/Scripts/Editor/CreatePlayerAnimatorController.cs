@@ -3,45 +3,49 @@ using UnityEditor;
 using UnityEditor.Animations;
 
 /// <summary>
-/// Editor script to create the Player Animator Controller.
+/// Editor script to create the Player Animator Controller from scratch.
 /// Run this from the Unity menu: Tools > Create Player Animator Controller
 /// </summary>
 public class CreatePlayerAnimatorController
 {
-    // ============ TWEAK THESE VALUES ============
-    // Speed threshold for transitioning between Idle and Run
-    private const float IDLE_TO_RUN_THRESHOLD = 0.2f;  // Start running when speed >= this
-    private const float RUN_TO_IDLE_THRESHOLD = 1f;  // Go back to idle when speed < this (hysteresis)
+    // Animation clip information from FBX files
+    private const string IDLE_FBX_PATH = "Assets/Prefabs/Player/Idle.fbx";
+    private const string IDLE_CLIP_NAME = "Idle";
     
-    // Transition durations (in seconds) - how long the blend takes
-    private const float IDLE_RUN_TRANSITION_DURATION = 0.15f;
-    private const float JUMP_TRANSITION_DURATION = 0.05f;
-    private const float FALL_TRANSITION_DURATION = 0.1f;
-    private const float LAND_TRANSITION_DURATION = 0.05f;
+    private const string RUN_FBX_PATH = "Assets/Prefabs/Player/Running.fbx";
+    private const string RUN_CLIP_NAME = "Running";
     
-    // Fall detection threshold
-    private const float FALL_VELOCITY_THRESHOLD = -0.1f;  // Start falling anim when velocity < this
-    // ============================================
+    private const string JUMP_FBX_PATH = "Assets/Prefabs/Player/Jumping.fbx";
+    private const string JUMP_CLIP_NAME = "Jump";
+    
+    private const string FALL_FBX_PATH = "Assets/Prefabs/Player/Fall A Loop.fbx";
+    private const string FALL_CLIP_NAME = "Fall";
+    
+    private const string RUNNING_JUMP_FBX_PATH = "Assets/Prefabs/Player/RunningJump.fbx";
+    private const string RUNNING_JUMP_CLIP_NAME = "RunningJump";
 
     [MenuItem("Tools/Create Player Animator Controller")]
     public static void CreateController()
     {
-        // Create the animator controller
-        string path = "Assets/Prefabs/Player/AC_Player.controller";
+        string controllerPath = "Assets/Prefabs/Player/AC_Player.controller";
+        
+        Debug.Log("=== Creating Player Animator Controller ===");
         
         // Delete existing controller if it exists
-        if (AssetDatabase.LoadAssetAtPath<AnimatorController>(path) != null)
+        if (AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath) != null)
         {
-            AssetDatabase.DeleteAsset(path);
+            AssetDatabase.DeleteAsset(controllerPath);
+            Debug.Log("Deleted existing controller");
         }
         
-        AnimatorController controller = AnimatorController.CreateAnimatorControllerAtPath(path);
+        // Create new animator controller
+        AnimatorController controller = AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
         
         // Add parameters
         controller.AddParameter("Speed", AnimatorControllerParameterType.Float);
         controller.AddParameter("VerticalVelocity", AnimatorControllerParameterType.Float);
         controller.AddParameter("IsGrounded", AnimatorControllerParameterType.Bool);
-        controller.AddParameter("IsRunning", AnimatorControllerParameterType.Bool);  // Used for Idle <-> Run transitions
+        controller.AddParameter("IsRunning", AnimatorControllerParameterType.Bool);
         controller.AddParameter("IsJumping", AnimatorControllerParameterType.Bool);
         controller.AddParameter("IsDashing", AnimatorControllerParameterType.Bool);
         controller.AddParameter("IsFalling", AnimatorControllerParameterType.Bool);
@@ -50,200 +54,168 @@ public class CreatePlayerAnimatorController
         controller.AddParameter("Land", AnimatorControllerParameterType.Trigger);
         controller.AddParameter("Dash", AnimatorControllerParameterType.Trigger);
         
+        Debug.Log("Added animator parameters");
+        
+        // Load animation clips from FBX files
+        AnimationClip idleClip = LoadClip(IDLE_FBX_PATH, IDLE_CLIP_NAME);
+        AnimationClip runClip = LoadClip(RUN_FBX_PATH, RUN_CLIP_NAME);
+        AnimationClip jumpClip = LoadClip(JUMP_FBX_PATH, JUMP_CLIP_NAME);
+        AnimationClip fallClip = LoadClip(FALL_FBX_PATH, FALL_CLIP_NAME);
+        
+        // Verify all clips loaded
+        if (idleClip == null) Debug.LogError("Failed to load Idle clip!");
+        if (runClip == null) Debug.LogError("Failed to load Run clip!");
+        if (jumpClip == null) Debug.LogError("Failed to load Jump clip!");
+        if (fallClip == null) Debug.LogError("Failed to load Fall clip!");
+        
         // Get the root state machine
         AnimatorStateMachine rootStateMachine = controller.layers[0].stateMachine;
         
-        // Find animation clips from the FBX files
-        AnimationClip idleClip = FindClipInFBX("Assets/Prefabs/Player/Idle.fbx", "Idle");
-        AnimationClip runClip = FindClipInFBX("Assets/Prefabs/Player/Running.fbx", "Running");
-        AnimationClip jumpClip = FindClipInFBX("Assets/Prefabs/Player/Jump.fbx", "Jump");
-        AnimationClip fallClip = FindClipInFBX("Assets/Prefabs/Player/Fall.fbx", "Fall");
-        AnimationClip runningJumpClip = FindClipInFBX("Assets/Prefabs/Player/Running Jump.fbx", "Running Jump");
-        
-        Debug.Log($"Found clips - Idle: {idleClip != null}, Run: {runClip != null}, Jump: {jumpClip != null}, Fall: {fallClip != null}");
-        
         // Create states
-        AnimatorState idleState = rootStateMachine.AddState("Idle", new Vector3(0, 0, 0));
-        AnimatorState runState = rootStateMachine.AddState("Run", new Vector3(250, 0, 0));
-        AnimatorState jumpState = rootStateMachine.AddState("Jump", new Vector3(125, -120, 0));
-        AnimatorState fallState = rootStateMachine.AddState("Fall", new Vector3(250, -120, 0));
-        AnimatorState landState = rootStateMachine.AddState("Land", new Vector3(375, -120, 0));
+        AnimatorState idleState = rootStateMachine.AddState("Idle", new Vector3(300, 0, 0));
+        AnimatorState runState = rootStateMachine.AddState("Run", new Vector3(300, 100, 0));
+        AnimatorState jumpState = rootStateMachine.AddState("Jump", new Vector3(50, 200, 0));
+        AnimatorState fallState = rootStateMachine.AddState("Fall", new Vector3(300, 200, 0));
+        AnimatorState landState = rootStateMachine.AddState("Land", new Vector3(550, 200, 0));
         
-        // Assign clips to states (if found)
-        if (idleClip != null) idleState.motion = idleClip;
-        if (runClip != null) runState.motion = runClip;
-        if (jumpClip != null) jumpState.motion = jumpClip;
-        if (fallClip != null) fallState.motion = fallClip;
-        // Land can use idle or a specific land animation if you have one
-        if (idleClip != null) landState.motion = idleClip;
+        // Assign animation clips to states
+        idleState.motion = idleClip;
+        runState.motion = runClip;
+        jumpState.motion = jumpClip;
+        fallState.motion = fallClip;
+        landState.motion = idleClip;  // Reuse idle for landing
         
         // Set default state
         rootStateMachine.defaultState = idleState;
         
+        Debug.Log("Created animator states with clips");
+        
         // === CREATE TRANSITIONS ===
+        // Note: PlayerAnimator.cs uses direct CrossFade/Play calls, so these transitions are mostly for manual testing
+        // The actual animation logic is driven by the code, not the state machine
         
-        // Idle -> Run (when IsRunning is true)
+        // Idle <-> Run transitions
         AnimatorStateTransition idleToRun = idleState.AddTransition(runState);
-        idleToRun.AddCondition(AnimatorConditionMode.If, 0, "IsRunning");
-        idleToRun.AddCondition(AnimatorConditionMode.If, 0, "IsGrounded");
         idleToRun.hasExitTime = false;
-        idleToRun.duration = IDLE_RUN_TRANSITION_DURATION;
+        idleToRun.duration = 0.1f;
+        idleToRun.AddCondition(AnimatorConditionMode.If, 0, "IsRunning");
         
-        // Run -> Idle (when IsRunning is false)
         AnimatorStateTransition runToIdle = runState.AddTransition(idleState);
-        runToIdle.AddCondition(AnimatorConditionMode.IfNot, 0, "IsRunning");
-        runToIdle.AddCondition(AnimatorConditionMode.If, 0, "IsGrounded");
         runToIdle.hasExitTime = false;
-        runToIdle.duration = IDLE_RUN_TRANSITION_DURATION;
+        runToIdle.duration = 0.1f;
+        runToIdle.AddCondition(AnimatorConditionMode.IfNot, 0, "IsRunning");
         
-        // Any State -> Jump (on Jump trigger)
+        // Any State -> Jump (for manual triggers)
         AnimatorStateTransition anyToJump = rootStateMachine.AddAnyStateTransition(jumpState);
-        anyToJump.AddCondition(AnimatorConditionMode.If, 0, "Jump");
         anyToJump.hasExitTime = false;
-        anyToJump.duration = JUMP_TRANSITION_DURATION;
+        anyToJump.duration = 0.05f;
         anyToJump.canTransitionToSelf = false;
+        anyToJump.AddCondition(AnimatorConditionMode.If, 0, "Jump");
         
-        // Jump -> Fall (when VerticalVelocity < 0)
+        // Jump -> Fall
         AnimatorStateTransition jumpToFall = jumpState.AddTransition(fallState);
-        jumpToFall.AddCondition(AnimatorConditionMode.Less, 0f, "VerticalVelocity");
         jumpToFall.hasExitTime = false;
-        jumpToFall.duration = FALL_TRANSITION_DURATION;
+        jumpToFall.duration = 0.1f;
+        jumpToFall.AddCondition(AnimatorConditionMode.Less, 0, "VerticalVelocity");
         
-        // Fall -> Land (when IsGrounded)
+        // Fall -> Jump (for trampoline bounces)
+        AnimatorStateTransition fallToJump = fallState.AddTransition(jumpState);
+        fallToJump.hasExitTime = false;
+        fallToJump.duration = 0f;  // Instant
+        fallToJump.AddCondition(AnimatorConditionMode.Greater, 0.1f, "VerticalVelocity");
+        
+        // Fall -> Land
         AnimatorStateTransition fallToLand = fallState.AddTransition(landState);
-        fallToLand.AddCondition(AnimatorConditionMode.If, 0, "IsGrounded");
         fallToLand.hasExitTime = false;
-        fallToLand.duration = LAND_TRANSITION_DURATION;
+        fallToLand.duration = 0.05f;
+        fallToLand.AddCondition(AnimatorConditionMode.If, 0, "IsGrounded");
         
-        // Land -> Idle (after exit time)
+        // Jump -> Land
+        AnimatorStateTransition jumpToLand = jumpState.AddTransition(landState);
+        jumpToLand.hasExitTime = false;
+        jumpToLand.duration = 0.05f;
+        jumpToLand.AddCondition(AnimatorConditionMode.If, 0, "IsGrounded");
+        
+        // Land -> Idle
         AnimatorStateTransition landToIdle = landState.AddTransition(idleState);
         landToIdle.hasExitTime = true;
-        landToIdle.exitTime = 0.9f;
-        landToIdle.duration = FALL_TRANSITION_DURATION;
+        landToIdle.exitTime = 0.8f;
+        landToIdle.duration = 0.1f;
         
-        // Land -> Run (if still moving)
+        // Land -> Run
         AnimatorStateTransition landToRun = landState.AddTransition(runState);
-        landToRun.AddCondition(AnimatorConditionMode.Greater, IDLE_TO_RUN_THRESHOLD, "Speed");
-        landToRun.hasExitTime = true;
-        landToRun.exitTime = 0.5f;
-        landToRun.duration = FALL_TRANSITION_DURATION;
+        landToRun.hasExitTime = false;
+        landToRun.duration = 0.1f;
+        landToRun.AddCondition(AnimatorConditionMode.If, 0, "IsRunning");
         
-        // Idle -> Fall (if not grounded and falling)
+        // Idle -> Fall (when walking off edge)
         AnimatorStateTransition idleToFall = idleState.AddTransition(fallState);
-        idleToFall.AddCondition(AnimatorConditionMode.IfNot, 0, "IsGrounded");
-        idleToFall.AddCondition(AnimatorConditionMode.Less, FALL_VELOCITY_THRESHOLD, "VerticalVelocity");
         idleToFall.hasExitTime = false;
-        idleToFall.duration = FALL_TRANSITION_DURATION;
+        idleToFall.duration = 0.1f;
+        idleToFall.AddCondition(AnimatorConditionMode.IfNot, 0, "IsGrounded");
+        idleToFall.AddCondition(AnimatorConditionMode.Less, -0.1f, "VerticalVelocity");
         
-        // Run -> Fall (if not grounded and falling)
+        // Run -> Fall (when running off edge)
         AnimatorStateTransition runToFall = runState.AddTransition(fallState);
-        runToFall.AddCondition(AnimatorConditionMode.IfNot, 0, "IsGrounded");
-        runToFall.AddCondition(AnimatorConditionMode.Less, FALL_VELOCITY_THRESHOLD, "VerticalVelocity");
         runToFall.hasExitTime = false;
-        runToFall.duration = FALL_TRANSITION_DURATION;
+        runToFall.duration = 0.1f;
+        runToFall.AddCondition(AnimatorConditionMode.IfNot, 0, "IsGrounded");
+        runToFall.AddCondition(AnimatorConditionMode.Less, -0.1f, "VerticalVelocity");
+        
+        // Idle -> Jump (for manual jumps)
+        AnimatorStateTransition idleToJump = idleState.AddTransition(jumpState);
+        idleToJump.hasExitTime = false;
+        idleToJump.duration = 0.05f;
+        idleToJump.AddCondition(AnimatorConditionMode.If, 0, "Jump");
+        
+        // Run -> Jump (for manual jumps)
+        AnimatorStateTransition runToJump = runState.AddTransition(jumpState);
+        runToJump.hasExitTime = false;
+        runToJump.duration = 0.05f;
+        runToJump.AddCondition(AnimatorConditionMode.If, 0, "Jump");
+        
+        Debug.Log("Created all transitions");
         
         // Save the controller
         EditorUtility.SetDirty(controller);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         
-        Debug.Log($"Player Animator Controller created at: {path}");
-        Debug.Log("States created: Idle, Run, Jump, Fall, Land");
-        Debug.Log($"Thresholds: Idle->Run at {IDLE_TO_RUN_THRESHOLD}, Run->Idle at {RUN_TO_IDLE_THRESHOLD}");
-        Debug.Log("Remember to:");
-        Debug.Log("1. Open the Animator Controller and verify the transitions");
-        Debug.Log("2. Assign any missing animation clips to the states");
-        Debug.Log("3. Add the Animator component to your character model");
-        Debug.Log("4. Assign this controller to the Animator");
-        Debug.Log("5. Add the PlayerAnimator script to the character model");
+        Debug.Log("=== Animator Controller Created Successfully ===");
+        Debug.Log($"Path: {controllerPath}");
+        Debug.Log("States: Idle, Run, Jump, Fall, Land");
+        Debug.Log("Animation clips loaded:");
+        Debug.Log($"  - Idle: {(idleClip != null ? "OK" : "MISSING")}");
+        Debug.Log($"  - Run: {(runClip != null ? "OK" : "MISSING")}");
+        Debug.Log($"  - Jump: {(jumpClip != null ? "OK" : "MISSING")}");
+        Debug.Log($"  - Fall: {(fallClip != null ? "OK" : "MISSING")}");
         
         // Select the created asset
         Selection.activeObject = controller;
     }
     
-    private static AnimationClip FindClipInFBX(string fbxPath, string expectedClipName)
+    private static AnimationClip LoadClip(string fbxPath, string clipName)
     {
         Object[] assets = AssetDatabase.LoadAllAssetsAtPath(fbxPath);
         
-        // First try to find by expected name
         foreach (Object asset in assets)
         {
-            if (asset is AnimationClip clip && !clip.name.Contains("__preview__"))
+            if (asset is AnimationClip clip)
             {
-                if (clip.name == expectedClipName)
+                // Skip preview clips
+                if (clip.name.Contains("__preview__"))
+                    continue;
+                
+                // Check if this is the clip we're looking for
+                if (clip.name == clipName)
                 {
-                    Debug.Log($"Found clip '{clip.name}' in {fbxPath}");
+                    Debug.Log($"✓ Loaded '{clipName}' from {fbxPath}");
                     return clip;
                 }
             }
         }
         
-        // If not found by name, find the longest clip (the actual animation, not the short empty ones)
-        AnimationClip longestClip = null;
-        float maxLength = 0;
-        
-        foreach (Object asset in assets)
-        {
-            if (asset is AnimationClip clip && !clip.name.Contains("__preview__"))
-            {
-                if (clip.length > maxLength)
-                {
-                    maxLength = clip.length;
-                    longestClip = clip;
-                }
-            }
-        }
-        
-        if (longestClip != null)
-        {
-            Debug.Log($"Found clip '{longestClip.name}' (length: {longestClip.length}s) in {fbxPath}");
-        }
-        else
-        {
-            Debug.LogWarning($"No valid animation clip found in {fbxPath}");
-        }
-        
-        return longestClip;
-    }
-    
-    private static AnimationClip FindAnimationClip(string name)
-    {
-        // Search in the Player prefabs folder
-        string[] guids = AssetDatabase.FindAssets($"{name} t:AnimationClip", new[] { "Assets/Prefabs/Player" });
-        
-        foreach (string guid in guids)
-        {
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            
-            // Load all objects from FBX files to find embedded animations
-            Object[] assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
-            foreach (Object asset in assets)
-            {
-                if (asset is AnimationClip clip && !clip.name.Contains("__preview__"))
-                {
-                    Debug.Log($"Found animation clip: {clip.name} at {assetPath}");
-                    return clip;
-                }
-            }
-        }
-        
-        // Also try to find clips embedded in FBX files
-        string[] fbxGuids = AssetDatabase.FindAssets($"{name} t:Model", new[] { "Assets/Prefabs/Player" });
-        foreach (string guid in fbxGuids)
-        {
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            Object[] assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
-            foreach (Object asset in assets)
-            {
-                if (asset is AnimationClip clip && !clip.name.Contains("__preview__"))
-                {
-                    Debug.Log($"Found animation clip in FBX: {clip.name} at {assetPath}");
-                    return clip;
-                }
-            }
-        }
-        
-        Debug.LogWarning($"Animation clip '{name}' not found. You'll need to assign it manually.");
+        Debug.LogError($"✗ Could not find clip '{clipName}' in {fbxPath}");
         return null;
     }
 }

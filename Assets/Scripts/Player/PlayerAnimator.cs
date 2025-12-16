@@ -95,6 +95,7 @@ public class PlayerAnimator : MonoBehaviour
     private static readonly int IdleState = Animator.StringToHash("Idle");
     private static readonly int RunState = Animator.StringToHash("Run");
     private static readonly int JumpState = Animator.StringToHash("Jump");
+    private static readonly int RunningJumpState = Animator.StringToHash("RunningJump");
     private static readonly int FallState = Animator.StringToHash("Fall");
     private static readonly int LandState = Animator.StringToHash("Land");
     
@@ -114,6 +115,7 @@ public class PlayerAnimator : MonoBehaviour
         Idle,
         Run,
         Jump,
+        RunningJump,
         Fall,
         Land
     }
@@ -202,9 +204,12 @@ public class PlayerAnimator : MonoBehaviour
             _groundedTimer = 0f;
         }
         
-        // Determine if running: TRUE when player is pressing movement keys
-        // Works both grounded and in air (for responsive transitions on landing)
-        bool hasMovementInput = false;
+        // Determine if running: TRUE when player is pressing movement keys.
+        // Works both grounded and in air (for responsive transitions on landing).
+        // If we don't have an input reader, we fall back to speed-based hysteresis
+        // (runThreshold to enter run, idleThreshold to exit run).
+        bool wasRunning = _isRunning;
+        bool hasMovementInput;
         if (inputReader != null)
         {
             Vector2 moveInput = inputReader.Move;
@@ -212,8 +217,9 @@ public class PlayerAnimator : MonoBehaviour
         }
         else
         {
-            // Fallback to speed-based detection if no input reader
-            hasMovementInput = _smoothedSpeed >= runThreshold;
+            hasMovementInput = wasRunning
+                ? _smoothedSpeed >= idleThreshold
+                : _smoothedSpeed >= runThreshold;
         }
         
         // Cache isRunning for use in UpdateAnimationState
@@ -222,14 +228,14 @@ public class PlayerAnimator : MonoBehaviour
         // For the animator parameter, we still want grounded check
         bool isRunningParam = hasMovementInput && isGrounded;
         
-        // Determine fall/jump states with tolerance for moving platforms
-        // Only consider falling if we've been ungrounded for a bit AND velocity is significantly negative
-        bool isFalling = !isGrounded && 
-                         verticalVelocity < fallVelocityThreshold && 
-                         !isDashing &&
-                         _airborneTimer > groundedGracePeriod;
-        
-        bool isJumping = !isGrounded && verticalVelocity > jumpVelocityThreshold && !isDashing;
+        // Determine fall/jump states with tolerance for moving platforms.
+        // Only consider air animations if we've been ungrounded for a bit AND velocity is meaningfully non-zero.
+        bool isAirborneForAnim = !isGrounded &&
+                     _airborneTimer > groundedGracePeriod &&
+                     Mathf.Abs(verticalVelocity) > groundedVelocityTolerance;
+
+        bool isFalling = isAirborneForAnim && verticalVelocity < fallVelocityThreshold && !isDashing;
+        bool isJumping = isAirborneForAnim && verticalVelocity > jumpVelocityThreshold && !isDashing;
         
         // Set animator parameters
         _animator.SetFloat(SpeedHash, _smoothedSpeed);
@@ -286,14 +292,10 @@ public class PlayerAnimator : MonoBehaviour
             _jumpLockTimer -= Time.deltaTime;
         }
         
-        // If we're in jump state and locked, don't allow ground states to override
-        if (_currentState == AnimState.Jump && _jumpLockTimer > 0f)
+        // If we're in jump state and locked, don't allow ANY state changes
+        // This prevents glitching during trampoline compression/launch sequence
+        if ((_currentState == AnimState.Jump || _currentState == AnimState.RunningJump) && _jumpLockTimer > 0f)
         {
-            // Only allow transition to fall if velocity is negative
-            if (verticalVelocity < 0f)
-            {
-                TransitionTo(AnimState.Fall, fallTransitionDuration);
-            }
             return;
         }
         
@@ -370,12 +372,12 @@ public class PlayerAnimator : MonoBehaviour
             // Only transition if we've been airborne long enough (prevents flickering on moving platforms)
             if (_airborneTimer > groundedGracePeriod)
             {
-                if (_currentState != AnimState.Jump && _currentState != AnimState.Fall)
+                if (_currentState != AnimState.Jump && _currentState != AnimState.RunningJump && _currentState != AnimState.Fall)
                 {
                     // Just left ground
                     if (verticalVelocity > jumpVelocityThreshold)
                     {
-                        targetState = AnimState.Jump;
+                        targetState = _isRunning ? AnimState.RunningJump : AnimState.Jump;
                         transitionDuration = jumpTransitionDuration;
                     }
                     else if (verticalVelocity < fallVelocityThreshold)
@@ -384,7 +386,7 @@ public class PlayerAnimator : MonoBehaviour
                         transitionDuration = fallTransitionDuration;
                     }
                 }
-                else if (_currentState == AnimState.Jump && verticalVelocity < 0)
+                else if ((_currentState == AnimState.Jump || _currentState == AnimState.RunningJump) && verticalVelocity < 0)
                 {
                     // Transitioning from jump to fall (going down after jumping)
                     targetState = AnimState.Fall;
@@ -394,7 +396,7 @@ public class PlayerAnimator : MonoBehaviour
                 {
                     // Transitioning from fall to jump (bounced by trampoline or launched while falling)
                     // Use instant transition for snappy response
-                    targetState = AnimState.Jump;
+                    targetState = _isRunning ? AnimState.RunningJump : AnimState.Jump;
                     transitionDuration = 0f;
                 }
             }
@@ -413,8 +415,8 @@ public class PlayerAnimator : MonoBehaviour
         if (newState == _currentState)
             return;
         
-        // Don't transition away from Jump if locked (prevents trampoline glitching)
-        if (_currentState == AnimState.Jump && _jumpLockTimer > 0f && newState != AnimState.Fall)
+        // Don't transition away from Jump/RunningJump if locked (prevents trampoline glitching)
+        if ((_currentState == AnimState.Jump || _currentState == AnimState.RunningJump) && _jumpLockTimer > 0f && newState != AnimState.Fall)
             return;
             
         int stateHash = GetStateHash(newState);
@@ -443,6 +445,7 @@ public class PlayerAnimator : MonoBehaviour
             case AnimState.Idle: return IdleState;
             case AnimState.Run: return RunState;
             case AnimState.Jump: return JumpState;
+            case AnimState.RunningJump: return RunningJumpState;
             case AnimState.Fall: return FallState;
             case AnimState.Land: return LandState;
             default: return IdleState;
@@ -453,14 +456,20 @@ public class PlayerAnimator : MonoBehaviour
     
     /// <summary>
     /// Called when player first lands on a trampoline (before compression starts).
-    /// Locks the animator immediately to prevent any landing/run/idle transitions.
+    /// Immediately transitions to RunningJump animation to prevent glitching.
     /// </summary>
     private void HandleTrampolineLand()
     {
-        _jumpLockTimer = 0.5f;  // Lock for longer since trampoline has compression delay
+        // Immediately transition to RunningJump to prevent animation glitching
+        int stateHash = GetStateHash(AnimState.RunningJump);
+        _animator.CrossFadeInFixedTime(stateHash, 0.1f);  // Smooth transition
+        _currentState = AnimState.RunningJump;
+        _jumpLockTimer = 0.6f;  // Lock for entire trampoline sequence
+        _airborneTimer = 0f;
+        
         if (showDebugInfo)
         {
-            Debug.Log("HandleTrampolineLand - locking animator for trampoline");
+            Debug.Log("HandleTrampolineLand - RunningJump transition with lock");
         }
     }
     
@@ -470,10 +479,11 @@ public class PlayerAnimator : MonoBehaviour
     /// </summary>
     private void HandlePrepareLaunch()
     {
-        _jumpLockTimer = 0.35f;
+        // Extend lock to ensure it stays active through the entire launch
+        _jumpLockTimer = Mathf.Max(_jumpLockTimer, 0.6f);
         if (showDebugInfo)
         {
-            Debug.Log("HandlePrepareLaunch - locking animator for incoming launch");
+            Debug.Log($"HandlePrepareLaunch - lock extended to {_jumpLockTimer}s");
         }
     }
     
@@ -481,7 +491,7 @@ public class PlayerAnimator : MonoBehaviour
     {
         // If already in jump state with active lock, just refresh the lock timer
         // This prevents animation restart/glitching on trampolines
-        if (_currentState == AnimState.Jump && _jumpLockTimer > 0f)
+        if ((_currentState == AnimState.Jump || _currentState == AnimState.RunningJump) && _jumpLockTimer > 0f)
         {
             _jumpLockTimer = 0.3f;
             _airborneTimer = 0f;
@@ -490,28 +500,33 @@ public class PlayerAnimator : MonoBehaviour
         
         // Force transition to jump state using CrossFade
         // The _jumpLockTimer prevents UpdateAnimationState from overriding this
-        int stateHash = GetStateHash(AnimState.Jump);
+        // ALWAYS use RunningJump animation for all jumps (including from idle and trampolines)
+        AnimState jumpState = AnimState.RunningJump;
+        int stateHash = GetStateHash(jumpState);
         _animator.CrossFadeInFixedTime(stateHash, jumpTransitionDuration);
-        _currentState = AnimState.Jump;
+        _currentState = jumpState;
         _jumpLockTimer = 0.3f;  // Lock to prevent state machine from overriding
         _airborneTimer = 0f;    // Reset airborne timer on jump
         
         if (showDebugInfo)
         {
-            Debug.Log($"HandleJump called - transitioning to Jump state (hash: {stateHash})");
+            Debug.Log($"HandleJump called - transitioning to RunningJump state (hash: {stateHash})");
         }
     }
     
     private void HandleDash()
     {
-        // Play running animation while dashing
-        if (_currentState == AnimState.Idle || _currentState == AnimState.Run)
+        // When dashing from idle, immediately transition to Run animation
+        if (_currentState == AnimState.Idle)
         {
-            TransitionTo(AnimState.Run, 0f);  // Instant transition to run
+            TransitionTo(AnimState.Run, 0.05f);
+            if (showDebugInfo)
+                Debug.Log("Dash from Idle - transitioning to Run animation");
         }
-        
-        if (showDebugInfo)
-            Debug.Log("Dash triggered - playing run animation");
+        else if (showDebugInfo)
+        {
+            Debug.Log("Dash triggered");
+        }
     }
     
     private void HandleLand()

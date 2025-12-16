@@ -21,9 +21,9 @@ public class FixPlayerAnimationImports
         {
             { "Idle.fbx", ("Idle", true) },
             { "Running.fbx", ("Running", true) },
-            { "Jump.fbx", ("Jump", false) },
-            { "Fall.fbx", ("Fall", true) },
-            { "Running Jump.fbx", ("RunningJump", false) }
+            { "Jumping.fbx", ("Jump", false) },
+            { "Fall A Loop.fbx", ("Fall", true) },
+            { "RunningJump.fbx", ("RunningJump", false) }
         };
         
         // First pass: Configure Idle.fbx to create the avatar
@@ -190,7 +190,7 @@ public class FixPlayerAnimationImports
     public static void ListAnimationClips()
     {
         string playerFolder = "Assets/Prefabs/Player";
-        string[] fbxFiles = { "Idle.fbx", "Running.fbx", "Jump.fbx", "Fall.fbx", "Running Jump.fbx" };
+        string[] fbxFiles = { "Idle.fbx", "Running.fbx", "Jumping.fbx", "Fall A Loop.fbx", "RunningJump.fbx" };
         
         Debug.Log("========== ANIMATION DEBUG INFO ==========");
         
