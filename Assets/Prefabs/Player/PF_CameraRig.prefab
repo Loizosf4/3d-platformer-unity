@@ -190,6 +190,7 @@ MonoBehaviour:
   lookStickActionName: LookStick
   mouseSensitivity: 0.08
   stickSensitivity: 1.5
+  invertX: 0
   invertY: 0
   clamp: 1
 --- !u!1 &412737776796071833
@@ -613,9 +614,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8929274147831618837}
+  - component: {fileID: 6325326294311112178}
+  - component: {fileID: 3289344897280232274}
   m_Layer: 0
   m_Name: PF_CameraRig
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -637,6 +640,33 @@ Transform:
   - {fileID: 8764401837362875383}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6325326294311112178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5683379039542738558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a428be069badf547980df619e2335e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  virtualCameraComponent: {fileID: 0}
+  followTarget: {fileID: 0}
+  autoFindPlayerByTag: 1
+--- !u!114 &3289344897280232274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5683379039542738558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f1266c80757e9a499c6145f40f7fa8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6579313283884069934
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,8 +821,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8769094368171827742}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1604206, y: -0.059981044, z: 0.009766978, w: 0.9851762}
-  m_LocalPosition: {x: -3.4752316, y: 6.901697, z: 3.493468}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.8937306, y: 0.8359997, z: 6.9695444}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
