@@ -12,16 +12,19 @@ public class Bootstrapper : MonoBehaviour
 
     [Header("Transitions")]
     [SerializeField] private GameObject sceneTransitionManagerPrefab; // PF_SceneTransitionManager
+    [SerializeField] private GameObject respawnManagerPrefab; // PF_RespawnManager
 
     private void Awake()
     {
         if (PlayerStats.Instance == null && gameStatePrefab != null)
             Instantiate(gameStatePrefab);
 
+        if (RespawnManager.Instance == null && respawnManagerPrefab != null)
+            Instantiate(respawnManagerPrefab);
+
         if (FindObjectOfType<HUDController>(true) == null && hudPrefab != null)
             Instantiate(hudPrefab);
 
-        // Spawn camera rig BEFORE player (important for camera-centric movement)
         if (FindObjectOfType<CameraRigBinder>(true) == null && cameraRigPrefab != null)
             Instantiate(cameraRigPrefab);
 
@@ -31,5 +34,6 @@ public class Bootstrapper : MonoBehaviour
         if (SceneTransitionManager.Instance == null && sceneTransitionManagerPrefab != null)
             Instantiate(sceneTransitionManagerPrefab);
     }
+
 
 }
