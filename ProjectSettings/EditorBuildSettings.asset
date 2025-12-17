@@ -11,4 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainArea.unity
     guid: cefd6538c65893441b82a01231d69043
+  - enabled: 1
+    path: Assets/Scenes/DoubleJumpUnlockArea.unity
+    guid: f287d1cb2da5fa349aa458bb44e25a2f
+  - enabled: 1
+    path: Assets/Scenes/BonusRoom.unity
+    guid: 795829724486cc440817fcd41ad17a4d
+  - enabled: 1
+    path: Assets/Scenes/WallJumpUnlockRoom.unity
+    guid: 4f4b9ffc60b0e274bab86369fa5fc187
   m_configObjects: {}
