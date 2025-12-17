@@ -606,6 +606,10 @@ public class PlayerMotorCC : MonoBehaviour
         // Mark that we've jumped - prevents re-triggering during grounded grace period
         _hasJumpedThisGrounding = true;
         
+        // Clear grounded stable timer to ensure player is not considered grounded during jump
+        // This prevents animation from getting stuck when jumping from moving platforms
+        _groundedStableTimer = 0f;
+        
         // Always trigger jump animation when DoJump is called
         OnJump?.Invoke();
     }
