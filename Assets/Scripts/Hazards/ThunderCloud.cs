@@ -422,18 +422,21 @@ public class ThunderCloud : MonoBehaviour
         _currentState = State.Warning;
         _stateTimer = warningDuration;
         
-        // Calculate strike point for indicator
-        Vector3 origin = transform.position;
-        Vector3 direction = Vector3.down;
+        // Calculate strike point - raycast from cloud downward to find ground
+        Vector3 cloudBottomPosition = transform.position;
+        Vector3 downDirection = Vector3.down;
         
         RaycastHit hit;
-        if (Physics.Raycast(origin, direction, out hit, strikeRange, hitLayers))
+        // Raycast from cloud downward to detect ground/platforms
+        if (Physics.Raycast(cloudBottomPosition, downDirection, out hit, strikeRange, hitLayers))
         {
+            // Lightning will hit this point on the ground/platform
             _strikePoint = hit.point;
         }
         else
         {
-            _strikePoint = origin + direction * strikeRange;
+            // No ground detected within range, use maximum distance
+            _strikePoint = cloudBottomPosition + downDirection * strikeRange;
         }
         
         // Play warning sound
@@ -446,25 +449,32 @@ public class ThunderCloud : MonoBehaviour
         _currentState = State.Striking;
         _stateTimer = strikeDuration;
         
-        // Cast ray downward to find strike point
-        Vector3 origin = transform.position;
-        Vector3 direction = Vector3.down;
+        // Lightning originates from the cloud
+        Vector3 lightningOrigin = transform.position;
+        Vector3 downDirection = Vector3.down;
         
-        RaycastHit hit;
-        if (Physics.Raycast(origin, direction, out hit, strikeRange, hitLayers))
+        RaycastHit groundHit;
+        Vector3 lightningEndPoint;
+        
+        // Raycast from cloud to ground to determine where lightning lands
+        if (Physics.Raycast(lightningOrigin, downDirection, out groundHit, strikeRange, hitLayers))
         {
-            _strikePoint = hit.point;
+            // Lightning hits the detected ground/platform
+            lightningEndPoint = groundHit.point;
+            _strikePoint = groundHit.point;
         }
         else
         {
-            _strikePoint = origin + direction * strikeRange;
+            // No ground detected, lightning extends to max range
+            lightningEndPoint = lightningOrigin + downDirection * strikeRange;
+            _strikePoint = lightningEndPoint;
         }
         
-        // Generate procedural lightning bolt
-        GenerateLightningBolt(origin, _strikePoint);
+        // Generate procedural lightning bolt from cloud to ground
+        GenerateLightningBolt(lightningOrigin, lightningEndPoint);
         
-        // Check for player in strike path using SphereCast
-        RaycastHit[] hits = Physics.SphereCastAll(origin, strikeRadius, direction, strikeRange, hitLayers);
+        // Check for player in strike path using SphereCast along the lightning path
+        RaycastHit[] hits = Physics.SphereCastAll(lightningOrigin, strikeRadius, downDirection, strikeRange, hitLayers);
         
         foreach (var h in hits)
         {
@@ -475,7 +485,7 @@ public class ThunderCloud : MonoBehaviour
                 float heightFromGround = health.transform.position.y - _strikePoint.y;
                 if (heightFromGround >= 0f && heightFromGround <= strikeHeight)
                 {
-                    health.TryTakeDamage(origin, damageAmount);
+                    health.TryTakeDamage(lightningOrigin, damageAmount);
                 }
                 break; // Only hit player once
             }
@@ -715,12 +725,17 @@ public class ThunderCloud : MonoBehaviour
                 // Position flat on the ground at strike point
                 groundIndicator.transform.position = _strikePoint + Vector3.up * 0.05f; // Slightly above ground to prevent z-fighting
                 
-                // No rotation needed for sphere
+                // No rotation needed for cylinder
                 groundIndicator.transform.rotation = Quaternion.identity;
                 
-                // Scale to match strike radius as a flat circle (sphere squashed on Y axis)
+                // Scale to match strike radius as a flat circle (cylinder squashed on Y axis)
+                // Account for parent scale to ensure world-space accuracy
+                Vector3 parentScale = transform.lossyScale;
                 float diameter = strikeRadius * 2f;
-                groundIndicator.transform.localScale = new Vector3(diameter, 0.05f, diameter); // Very flat Y to make it look like a disc
+                
+                // Divide by parent scale to compensate for parent transform scaling
+                float worldDiameter = diameter / Mathf.Max(parentScale.x, 0.001f);
+                groundIndicator.transform.localScale = new Vector3(worldDiameter, 0.05f, worldDiameter); // Very flat Y to make it look like a disc
                 
                 // Pulse during warning
                 if (showWarning)

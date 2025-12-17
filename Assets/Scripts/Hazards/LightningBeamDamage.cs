@@ -10,10 +10,6 @@ public class LightningBeamDamage : MonoBehaviour
     [Tooltip("Reference to the parent LightningWall controller")]
     [SerializeField] private LightningWall controller;
     
-    [Header("Pushback")]
-    [Tooltip("Force to push player away from beam")]
-    [SerializeField] private float pushbackForce = 15f;
-    
     [Header("Detection")]
     [SerializeField] private string playerTag = "Player";
     
@@ -25,6 +21,18 @@ public class LightningBeamDamage : MonoBehaviour
         // Auto-find controller if not assigned
         if (controller == null)
             controller = GetComponentInParent<LightningWall>();
+            
+        if (controller == null)
+            Debug.LogError($"LightningBeamDamage on {gameObject.name}: Could not find LightningWall controller!");
+            
+        // Verify we have a trigger collider
+        Collider col = GetComponent<Collider>();
+        if (col == null)
+            Debug.LogError($"LightningBeamDamage on {gameObject.name}: No collider found!");
+        else if (!col.isTrigger)
+            Debug.LogWarning($"LightningBeamDamage on {gameObject.name}: Collider is not a trigger!");
+        else
+            Debug.Log($"LightningBeamDamage on {gameObject.name}: Setup complete. Trigger collider found.");
     }
 
     private void Update()
@@ -33,11 +41,29 @@ public class LightningBeamDamage : MonoBehaviour
             _damageTimer -= Time.deltaTime;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log($"LightningBeamDamage.OnTriggerEnter: {other.gameObject.name}, tag={other.tag}, controller={controller != null}, active={controller?.IsActive}");
+        
+        if (controller == null || !controller.IsActive) return;
+        if (!other.CompareTag(playerTag)) return;
+        
+        Debug.Log($"Applying damage on ENTER to {other.gameObject.name}");
+        ApplyDamage(other);
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (controller == null || !controller.IsActive) return;
+        Debug.Log($"Applying damage on STAY to {other.gameObject.name}");
         if (_damageTimer > 0f) return;
         if (!other.CompareTag(playerTag)) return;
+        
+        ApplyDamage(other);
+    }
+    
+    private void ApplyDamage(Collider other)
+    {
         
         var health = other.GetComponentInParent<PlayerHealthController>();
         if (health == null) return;
@@ -63,31 +89,36 @@ public class LightningBeamDamage : MonoBehaviour
             return;
         }
         
-        // Apply pushback force using beam surface normal
+        // Apply STRONG pushback force - push player away from wall center
         var motor = other.GetComponentInParent<PlayerMotorCC>();
         if (motor != null)
         {
-            // Determine which side of the beam the player is on (front +Z or back -Z in local space)
-            Vector3 localPlayerPos = transform.InverseTransformPoint(other.transform.position);
+            // Calculate direction from wall center to player
+            Vector3 wallCenter = transform.position;
+            Vector3 playerPos = other.transform.position;
+            Vector3 pushDirection = (playerPos - wallCenter).normalized;
             
-            // Push in the direction of the beam's surface normal (Z-axis faces)
-            Vector3 pushDirection;
-            if (localPlayerPos.z > 0)
+            // Keep only horizontal component (zero out Y)
+            pushDirection.y = 0f;
+            
+            // If somehow the direction is too small (player directly above/below), use forward
+            if (pushDirection.magnitude < 0.1f)
             {
-                // Player is on the front side, push in +Z world direction
-                pushDirection = transform.forward;
+                pushDirection = Vector3.forward;
             }
             else
             {
-                // Player is on the back side, push in -Z world direction
-                pushDirection = -transform.forward;
+                pushDirection.Normalize();
             }
             
-            // Add slight upward component
-            pushDirection.y = 0.3f;
+            // Add upward component
+            pushDirection.y = 0.5f;
             pushDirection.Normalize();
             
-            motor.AddDirectionalForce(pushDirection * pushbackForce);
+            float force = controller.PushbackForce;
+            Debug.Log($"PUSHBACK: wallCenter={wallCenter}, playerPos={playerPos}, pushDir={pushDirection}, force={force}");
+            
+            motor.AddDirectionalForce(pushDirection * force);
         }
         
         // Start cooldown
