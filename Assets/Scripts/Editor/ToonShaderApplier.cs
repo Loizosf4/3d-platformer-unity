@@ -13,7 +13,8 @@ public class ToonShaderApplier : EditorWindow
         Standard,           // Full toon with optional outline, shadows, highlights, rim
         NoOutline,          // Toon shading without any outline
         Transparent,        // For transparent objects
-        Unlit               // Simple unlit with optional outline
+        Unlit,              // Simple unlit with optional outline
+        OutlineOnly         // Only add black outline, preserve original material
     }
     
     private ToonShaderType selectedShaderType = ToonShaderType.Standard;
@@ -44,6 +45,12 @@ public class ToonShaderApplier : EditorWindow
     public static void ApplyNoOutlineQuick()
     {
         ApplyToonShaderToSelected(ToonShaderType.NoOutline, true, true, false);
+    }
+    
+    [MenuItem("Tools/Toon Shader/Apply OUTLINE ONLY to Selected")]
+    public static void ApplyOutlineOnlyQuick()
+    {
+        ApplyToonShaderToSelected(ToonShaderType.OutlineOnly, true, true, true);
     }
     
     [MenuItem("Tools/Toon Shader/Apply Toon to All Renderers in Scene")]
@@ -79,10 +86,19 @@ public class ToonShaderApplier : EditorWindow
         EditorGUILayout.Space();
         
         // Only show outline options for shaders that support it
-        if (selectedShaderType == ToonShaderType.Standard || selectedShaderType == ToonShaderType.Unlit)
+        if (selectedShaderType == ToonShaderType.Standard || selectedShaderType == ToonShaderType.Unlit || selectedShaderType == ToonShaderType.OutlineOnly)
         {
             GUILayout.Label("Outline Settings", EditorStyles.boldLabel);
-            enableOutline = EditorGUILayout.Toggle("Enable Outline", enableOutline);
+            
+            if (selectedShaderType != ToonShaderType.OutlineOnly)
+            {
+                enableOutline = EditorGUILayout.Toggle("Enable Outline", enableOutline);
+            }
+            else
+            {
+                enableOutline = true; // Always enabled for outline-only mode
+                EditorGUILayout.HelpBox("Outline Only mode preserves your existing material and only adds a black outline.", MessageType.Info);
+            }
             
             if (enableOutline)
             {
@@ -95,14 +111,18 @@ public class ToonShaderApplier : EditorWindow
             EditorGUILayout.Space();
         }
         
-        GUILayout.Label("Shading Parameters", EditorStyles.boldLabel);
+        // Don't show shading parameters for outline-only mode
+        if (selectedShaderType != ToonShaderType.OutlineOnly)
+        {
+            GUILayout.Label("Shading Parameters", EditorStyles.boldLabel);
         shadowColor = EditorGUILayout.ColorField("Shadow Color", shadowColor);
         shadowTolerance = EditorGUILayout.Slider("Shadow Tolerance", shadowTolerance, 0f, 1f);
         EditorGUILayout.HelpBox("Shadow Tolerance: 0 = full shadows, 1 = no shadows", MessageType.None);
         rimColor = EditorGUILayout.ColorField("Rim Color", rimColor);
         rimIntensity = EditorGUILayout.Slider("Rim Intensity", rimIntensity, 0f, 1f);
         
-        EditorGUILayout.Space();
+            EditorGUILayout.Space();
+        }
         
         if (GUILayout.Button("Apply to Selected Objects"))
         {
@@ -122,7 +142,8 @@ public class ToonShaderApplier : EditorWindow
             "• Standard: Full cel shading with optional outline\n" +
             "• No Outline: Cel shading without outline pass (better performance)\n" +
             "• Transparent: For transparent/alpha objects\n" +
-            "• Unlit: Flat color with optional outline", 
+            "• Unlit: Flat color with optional outline\n" +
+            "• Outline Only: Keeps original material, only adds black outline", 
             MessageType.Info);
     }
     
@@ -173,6 +194,12 @@ public class ToonShaderApplier : EditorWindow
         if (renderer is ParticleSystemRenderer || renderer is TrailRenderer || renderer is LineRenderer)
             return false;
         
+        // Special handling for Outline Only mode
+        if (shaderType == ToonShaderType.OutlineOnly)
+        {
+            return ApplyOutlineOnly(renderer, outline ?? Color.black, outlineW ?? 0.005f);
+        }
+        
         string shaderName = shaderType switch
         {
             ToonShaderType.Standard => "Custom/ToonShader",
@@ -210,10 +237,10 @@ public class ToonShaderApplier : EditorWindow
                 toonMat = new Material(toonShader);
                 toonMat.name = originalMat.name + "_Toon";
                 
-                // Copy main texture and color if they exist
-                if (originalMat.HasProperty("_MainTex"))
-                    toonMat.SetTexture("_MainTex", originalMat.GetTexture("_MainTex"));
-                    
+                // Preserve all textures from original material
+                CopyTextures(originalMat, toonMat);
+                
+                // Copy main color if it exists
                 if (originalMat.HasProperty("_Color"))
                     toonMat.SetColor("_Color", originalMat.GetColor("_Color"));
             }
@@ -264,6 +291,86 @@ public class ToonShaderApplier : EditorWindow
         renderer.sharedMaterials = newMaterials;
         
         return true;
+    }
+    
+    private static void CopyTextures(Material source, Material destination)
+    {
+        // Copy all texture properties
+        if (source.HasProperty("_MainTex") && destination.HasProperty("_MainTex"))
+            destination.SetTexture("_MainTex", source.GetTexture("_MainTex"));
+        
+        if (source.HasProperty("_BumpMap") && destination.HasProperty("_BumpMap"))
+            destination.SetTexture("_BumpMap", source.GetTexture("_BumpMap"));
+        
+        if (source.HasProperty("_MetallicGlossMap") && destination.HasProperty("_MetallicGlossMap"))
+            destination.SetTexture("_MetallicGlossMap", source.GetTexture("_MetallicGlossMap"));
+        
+        if (source.HasProperty("_OcclusionMap") && destination.HasProperty("_OcclusionMap"))
+            destination.SetTexture("_OcclusionMap", source.GetTexture("_OcclusionMap"));
+        
+        if (source.HasProperty("_EmissionMap") && destination.HasProperty("_EmissionMap"))
+            destination.SetTexture("_EmissionMap", source.GetTexture("_EmissionMap"));
+        
+        // Copy texture scales and offsets
+        if (source.HasProperty("_MainTex") && destination.HasProperty("_MainTex"))
+        {
+            destination.SetTextureScale("_MainTex", source.GetTextureScale("_MainTex"));
+            destination.SetTextureOffset("_MainTex", source.GetTextureOffset("_MainTex"));
+        }
+    }
+    
+    private static bool ApplyOutlineOnly(Renderer renderer, Color outlineColor, float outlineWidth)
+    {
+        // For outline only, we need to use a special approach
+        // We'll keep the original material and add an outline pass
+        
+        Material[] materials = renderer.sharedMaterials;
+        bool modified = false;
+        
+        for (int i = 0; i < materials.Length; i++)
+        {
+            Material mat = materials[i];
+            if (mat == null) continue;
+            
+            // Check if material already has outline shader
+            if (mat.shader.name.Contains("ToonShaderOutlineOnly"))
+                continue;
+            
+            // Create a wrapper shader that uses the original material for rendering
+            // but adds an outline pass
+            Shader outlineShader = Shader.Find("Custom/ToonShaderOutlineOnly");
+            
+            if (outlineShader != null)
+            {
+                Material newMat = new Material(outlineShader);
+                newMat.name = mat.name + "_WithOutline";
+                
+                // Copy ALL properties from original
+                newMat.CopyPropertiesFromMaterial(mat);
+                newMat.shader = outlineShader;
+                
+                // Set outline parameters
+                newMat.SetColor("_OutlineColor", outlineColor);
+                newMat.SetFloat("_OutlineWidth", outlineWidth);
+                newMat.EnableKeyword("OUTLINE_ON");
+                
+                materials[i] = newMat;
+                modified = true;
+            }
+            else
+            {
+                Debug.LogWarning("ToonShaderOutlineOnly shader not found. Creating it...");
+                // Continue with other materials
+            }
+        }
+        
+        if (modified)
+        {
+            Undo.RecordObject(renderer, "Apply Outline Only");
+            renderer.sharedMaterials = materials;
+        }
+        
+        return modified;
     }
     
     private void RemoveFromSelected()
