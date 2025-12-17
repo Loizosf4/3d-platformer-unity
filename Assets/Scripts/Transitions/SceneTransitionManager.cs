@@ -215,4 +215,65 @@ public class SceneTransitionManager : MonoBehaviour
         freeLook.m_YAxis.Value = 0.5f;
     }
 
+    public void RequestRespawnToCheckpoint(CheckpointData cp)
+    {
+        if (_isTransitioning) return;
+        StartCoroutine(RespawnRoutine(cp));
+    }
+
+    private IEnumerator RespawnRoutine(CheckpointData cp)
+    {
+        _isTransitioning = true;
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        var locker = player != null ? player.GetComponent<PlayerControlLock>() : null;
+        if (locker != null) locker.SetLocked(true);
+
+        yield return FadeTo(1f, fadeOutTime);
+
+        // Load checkpoint scene if needed
+        if (SceneManager.GetActiveScene().name != cp.sceneName)
+        {
+            AsyncOperation op = SceneManager.LoadSceneAsync(cp.sceneName, LoadSceneMode.Single);
+            while (!op.isDone) yield return null;
+        }
+
+        player = GameObject.FindGameObjectWithTag("Player");
+        locker = player != null ? player.GetComponent<PlayerControlLock>() : null;
+
+        // Teleport to checkpoint pos/rot (CharacterController-safe)
+        if (player != null)
+        {
+            var cc = player.GetComponent<CharacterController>();
+            if (cc != null) cc.enabled = false;
+
+            var motor = player.GetComponent<PlayerMotorCC>();
+            if (motor != null) motor.ResetMovementState();
+
+            player.transform.SetPositionAndRotation(cp.position, cp.rotation);
+
+            if (cc != null)
+            {
+                cc.enabled = true;
+                cc.Move(Vector3.zero);
+            }
+
+            ResetFreeLookBehindPlayer(player);
+        }
+
+        // Heal after moving
+        if (PlayerStats.Instance != null)
+            PlayerStats.Instance.FullHeal();
+
+        yield return FadeTo(0f, fadeInTime);
+
+        if (postSpawnLockTime > 0f)
+            yield return new WaitForSecondsRealtime(postSpawnLockTime);
+
+        if (locker != null) locker.SetLocked(false);
+
+        _isTransitioning = false;
+    }
+
+
 }

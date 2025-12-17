@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -50,33 +51,28 @@ public class Checkpoint : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        if (spawnPoint == null)
-        {
-            Debug.LogWarning($"[Checkpoint] {name} has no SpawnPoint assigned.");
-            return;
-        }
-
         var stats = PlayerStats.Instance;
         if (stats == null)
         {
-            Debug.LogError("[Checkpoint] PlayerStats.Instance not found. Make sure GameState exists.");
+            Debug.LogError("[Checkpoint] PlayerStats.Instance is null (GameState missing).");
             return;
         }
 
         stats.SetCheckpoint(spawnPoint);
-
+        stats.FullHeal(); // heal on touch
         ActivateFeedback();
     }
 
+
     private void ActivateFeedback()
     {
-        if (_activated) return;
-        _activated = true;
-
         if (!string.IsNullOrWhiteSpace(checkpointId))
             Debug.Log($"[Checkpoint] Activated: {checkpointId}");
 
         if (feedbackRenderer != null)
             feedbackRenderer.material.color = activeColor;
+
+        _activated = true; // optional: keep as “ever activated” if you want
     }
+
 }

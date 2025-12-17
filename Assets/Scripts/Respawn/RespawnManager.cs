@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RespawnManager : MonoBehaviour
 {
@@ -9,6 +10,35 @@ public class RespawnManager : MonoBehaviour
 
     [Tooltip("Used if no checkpoint has ever been touched.")]
     [SerializeField] private Transform defaultSpawnPoint;
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        RefreshDefaultSpawnForCurrentScene();
+    }
+
+    private void RefreshDefaultSpawnForCurrentScene()
+    {
+        var spawns = FindObjectsOfType<SpawnPoint>(true);
+        foreach (var sp in spawns)
+        {
+            if (sp != null && sp.IsDefaultSpawn)
+            {
+                defaultSpawnPoint = sp.transform;
+                return;
+            }
+        }
+        // If none found, leave it null (Respawn will fall back to Vector3.zero)
+    }
 
     private void Awake()
     {
@@ -24,11 +54,13 @@ public class RespawnManager : MonoBehaviour
         if (stats == null)
             stats = PlayerStats.Instance;
 
+        /*
         if (defaultSpawnPoint == null)
         {
             var dsp = GameObject.Find("DefaultSpawnPoint");
             if (dsp != null) defaultSpawnPoint = dsp.transform;
         }
+        */
     }
 
     public void SetDefaultSpawnPoint(Transform t)
@@ -76,6 +108,13 @@ public class RespawnManager : MonoBehaviour
         if (stats.HasCheckpoint)
         {
             var cp = stats.LastCheckpoint;
+
+            if (SceneTransitionManager.Instance != null)
+            {
+                SceneTransitionManager.Instance.RequestRespawnToCheckpoint(cp);
+                return; // SceneTransitionManager will heal + move
+            }
+
             TeleportAndReset(player, cp.position, cp.rotation);
         }
         else if (defaultSpawnPoint != null)
