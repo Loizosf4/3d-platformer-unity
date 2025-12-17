@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7710037610982831395}
   - component: {fileID: 4234991528214393434}
   - component: {fileID: 8402068838622390218}
-  - component: {fileID: 5709864208093716257}
+  - component: {fileID: 4630103638261691957}
   m_Layer: 0
   m_Name: PF_Collectible_Coin_Hub
   m_TagString: Untagged
@@ -57,7 +57,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 02d6a2227132ba3428999bc65c52a5ee, type: 2}
+  - {fileID: 2100000, guid: 69f0f85a4da7641428107116f8d60342, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -149,6 +149,7 @@ MonoBehaviour:
   collectVfx: {fileID: 0}
   motionScriptToDisable: {fileID: 8402068838622390218}
   destroyDelay: 0
+  collectibleId: 1094e04b75b145a78d31b0d34964f481
 --- !u!114 &8402068838622390218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,11 +165,11 @@ MonoBehaviour:
   rotationDegreesPerSecond: {x: 0, y: 120, z: 0}
   bobHeight: 0.15
   bobSpeed: 2
---- !u!33 &5709864208093716257
+--- !u!33 &4630103638261691957
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6492122009050486830}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 2534964839176971238, guid: dcde63d579d2bd04685f772e4dc40bce, type: 3}
