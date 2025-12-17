@@ -151,6 +151,7 @@ public class HailShooterEnemy : MonoBehaviour
                 rb.velocity = spreadDirection * projectileSpeed;
             }
             
+<<<<<<< Updated upstream
             // Add damage component if not already present
             DamageOnTouch damageComp = hailstone.GetComponent<DamageOnTouch>();
             if (damageComp == null)
@@ -167,6 +168,15 @@ public class HailShooterEnemy : MonoBehaviour
             
             // Destroy hailstone after lifetime to prevent clutter
             Destroy(hailstone, 5f);
+=======
+            // Initialize if it has the Hailstone component
+            Hailstone hailComp = hailstone.GetComponent<Hailstone>();
+            if (hailComp != null)
+            {
+                // Initialize with reasonable defaults
+                hailComp.Initialize(null, projectileSpeed, 0.1f, 1f, 5f);
+            }
+>>>>>>> Stashed changes
         }
         
         Debug.Log($"HailShooterEnemy: Fired {hailstonesPerBurst} hailstones at player");
@@ -177,6 +187,7 @@ public class HailShooterEnemy : MonoBehaviour
         if (!_isActive) return;
         
         // Check if player stomped on top
+<<<<<<< Updated upstream
         if (other.CompareTag(playerTag))
         {
             // Get player motor
@@ -212,6 +223,22 @@ public class HailShooterEnemy : MonoBehaviour
                     
                     // Give player a small bounce
                     motor.AddUpwardVelocityThisFrame(8f);
+=======
+        if (other.CompareTag(playerTag) && stompCollider != null && other == stompCollider)
+        {
+            // Check if player is coming from above
+            var motor = other.GetComponentInParent<PlayerMotorCC>();
+            if (motor != null)
+            {
+                // Get player's velocity - if moving downward, it's a stomp
+                // This is a simple check - you can make it more sophisticated
+                Vector3 playerPos = other.transform.position;
+                Vector3 enemyPos = transform.position;
+                
+                if (playerPos.y > enemyPos.y)
+                {
+                    DefeatEnemy();
+>>>>>>> Stashed changes
                 }
             }
         }

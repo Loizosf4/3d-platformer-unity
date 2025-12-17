@@ -439,6 +439,9 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &52106135
 GameObject:
@@ -529,6 +532,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 --- !u!1001 &100716646
 PrefabInstance:
@@ -667,6 +671,8 @@ Transform:
   m_PrefabInstance: {fileID: 150881250}
   m_PrefabAsset: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!21 &131087949
 Material:
   serializedVersion: 8
@@ -715,6 +721,9 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &211774054
 GameObject:
@@ -763,8 +772,11 @@ Transform:
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 181.412, z: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!43 &227574757
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!21 &218243181
 Material:
   serializedVersion: 8
@@ -1294,6 +1306,7 @@ Transform:
   m_PrefabInstance: {fileID: 1883281602}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!4 &291554451 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
@@ -1378,6 +1391,8 @@ Transform:
   m_PrefabInstance: {fileID: 305173698}
   m_PrefabAsset: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!21 &288630715
 Material:
   serializedVersion: 8
@@ -1426,6 +1441,9 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!4 &331327469 stripped
 Transform:
@@ -2285,6 +2303,7 @@ Transform:
   m_PrefabInstance: {fileID: 393575546}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1001 &415709613
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2364,6 +2383,8 @@ Transform:
   m_PrefabInstance: {fileID: 415709613}
   m_PrefabAsset: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!21 &395329874
 Material:
   serializedVersion: 8
@@ -2460,6 +2481,9 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &436983139
 PrefabInstance:
@@ -2529,7 +2553,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       objectReference: {fileID: 2100000, guid: db8c288a0efc2f84580e20a6203035f2, type: 2}
+=======
+      objectReference: {fileID: 984281154}
+>>>>>>> Stashed changes
 =======
       objectReference: {fileID: 984281154}
 >>>>>>> Stashed changes
@@ -2695,6 +2723,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 --- !u!1 &515562653
 GameObject:
@@ -2888,10 +2917,16 @@ Mesh:
 Material:
   serializedVersion: 8
 >>>>>>> Stashed changes
+=======
+--- !u!21 &547681882
+Material:
+  serializedVersion: 8
+>>>>>>> Stashed changes
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   m_Name: <Renderable generated -36438>
   serializedVersion: 11
@@ -3055,6 +3090,8 @@ Material:
 --- !u!43 &559067635
 Mesh:
 =======
+=======
+>>>>>>> Stashed changes
   m_Name: Stylized Stone Gray_Toon_Toon_Toon_Toon_Toon_Toon_Toon
   m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
   m_Parent: {fileID: 0}
@@ -3099,11 +3136,15 @@ Mesh:
 --- !u!21 &579971443
 Material:
   serializedVersion: 8
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   m_Name: <Renderable generated -36446>
   serializedVersion: 11
@@ -3343,6 +3384,8 @@ Transform:
   m_PrefabInstance: {fileID: 571667864}
   m_PrefabAsset: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
   m_Name: MAT_Yellow_Toon_Toon_Toon_Toon_Toon_Toon_Toon_Toon_Toon_Toon
   m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
   m_Parent: {fileID: 0}
@@ -3384,6 +3427,9 @@ Transform:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &607294969
 GameObject:
@@ -3860,6 +3906,7 @@ PrefabInstance:
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5461e008d9908c4f9c6df2b8014d506, type: 3}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1001 &726522669
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4001,6 +4048,8 @@ Transform:
   m_PrefabInstance: {fileID: 727479182}
   m_PrefabAsset: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!21 &767839837
 Material:
   serializedVersion: 8
@@ -4049,6 +4098,9 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!4 &770144817 stripped
 Transform:
@@ -4488,6 +4540,7 @@ Transform:
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1001 &869328180
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4828,6 +4881,9 @@ MonoBehaviour:
       TexGenIndex: 5
     Generation: 2
 --- !u!21 &877083281
+=======
+--- !u!21 &865655723
+>>>>>>> Stashed changes
 =======
 --- !u!21 &865655723
 >>>>>>> Stashed changes
@@ -5401,8 +5457,11 @@ MonoBehaviour:
       TexGenIndex: 5
     Generation: 124
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &972648448
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!21 &912945096
 Material:
   serializedVersion: 8
@@ -5541,6 +5600,9 @@ MeshCollider:
 --- !u!23 &990839275
 MeshRenderer:
   m_ObjectHideFlags: 1
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5728,6 +5790,7 @@ PrefabInstance:
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &996532840
 GameObject:
   m_ObjectHideFlags: 0
@@ -5883,6 +5946,8 @@ MonoBehaviour:
   HasUV2: 0
   LightingHashValue: 0
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!21 &1035720585
 Material:
   serializedVersion: 8
@@ -5931,6 +5996,9 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &1041038691
 PrefabInstance:
@@ -7809,6 +7877,9 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &1124191625
 GameObject:
@@ -9194,8 +9265,11 @@ Transform:
   m_Father: {fileID: 1090594365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!43 &1264334870
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!21 &1226030456
 Material:
   serializedVersion: 8
@@ -10985,7 +11059,11 @@ MonoBehaviour:
       layers: 16777223
       maskAndChannels: 234881031
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     surfaceParameter: -2916
+=======
+    surfaceParameter: 125530
+>>>>>>> Stashed changes
 =======
     surfaceParameter: 125530
 >>>>>>> Stashed changes
@@ -12711,7 +12789,11 @@ MonoBehaviour:
       TexGenIndex: 5
     Generation: 2
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &1622662872
+=======
+--- !u!1 &1686500876
+>>>>>>> Stashed changes
 =======
 --- !u!1 &1686500876
 >>>>>>> Stashed changes
@@ -12723,15 +12805,21 @@ GameObject:
   serializedVersion: 6
   m_Component:
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - component: {fileID: 1622662873}
   - component: {fileID: 1622662874}
   m_Layer: 0
   m_Name: Brush (27)
 =======
+=======
+>>>>>>> Stashed changes
   - component: {fileID: 1686500877}
   - component: {fileID: 1686500878}
   m_Layer: 0
   m_Name: '[generated-meshes]'
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12739,7 +12827,11 @@ GameObject:
   m_StaticEditorFlags: 0
   m_IsActive: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!4 &1622662873
+=======
+--- !u!4 &1686500877
+>>>>>>> Stashed changes
 =======
 --- !u!4 &1686500877
 >>>>>>> Stashed changes
@@ -12748,6 +12840,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   m_GameObject: {fileID: 1622662872}
   serializedVersion: 2
@@ -13155,11 +13248,15 @@ Transform:
 =======
   m_GameObject: {fileID: 1686500876}
 >>>>>>> Stashed changes
+=======
+  m_GameObject: {fileID: 1686500876}
+>>>>>>> Stashed changes
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   m_Children:
   - {fileID: 465915111}
@@ -13868,6 +13965,8 @@ Transform:
   m_PrefabInstance: {fileID: 1696930677}
   m_PrefabAsset: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
   m_Children: []
   m_Father: {fileID: 1809703157}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13934,6 +14033,9 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &1699573810
 GameObject:
@@ -16474,6 +16576,7 @@ PrefabInstance:
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &1961065659
 GameObject:
   m_ObjectHideFlags: 16
@@ -16639,6 +16742,8 @@ Transform:
   m_PrefabInstance: {fileID: 1983311005}
   m_PrefabAsset: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!21 &1996654618
 Material:
   serializedVersion: 8
@@ -16687,6 +16792,9 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!43 &2009938518
 Mesh:
@@ -17346,6 +17454,7 @@ Transform:
   m_PrefabInstance: {fileID: 2015871254}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1001 &2052164154
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17425,6 +17534,8 @@ Transform:
   m_PrefabInstance: {fileID: 2052164154}
   m_PrefabAsset: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
 --- !u!21 &2059950906
 Material:
   serializedVersion: 8
@@ -17473,6 +17584,9 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
   m_BuildTextureStacks: []
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &2088204785
 PrefabInstance:
@@ -17542,7 +17656,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       objectReference: {fileID: 2100000, guid: db8c288a0efc2f84580e20a6203035f2, type: 2}
+=======
+      objectReference: {fileID: 1538240935}
+>>>>>>> Stashed changes
 =======
       objectReference: {fileID: 1538240935}
 >>>>>>> Stashed changes
@@ -17758,10 +17876,15 @@ SceneRoots:
   - {fileID: 52106136}
   - {fileID: 1090594365}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - {fileID: 1153249365}
   - {fileID: 1319735691}
   - {fileID: 675244236}
   - {fileID: 1667954747}
+=======
+  - {fileID: 1319735691}
+  - {fileID: 1809703157}
+>>>>>>> Stashed changes
 =======
   - {fileID: 1319735691}
   - {fileID: 1809703157}
