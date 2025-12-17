@@ -9,6 +9,13 @@ public class GravityFlipVolume : MonoBehaviour
 
     [Tooltip("If true, leaving the volume restores the player's normal gravity.")]
     [SerializeField] private bool restoreOnExit = true;
+    
+    [Header("Flip Settings")]
+    [Tooltip("If true, player will flip upside down when entering the volume")]
+    [SerializeField] private bool flipPlayerUpsideDown = true;
+    
+    [Tooltip("How fast the player rotates when flipping (degrees per second)")]
+    [SerializeField] private float flipRotationSpeed = 360f;
 
     [Header("Optional VFX")]
     [SerializeField] private ParticleSystem upParticles;
@@ -26,7 +33,12 @@ public class GravityFlipVolume : MonoBehaviour
         if (motor == null) return;
 
         motor.SetGravityOverride(gravityInside);
-
+        
+        // Tell the motor to flip the player upside down
+        if (flipPlayerUpsideDown)
+        {
+            motor.SetGravityFlip(true, flipRotationSpeed);
+        }
 
         if (upParticles != null) upParticles.Play(true);
     }
@@ -40,8 +52,13 @@ public class GravityFlipVolume : MonoBehaviour
         {
             motor.ClearGravityOverride();
             motor.ResetVerticalVelocity();
+            
+            // Return player to normal orientation
+            if (flipPlayerUpsideDown)
+            {
+                motor.SetGravityFlip(false, flipRotationSpeed);
+            }
         }
-
 
         if (upParticles != null) upParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
