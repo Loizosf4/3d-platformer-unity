@@ -130,18 +130,18 @@ MonoBehaviour:
   input: {fileID: 5121583129836092809}
   cameraTransform: {fileID: 0}
   cameraTarget: {fileID: 6899242699806718272}
-  maxMoveSpeed: 7
-  acceleration: 25
-  deceleration: 30
+  maxMoveSpeed: 12
+  acceleration: 40
+  deceleration: 100
   airControlMultiplier: 0.6
-  rotationSpeed: 12
+  rotationSpeed: 20
   doubleJumpUnlocked: 0
   extraJumpsAllowed: 1
-  gravity: -25
-  jumpHeight: 1.6
-  dashUnlocked: 0
-  dashSpeed: 16
-  dashDuration: 0.18
+  gravity: -35
+  jumpHeight: 2.8
+  dashUnlocked: 1
+  dashSpeed: 45
+  dashDuration: 0.12
   dashCooldown: 0.6
   dashUsesMoveInput: 1
   dashPreserveVerticalVelocity: 0

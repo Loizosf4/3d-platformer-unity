@@ -149,7 +149,6 @@ MonoBehaviour:
   collectVfx: {fileID: 0}
   motionScriptToDisable: {fileID: 8402068838622390218}
   destroyDelay: 0
-  collectibleId: ad256fb4efbf4b09b389ade01333c36d
 --- !u!114 &8402068838622390218
 MonoBehaviour:
   m_ObjectHideFlags: 0
