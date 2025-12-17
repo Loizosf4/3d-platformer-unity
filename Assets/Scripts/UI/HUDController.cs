@@ -75,21 +75,21 @@ public class HUDController : MonoBehaviour
         if (shardsText == null) return;
 
         if (stats != null && stats.IsMaxHealthUpgraded)
-            shardsText.text = "Shards: MAX";
+            shardsText.text = "MAX";
         else
-            shardsText.text = $"Shards: {shards}/{required}";
+            shardsText.text = $"{shards}/{required}";
     }
 
     private void HandleStarsChanged(int total)
     {
         if (starsText != null)
-            starsText.text = $"Stars: {total}";
+            starsText.text = total.ToString();
     }
 
     private void HandleDeathsChanged(int total)
     {
         if (deathsText != null)
-            deathsText.text = $"Deaths: {total}x";
+            deathsText.text = $"x{total}";
     }
 
     private void HandleCoinChanged(CoinType type, int total)
@@ -97,7 +97,7 @@ public class HUDController : MonoBehaviour
         switch (type)
         {
             case CoinType.Hub:
-                if (coinHubText != null) coinHubText.text = $"Hub: {total}";
+                if (coinHubText != null) coinHubText.text = total.ToString();
                 break;
             case CoinType.Biome1:
                 if (coinBiome1Text != null) coinBiome1Text.text = $"Biome1: {total}";
