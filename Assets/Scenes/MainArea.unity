@@ -130,6 +130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3601798991701859516, guid: 887c019928722f549afb1d9bb12e83a9, type: 3}
+      propertyPath: collectibleId
+      value: 5a58f2d14bea46d8bc8d04438c48b98f
+      objectReference: {fileID: 0}
     - target: {fileID: 4067965282104900117, guid: 887c019928722f549afb1d9bb12e83a9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.6629133
@@ -283,6 +287,10 @@ PrefabInstance:
     - target: {fileID: 193536790084456621, guid: d57451be471ec2441b78a43bb01348dd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064420296610056083, guid: d57451be471ec2441b78a43bb01348dd, type: 3}
+      propertyPath: collectibleId
+      value: 8331ae80b0224522ba2dc6e2de653f7e
       objectReference: {fileID: 0}
     - target: {fileID: 8079359721800249973, guid: d57451be471ec2441b78a43bb01348dd, type: 3}
       propertyPath: m_Name
@@ -683,6 +691,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7064420296610056083, guid: d57451be471ec2441b78a43bb01348dd, type: 3}
+      propertyPath: collectibleId
+      value: 4a0f129957854b84880623cefd4d9905
+      objectReference: {fileID: 0}
     - target: {fileID: 8079359721800249973, guid: d57451be471ec2441b78a43bb01348dd, type: 3}
       propertyPath: m_Name
       value: PF_Collectible_HealthShard (2)
@@ -797,6 +809,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7064420296610056083, guid: d57451be471ec2441b78a43bb01348dd, type: 3}
+      propertyPath: collectibleId
+      value: 7b9f5407bf694ec69ae79e88294a8501
+      objectReference: {fileID: 0}
     - target: {fileID: 8079359721800249973, guid: d57451be471ec2441b78a43bb01348dd, type: 3}
       propertyPath: m_Name
       value: PF_Collectible_HealthShard (1)
@@ -814,6 +830,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4234991528214393434, guid: 537762864ae3d184988a2e9d681f4261, type: 3}
+      propertyPath: type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234991528214393434, guid: 537762864ae3d184988a2e9d681f4261, type: 3}
+      propertyPath: collectibleId
+      value: 82a3a036d672469f8ab6791d02bfd8e0
+      objectReference: {fileID: 0}
     - target: {fileID: 6492122009050486830, guid: 537762864ae3d184988a2e9d681f4261, type: 3}
       propertyPath: m_Name
       value: PF_Collectible_Coin_Biome1

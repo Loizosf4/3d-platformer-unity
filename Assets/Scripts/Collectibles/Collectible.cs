@@ -28,7 +28,42 @@ public class Collectible : MonoBehaviour
     [Tooltip("Delay before destroying (lets VFX play). 0 = destroy immediately.")]
     [SerializeField] private float destroyDelay = 0f;
 
+    [Header("Persistence")]
+    [SerializeField] private string collectibleId;
+
+
     private bool _collected;
+
+    private void Awake()
+    {
+        // If already collected, disable immediately when the scene loads.
+        var reg = GetRegistry();
+        if (reg != null && !string.IsNullOrWhiteSpace(collectibleId) && reg.IsCollected(collectibleId))
+        {
+            DisableAsAlreadyCollected();
+        }
+    }
+
+    private void DisableAsAlreadyCollected()
+    {
+        _collected = true;
+
+        var col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        if (motionScriptToDisable != null)
+            motionScriptToDisable.enabled = false;
+
+        if (visualsRoot != null)
+            visualsRoot.SetActive(false);
+
+        // No VFX on load. Just remove it.
+        if (destroyOnCollect)
+            Destroy(gameObject);
+        else
+            gameObject.SetActive(false);
+    }
+
 
     private void Reset()
     {
@@ -59,6 +94,21 @@ public class Collectible : MonoBehaviour
 
         int safeAmount = Mathf.Max(1, amount);
 
+        var reg = GetRegistry();
+        if (reg == null)
+        {
+            Debug.LogError($"[{nameof(Collectible)}] No CollectedItemsRegistry found/created.");
+            return;
+        }
+
+        // If somehow this collectible is already recorded, disable and do nothing.
+        if (!string.IsNullOrWhiteSpace(collectibleId) && reg.IsCollected(collectibleId))
+        {
+            DisableAsAlreadyCollected();
+            return;
+        }
+
+
         switch (type)
         {
             case CollectibleType.Star:
@@ -85,6 +135,13 @@ public class Collectible : MonoBehaviour
                 stats.AddCoin(CoinType.Biome3, safeAmount);
                 break;
         }
+
+        // Record collected state for persistence across scene reloads
+        if (!string.IsNullOrWhiteSpace(collectibleId))
+            reg.MarkCollected(collectibleId);
+        else
+            Debug.LogWarning($"[{nameof(Collectible)}] collectibleId is empty on {name}. This pickup will respawn on revisit.");
+
 
         Collect();
     }
@@ -115,4 +172,35 @@ public class Collectible : MonoBehaviour
         else
             gameObject.SetActive(false);
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        // Auto-assign an ID if missing (editor only)
+        if (string.IsNullOrWhiteSpace(collectibleId))
+            collectibleId = System.Guid.NewGuid().ToString("N");
+    }
+#endif
+
+    [ContextMenu("Generate New Collectible ID")]
+    private void GenerateNewId()
+    {
+        collectibleId = System.Guid.NewGuid().ToString("N");
+    }
+
+    private CollectedItemsRegistry GetRegistry()
+    {
+        var reg = CollectedItemsRegistry.Instance;
+        if (reg != null) return reg;
+
+        // Create it automatically at runtime if missing
+        if (Application.isPlaying)
+        {
+            var go = new GameObject("CollectedItemsRegistry");
+            reg = go.AddComponent<CollectedItemsRegistry>();
+        }
+        return reg;
+    }
+
+
 }
