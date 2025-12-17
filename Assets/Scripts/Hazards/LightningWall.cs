@@ -121,25 +121,30 @@ public class LightningWall : MonoBehaviour
         // Use the specified lightning height for colliders
         float totalHeight = Mathf.Max(2f, lightningHeight);
         
-        // Update damage collider - LARGER than blocking collider so player gets damaged before hitting wall
+        // Calculate depth based on wall distance (proportional scaling)
+        float colliderDepth = Mathf.Max(0.5f, wallDistance * 0.2f);
+        
+        // Update damage collider - trigger zone that detects player contact
         if (damageCollider != null)
         {
             BoxCollider boxCollider = damageCollider as BoxCollider;
             if (boxCollider != null)
             {
-                boxCollider.size = new Vector3(wallDistance, totalHeight, 2.5f); // Large trigger zone
+                // Size scales with both wallDistance (X) and lightningHeight (Y), depth is proportional
+                boxCollider.size = new Vector3(wallDistance, totalHeight, colliderDepth);
                 boxCollider.center = Vector3.zero;
                 boxCollider.isTrigger = true; // Ensure it's a trigger
             }
         }
         
-        // Update blocking collider - thick solid wall to prevent passage
+        // Update blocking collider - slightly thinner than damage trigger
         if (blockingCollider != null)
         {
             BoxCollider boxCollider = blockingCollider as BoxCollider;
             if (boxCollider != null)
             {
-                boxCollider.size = new Vector3(wallDistance, totalHeight, 1.0f); // Thick wall
+                // Slightly thinner than damage collider
+                boxCollider.size = new Vector3(wallDistance, totalHeight, colliderDepth * 0.5f);
                 boxCollider.center = Vector3.zero;
                 boxCollider.isTrigger = false; // Ensure it's solid
             }
@@ -493,11 +498,12 @@ public class LightningWall : MonoBehaviour
                 lightningParticles.Stop();
         }
         
-        // Colliders - only enable trigger for damage detection
+        // Colliders - only enable damage trigger
         if (damageCollider != null)
             damageCollider.enabled = _isActive;
         
-        // Disable blocking collider - using strong pushback instead
+        // Keep blocking collider disabled - it prevents damage trigger from working
+        // Instead we use strong pushback force from the damage trigger
         if (blockingCollider != null)
             blockingCollider.enabled = false;
     }

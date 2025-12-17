@@ -63,7 +63,7 @@ MonoBehaviour:
   offDuration: 2
   startActive: 1
   damageAmount: 1
-  pushbackForce: 20
+  pushbackForce: 10
   lightningParticles: {fileID: 4521789012345678941}
   editorGuide: {fileID: 4521789012345678931}
   damageCollider: {fileID: 4521789012345678932}

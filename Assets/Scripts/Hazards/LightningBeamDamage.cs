@@ -50,6 +50,10 @@ public class LightningBeamDamage : MonoBehaviour
         
         Debug.Log($"Applying damage on ENTER to {other.gameObject.name}");
         ApplyDamage(other);
+        
+        // Apply immediate VERY strong pushback to prevent fast players from passing through
+        // This replaces the need for a solid blocking collider
+        ApplyPushback(other, controller.PushbackForce * 3.0f);
     }
 
     private void OnTriggerStay(Collider other)
@@ -89,39 +93,42 @@ public class LightningBeamDamage : MonoBehaviour
             return;
         }
         
-        // Apply STRONG pushback force - push player away from wall center
-        var motor = other.GetComponentInParent<PlayerMotorCC>();
-        if (motor != null)
-        {
-            // Calculate direction from wall center to player
-            Vector3 wallCenter = transform.position;
-            Vector3 playerPos = other.transform.position;
-            Vector3 pushDirection = (playerPos - wallCenter).normalized;
-            
-            // Keep only horizontal component (zero out Y)
-            pushDirection.y = 0f;
-            
-            // If somehow the direction is too small (player directly above/below), use forward
-            if (pushDirection.magnitude < 0.1f)
-            {
-                pushDirection = Vector3.forward;
-            }
-            else
-            {
-                pushDirection.Normalize();
-            }
-            
-            // Add upward component
-            pushDirection.y = 0.5f;
-            pushDirection.Normalize();
-            
-            float force = controller.PushbackForce;
-            Debug.Log($"PUSHBACK: wallCenter={wallCenter}, playerPos={playerPos}, pushDir={pushDirection}, force={force}");
-            
-            motor.AddDirectionalForce(pushDirection * force);
-        }
+        // Apply pushback with normal force
+        ApplyPushback(other, controller.PushbackForce);
         
         // Start cooldown
         _damageTimer = DAMAGE_INTERVAL;
+    }
+    
+    private void ApplyPushback(Collider other, float force)
+    {
+        var motor = other.GetComponentInParent<PlayerMotorCC>();
+        if (motor == null) return;
+        
+        // The wall runs left-right (X-axis), so we need to push along Z-axis (perpendicular to wall)
+        // Get player position and wall position
+        Vector3 playerPos = other.transform.position;
+        Vector3 wallPos = controller.transform.position;
+        
+        // Calculate which side of the wall the player is on (Z-axis direction)
+        Vector3 wallToPlayer = playerPos - wallPos;
+        float zDirection = Mathf.Sign(wallToPlayer.z);
+        
+        // If player is very close to wall center (within 0.1 units), default to pushing forward
+        if (Mathf.Abs(wallToPlayer.z) < 0.1f)
+        {
+            zDirection = 1f; // Push forward by default
+        }
+        
+        // Push direction is perpendicular to the wall (along Z-axis)
+        Vector3 pushDirection = controller.transform.forward * zDirection;
+        
+        // Add upward component for better feel
+        pushDirection.y = 0.5f;
+        pushDirection.Normalize();
+        
+        Debug.Log($"PUSHBACK: playerPos={playerPos}, wallPos={wallPos}, zDir={zDirection}, pushDir={pushDirection}, force={force}");
+        
+        motor.AddDirectionalForce(pushDirection * force);
     }
 }
