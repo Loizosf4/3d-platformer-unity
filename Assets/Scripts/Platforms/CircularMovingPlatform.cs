@@ -204,6 +204,49 @@ public class CircularMovingPlatform : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+        {
+            _playerMotor = collision.collider.GetComponent<PlayerMotorCC>();
+            if (_playerMotor != null)
+            {
+                _playerMotor.SetOnPlatform(transform);
+            }
+        }
+    }
+    
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player") && _playerMotor != null)
+        {
+            _playerMotor.SetPlatformMovement(_deltaMovement);
+        }
+    }
+    
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player") && _playerMotor != null)
+        {
+            _playerMotor.ClearPlatform(_platformVelocity);
+            _playerMotor = null;
+        }
+    }
+    
+    private void OnTriggerStay(Collider other)
+    {
+        // Continuously check if grounded player enters trigger while platform is moving
+        if (other.CompareTag("Player") && _playerMotor == null)
+        {
+            PlayerMotorCC motor = other.GetComponent<PlayerMotorCC>();
+            if (motor != null && motor.IsGrounded)
+            {
+                _playerMotor = motor;
+                _playerMotor.SetOnPlatform(transform);
+            }
+        }
+    }
+    
     public Vector3 GetPlatformVelocity() => _platformVelocity;
     public Vector3 GetDeltaMovement() => _deltaMovement;
     public void SetRotationSpeed(float speed) => rotationSpeed = speed;
