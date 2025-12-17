@@ -29,6 +29,7 @@ public class DisappearingPlatform : MonoBehaviour
     
     // Components
     private Collider _collider;
+    private MeshCollider _meshCollider;
     private MeshRenderer _renderer;
     private Material _material;
     private Color _originalColor;
@@ -40,6 +41,7 @@ public class DisappearingPlatform : MonoBehaviour
     {
         // Get components
         _collider = GetComponent<Collider>();
+        _meshCollider = GetComponent<MeshCollider>();
         _renderer = GetComponent<MeshRenderer>();
         
         if (_renderer != null && _renderer.material != null)
@@ -160,6 +162,12 @@ public class DisappearingPlatform : MonoBehaviour
             _collider.enabled = false;
         }
         
+        // Also disable mesh collider specifically if present
+        if (_meshCollider != null)
+        {
+            _meshCollider.enabled = false;
+        }
+        
         // Hide visual
         if (_renderer != null)
         {
@@ -176,6 +184,12 @@ public class DisappearingPlatform : MonoBehaviour
         if (_collider != null)
         {
             _collider.enabled = true;
+        }
+        
+        // Re-enable mesh collider specifically if present
+        if (_meshCollider != null)
+        {
+            _meshCollider.enabled = true;
         }
         
         // Show visual
@@ -242,6 +256,7 @@ public class DisappearingPlatform : MonoBehaviour
         _disappearanceTriggered = false;
         
         if (_collider != null) _collider.enabled = true;
+        if (_meshCollider != null) _meshCollider.enabled = true;
         if (_renderer != null) _renderer.enabled = true;
         if (_material != null) _material.color = _originalColor;
     }

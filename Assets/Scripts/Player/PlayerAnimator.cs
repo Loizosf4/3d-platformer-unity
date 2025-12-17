@@ -350,19 +350,19 @@ public class PlayerAnimator : MonoBehaviour
                     transitionDuration = runToIdleDuration;
                 }
             }
-            else if (_currentState == AnimState.Jump || _currentState == AnimState.Fall)
+            else if (_currentState == AnimState.Jump || _currentState == AnimState.RunningJump || _currentState == AnimState.Fall)
             {
-                // Just landed - this is handled in UpdateAnimatorParameters
-                // But as a fallback, transition to appropriate state
+                // Just landed while in jump/fall state
+                // Force immediate transition to prevent animation getting stuck
                 if (_isRunning)
                 {
                     targetState = AnimState.Run;
-                    transitionDuration = idleToRunDuration;
+                    transitionDuration = 0.05f; // Quick transition to prevent sticking
                 }
                 else
                 {
                     targetState = AnimState.Idle;
-                    transitionDuration = runToIdleDuration;
+                    transitionDuration = 0.05f; // Quick transition to prevent sticking
                 }
             }
         }

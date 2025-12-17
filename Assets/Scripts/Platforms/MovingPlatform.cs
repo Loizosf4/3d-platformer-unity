@@ -180,11 +180,25 @@ public class MovingPlatform : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            _playerOnPlatform = collision.transform;
-            _playerMotor = collision.collider.GetComponent<PlayerMotorCC>();
-            if (_playerMotor != null)
+            // Only attach if player is landing on top (collision normal points up)
+            bool isLandingOnTop = false;
+            foreach (ContactPoint contact in collision.contacts)
             {
-                _playerMotor.SetOnPlatform(transform);
+                if (contact.normal.y > 0.5f) // Normal pointing upward
+                {
+                    isLandingOnTop = true;
+                    break;
+                }
+            }
+            
+            if (isLandingOnTop)
+            {
+                _playerOnPlatform = collision.transform;
+                _playerMotor = collision.collider.GetComponent<PlayerMotorCC>();
+                if (_playerMotor != null)
+                {
+                    _playerMotor.SetOnPlatform(transform);
+                }
             }
         }
     }
