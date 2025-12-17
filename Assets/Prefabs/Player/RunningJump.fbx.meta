@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 76712b705e42c83408708f48201b4552
+guid: 31536313f59bb1f47bb0d2804dd98523
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -93,19 +93,19 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Fall
+      name: mixamo.com
       takeName: mixamo.com
-      internalID: -203655887218126122
+      internalID: 57056298178330393
       firstFrame: 0
-      lastFrame: 63
+      lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1

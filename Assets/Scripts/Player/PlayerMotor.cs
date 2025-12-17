@@ -141,6 +141,13 @@ public class PlayerMotorCC : MonoBehaviour
     private bool _gravityOverrideActive = false;
     private float _gravityOverrideValue = -25f; // should be negative for "normal down" gravity
     private float CurrentGravity => _gravityOverrideActive ? _gravityOverrideValue : gravity;
+    
+    // Gravity flip (upside down mode)
+    private bool _isFlipped = false;
+    private bool _shouldBeFlipped = false;
+    private float _flipRotationSpeed = 360f;
+    private float _currentFlipAngle = 0f; // 0 = normal, 180 = upside down
+    private float _currentYRotation = 0f; // Cached Y rotation to avoid euler angle issues
 
     private float _externalControlLockTimer = 0f;
 
@@ -170,6 +177,13 @@ public class PlayerMotorCC : MonoBehaviour
     {
         get
         {
+            // When flipped, check for ceiling instead of floor
+            if (_isFlipped)
+            {
+                return CheckFlippedGrounded();
+            }
+            
+            // Normal grounded check
             // If CharacterController says grounded, we're grounded
             if (_cc != null && _cc.isGrounded)
             {
@@ -183,6 +197,30 @@ public class PlayerMotorCC : MonoBehaviour
             }
             return false;
         }
+    }
+    
+    private bool CheckFlippedGrounded()
+    {
+        // When upside down, raycast upward to check for "ground" (ceiling)
+        if (_cc == null) return false;
+        
+        Vector3 origin = transform.position;
+        float checkDistance = _cc.height * 0.5f + 0.2f; // Half height + skin width
+        
+        // Check upward (world up) when flipped
+        RaycastHit hit;
+        if (Physics.Raycast(origin, Vector3.up, out hit, checkDistance))
+        {
+            return true;
+        }
+        
+        // Also check with sphere cast for better detection
+        if (Physics.SphereCast(origin, _cc.radius * 0.9f, Vector3.up, out hit, checkDistance - _cc.radius))
+        {
+            return true;
+        }
+        
+        return false;
     }
     
     /// <summary>Is the player on a moving platform</summary>
@@ -231,6 +269,9 @@ public class PlayerMotorCC : MonoBehaviour
             Debug.LogWarning("[PlayerMotor] wallLayers was 0, defaulting to Default layer. Please configure Wall Layers in the Inspector.");
         }
         
+        // Initialize Y rotation from current transform
+        _currentYRotation = transform.rotation.eulerAngles.y;
+        
         // Debug info on start
         Debug.Log($"[PlayerMotor] Started. wallJumpUnlocked={wallJumpUnlocked}, wallLayers={(int)wallLayers}, debugWallJump={debugWallJump}");
     }
@@ -260,10 +301,14 @@ public class PlayerMotorCC : MonoBehaviour
 
         UpdateTimers();
         UpdateWallCheck();
+        UpdateGravityFlip(); // Handle upside down rotation
         TryStartDash();     // dash check happens before movement/jump
         HandleMovement();
         HandleJump();
         ApplyGravityAndMove();
+        
+        // Ensure rotation is always correct (prevents external systems from changing it)
+        transform.rotation = Quaternion.Euler(_currentFlipAngle, _currentYRotation, 0f);
     }
 
 
@@ -293,10 +338,20 @@ public class PlayerMotorCC : MonoBehaviour
             // Reset extra jumps when grounded
             _extraJumpsRemaining = doubleJumpUnlocked ? Mathf.Max(0, extraJumpsAllowed) : 0;
 
-            // Stick to ground ONLY when gravity pulls DOWN.
-            // When gravity is reversed (positive), do NOT clamp to groundedStickForce.
-            if (CurrentGravity < 0f && _velocity.y < 0f)
-                _velocity.y = groundedStickForce;
+            // Stick to ground - handle both normal and flipped states
+            if (_isFlipped)
+            {
+                // When flipped (upside down), stick to ceiling by clamping upward velocity
+                // Gravity is positive, so we stick by preventing excessive upward movement
+                if (_velocity.y > -groundedStickForce)
+                    _velocity.y = -groundedStickForce; // Negative value pulls toward ceiling
+            }
+            else
+            {
+                // Normal case: stick to floor
+                if (CurrentGravity < 0f && _velocity.y < 0f)
+                    _velocity.y = groundedStickForce;
+            }
 
         }
         else
@@ -312,13 +367,13 @@ public class PlayerMotorCC : MonoBehaviour
         }
         
         // Also reset when truly airborne for a while (fallback)
-        if (!_cc.isGrounded && _groundedStableTimer <= 0f)
+        if (!IsGrounded && _groundedStableTimer <= 0f)
         {
             _hasJumpedThisGrounding = false;
         }
         
         // Update grounded state for next frame (must be after the landing check)
-        _wasGroundedLastFrame = _cc.isGrounded;
+        _wasGroundedLastFrame = IsGrounded;
 
 
         // Jump buffer
@@ -351,8 +406,15 @@ public class PlayerMotorCC : MonoBehaviour
             Vector3 faceDirLocked = new Vector3(_planarVelocity.x, 0f, _planarVelocity.z);
             if (faceDirLocked.sqrMagnitude > 0.0001f)
             {
-                Quaternion targetRot = Quaternion.LookRotation(faceDirLocked, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+                // Calculate target Y rotation, preserve X rotation (flip)
+                float targetYRotation = Mathf.Atan2(faceDirLocked.x, faceDirLocked.z) * Mathf.Rad2Deg;
+                
+                // When flipped upside down, invert the facing direction
+                if (_isFlipped)
+                    targetYRotation += 180f;
+                
+                _currentYRotation = Mathf.LerpAngle(_currentYRotation, targetYRotation, rotationSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.Euler(_currentFlipAngle, _currentYRotation, 0f);
             }
 
             return;
@@ -367,8 +429,15 @@ public class PlayerMotorCC : MonoBehaviour
             Vector3 faceDirLocked = new Vector3(_planarVelocity.x, 0f, _planarVelocity.z);
             if (faceDirLocked.sqrMagnitude > 0.0001f)
             {
-                Quaternion targetRot = Quaternion.LookRotation(faceDirLocked, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+                // Calculate target Y rotation, preserve X rotation (flip)
+                float targetYRotation = Mathf.Atan2(faceDirLocked.x, faceDirLocked.z) * Mathf.Rad2Deg;
+                
+                // When flipped upside down, invert the facing direction
+                if (_isFlipped)
+                    targetYRotation += 180f;
+                
+                _currentYRotation = Mathf.LerpAngle(_currentYRotation, targetYRotation, rotationSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.Euler(_currentFlipAngle, _currentYRotation, 0f);
             }
 
             return;
@@ -422,8 +491,15 @@ public class PlayerMotorCC : MonoBehaviour
         Vector3 faceDir = new Vector3(_planarVelocity.x, 0f, _planarVelocity.z);
         if (faceDir.sqrMagnitude > 0.0001f)
         {
-            Quaternion targetRot = Quaternion.LookRotation(faceDir, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+            // Calculate target Y rotation, preserve X rotation (flip)
+            float targetYRotation = Mathf.Atan2(faceDir.x, faceDir.z) * Mathf.Rad2Deg;
+            
+            // When flipped upside down, invert the facing direction
+            if (_isFlipped)
+                targetYRotation += 180f;
+            
+            _currentYRotation = Mathf.LerpAngle(_currentYRotation, targetYRotation, rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Euler(_currentFlipAngle, _currentYRotation, 0f);
         }
     }
 
@@ -503,15 +579,36 @@ public class PlayerMotorCC : MonoBehaviour
         // v = sqrt(2 * h * -g)
         float jumpVelocity = Mathf.Sqrt(2f * jumpHeight * -gravity);
         
+        // When flipped (upside down), jump should push player away from ceiling (downward)
+        if (_isFlipped)
+        {
+            jumpVelocity = -jumpVelocity; // Invert jump direction
+        }
+        
         // Only replace velocity if it would increase the upward speed
         // This preserves trampoline momentum or other external upward forces
-        if (jumpVelocity > _velocity.y)
+        // When flipped, we compare in the opposite direction
+        if (_isFlipped)
         {
-            _velocity.y = jumpVelocity;
+            if (jumpVelocity < _velocity.y) // For flipped, more negative is "jumping away"
+            {
+                _velocity.y = jumpVelocity;
+            }
+        }
+        else
+        {
+            if (jumpVelocity > _velocity.y)
+            {
+                _velocity.y = jumpVelocity;
+            }
         }
         
         // Mark that we've jumped - prevents re-triggering during grounded grace period
         _hasJumpedThisGrounding = true;
+        
+        // Clear grounded stable timer to ensure player is not considered grounded during jump
+        // This prevents animation from getting stuck when jumping from moving platforms
+        _groundedStableTimer = 0f;
         
         // Always trigger jump animation when DoJump is called
         OnJump?.Invoke();
@@ -542,8 +639,10 @@ public class PlayerMotorCC : MonoBehaviour
     {
         // Apply gravity
         float g = _gravityOverrideActive ? _gravityOverrideValue : gravity;
+        
+        // When flipped, gravity should push player "down" in their local space (up in world space)
+        // The gravity value from the volume is already positive (+25), so we just apply it
         _velocity.y += CurrentGravity * Time.deltaTime;
-
 
         // Add any external upward velocity (magnet platforms)
         _velocity.y += _extraUpwardVelocity;
@@ -661,9 +760,41 @@ public class PlayerMotorCC : MonoBehaviour
             }
 
             // Small grounded stick if we ended dash on ground
-            if (_cc.isGrounded && _velocity.y < 0f)
-                _velocity.y = groundedStickForce;
+            if (IsGrounded)
+            {
+                if (_isFlipped)
+                {
+                    // When flipped, stick to ceiling
+                    if (_velocity.y > -groundedStickForce)
+                        _velocity.y = -groundedStickForce;
+                }
+                else
+                {
+                    // Normal: stick to floor
+                    if (_velocity.y < 0f)
+                        _velocity.y = groundedStickForce;
+                }
+            }
         }
+    }
+    
+    private void UpdateGravityFlip()
+    {
+        // Determine target flip angle
+        float targetAngle = _shouldBeFlipped ? 180f : 0f;
+        
+        // Only update if flip angle needs to change
+        if (Mathf.Abs(_currentFlipAngle - targetAngle) > 0.01f)
+        {
+            float rotationStep = _flipRotationSpeed * Time.deltaTime;
+            _currentFlipAngle = Mathf.MoveTowards(_currentFlipAngle, targetAngle, rotationStep);
+            
+            // Only set rotation when actively transitioning
+            transform.rotation = Quaternion.Euler(_currentFlipAngle, _currentYRotation, 0f);
+        }
+        
+        // Update flipped state
+        _isFlipped = Mathf.Abs(_currentFlipAngle - 180f) < 0.1f;
     }
 
     private void UpdateWallCheck()
@@ -884,6 +1015,20 @@ public class PlayerMotorCC : MonoBehaviour
     {
         _gravityOverrideActive = false;
     }
+    
+    /// <summary>
+    /// Set whether the player should be flipped upside down (for gravity volumes)
+    /// </summary>
+    public void SetGravityFlip(bool shouldFlip, float rotationSpeed = 360f)
+    {
+        _shouldBeFlipped = shouldFlip;
+        _flipRotationSpeed = rotationSpeed;
+    }
+    
+    /// <summary>
+    /// Check if player is currently flipped upside down
+    /// </summary>
+    public bool IsFlipped => _isFlipped;
 
     public void ResetAfterGravityVolumeExit(bool resetPlanar = false)
     {

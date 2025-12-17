@@ -54,14 +54,24 @@ MonoBehaviour:
   strikeDuration: 0.2
   strikeOnStart: 0
   strikeRange: 20
-  strikeRadius: 5
+  strikeRadius: 10
   strikeHeight: 3
   damageAmount: 1
   hitLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+  lightningLineRenderer: {fileID: 0}
+  lightningCoreRenderer: {fileID: 0}
   lightningBeam: {fileID: 8901234567890123471}
+  lightningSegments: 15
+  lightningJaggedness: 0.5
+  lightningWidth: 0.15
+  branchCount: 3
+  minBranchLength: 0.5
+  maxBranchLength: 2.5
+  branchRenderers: []
   lightningParticles: {fileID: 8901234567890123472}
+  cloudElectricParticles: {fileID: 0}
   warningLight: {fileID: 8901234567890123467}
   cloudRenderer: {fileID: 8901234567890123463}
   groundIndicator: {fileID: 8901234567890123476}
@@ -184,8 +194,8 @@ Transform:
   m_GameObject: {fileID: 8901234567890123460}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 1, z: 2}
+  m_LocalPosition: {x: 1.2155, y: -0.25847, z: 0.75143}
+  m_LocalScale: {x: 0.54922, y: 0.54922, z: 0.54922}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8901234567890123457}
@@ -197,7 +207,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8901234567890123460}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 8476637813161803637, guid: 806438c8e033d3641afd2145f0edffb9, type: 3}
 --- !u!23 &8901234567890123463
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -218,7 +228,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 34850c6ba5953ff4b9884217d0c7c8ee, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -73,6 +73,9 @@ public class Checkpoint : MonoBehaviour
         if (_activated) return;
         _activated = true;
 
+        if (!string.IsNullOrWhiteSpace(checkpointId))
+            Debug.Log($"[Checkpoint] Activated: {checkpointId}");
+
         if (feedbackRenderer != null)
             feedbackRenderer.material.color = activeColor;
     }
