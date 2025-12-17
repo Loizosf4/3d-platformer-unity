@@ -30,10 +30,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4521789012345678910}
-  - {fileID: 4521789012345678920}
   - {fileID: 4521789012345678930}
   - {fileID: 4521789012345678940}
+  - {fileID: 4521789012345678910}
+  - {fileID: 4521789012345678920}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4521789012345678903
@@ -48,21 +48,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallDistance: 5
-  beamHeight: 2
-  wallA: {fileID: 4521789012345678910}
-  wallB: {fileID: 4521789012345678920}
-  lightningBeam: {fileID: 4521789012345678930}
+  wallDistance: 20
+  showEndpoints: 1
+  lightningHeight: 2
+  boltSpacing: 0.5
+  lightningSegments: 15
+  lightningJaggedness: 0.5
+  lightningWidth: 0.15
+  branchCount: 2
+  minBranchLength: 0.3
+  maxBranchLength: 1.5
+  lightningColor: {r: 0.8, g: 0.9, b: 1, a: 1}
   onDuration: 2
   offDuration: 2
   startActive: 1
   damageAmount: 1
-  lightningVisual: {fileID: 4521789012345678931}
+  pushbackForce: 10
   lightningParticles: {fileID: 4521789012345678941}
+  editorGuide: {fileID: 4521789012345678931}
   damageCollider: {fileID: 4521789012345678932}
   blockingCollider: {fileID: 4521789012345678935}
-  activeColor: {r: 0.5, g: 0.8, b: 1, a: 1}
-  inactiveColor: {r: 0.2, g: 0.2, b: 0.3, a: 0.3}
 --- !u!1 &4521789012345678909
 GameObject:
   m_ObjectHideFlags: 0
@@ -81,7 +86,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4521789012345678910
 Transform:
   m_ObjectHideFlags: 0
@@ -91,8 +96,8 @@ Transform:
   m_GameObject: {fileID: 4521789012345678909}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 3, z: 0.3}
+  m_LocalPosition: {x: -10, y: 0, z: 0}
+  m_LocalScale: {x: 20, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4521789012345678902}
@@ -104,7 +109,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4521789012345678909}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 8476637813161803637, guid: 806438c8e033d3641afd2145f0edffb9, type: 3}
 --- !u!23 &4521789012345678912
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -125,7 +130,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 02d6a2227132ba3428999bc65c52a5ee, type: 2}
+  - {fileID: 2100000, guid: f83ff7633a724c748a9546785d72e841, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -186,7 +191,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4521789012345678920
 Transform:
   m_ObjectHideFlags: 0
@@ -196,8 +201,8 @@ Transform:
   m_GameObject: {fileID: 4521789012345678919}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.5, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 3, z: 0.3}
+  m_LocalPosition: {x: 10, y: 0, z: 0}
+  m_LocalScale: {x: 20, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4521789012345678902}
@@ -209,7 +214,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4521789012345678919}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 8476637813161803637, guid: 806438c8e033d3641afd2145f0edffb9, type: 3}
 --- !u!23 &4521789012345678922
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -230,7 +235,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 02d6a2227132ba3428999bc65c52a5ee, type: 2}
+  - {fileID: 2100000, guid: f83ff7633a724c748a9546785d72e841, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -337,7 +342,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+  - {fileID: 2100000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -393,7 +398,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 4521789012345678903}
-  pushbackForce: 15
   playerTag: Player
 --- !u!65 &4521789012345678935
 BoxCollider:
@@ -414,7 +418,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 0.3}
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4521789012345678939
 GameObject:
