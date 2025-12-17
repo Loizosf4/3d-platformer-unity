@@ -139,7 +139,7 @@ MonoBehaviour:
   extraJumpsAllowed: 1
   gravity: -35
   jumpHeight: 2.8
-  dashUnlocked: 1
+  dashUnlocked: 0
   dashSpeed: 45
   dashDuration: 0.12
   dashCooldown: 0.6
