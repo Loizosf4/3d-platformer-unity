@@ -4,11 +4,15 @@ using UnityEngine;
 /// Lightning obstacle that cycles on/off, damaging the player when active.
 /// Uses procedural lightning bolts between two endpoints.
 /// </summary>
+[ExecuteAlways]
 public class LightningWall : MonoBehaviour
 {
     [Header("Endpoints")]
     [Tooltip("Distance between the two endpoints")]
     [SerializeField] private float wallDistance = 5f;
+    
+    [Tooltip("Rotation angle in degrees (Y-axis)")]
+    [SerializeField] private float rotationAngle = 0f;
     
     [Tooltip("Show endpoint preview box in editor")]
     [SerializeField] private bool showEndpoints = false;
@@ -81,9 +85,16 @@ public class LightningWall : MonoBehaviour
     private float _regenerateTimer;
     private const float RegenerateInterval = 0.05f; // Regenerate bolts every 50ms for animation
     private int _calculatedBoltCount; // Auto-calculated based on height
+    
+    // Endpoint transforms for rotation
+    private Transform _leftEndpoint;
+    private Transform _rightEndpoint;
 
     private void Start()
     {
+        // Create endpoint transforms if they don't exist
+        CreateEndpoints();
+        
         // Check if always on mode
         _alwaysOn = (onDuration <= 0f && offDuration <= 0f) || offDuration <= 0f;
         
@@ -116,6 +127,58 @@ public class LightningWall : MonoBehaviour
         UpdateVisuals();
     }
 
+    private void CreateEndpoints()
+    {
+        // Find or create left endpoint
+        Transform existingLeft = transform.Find("LeftEndpoint");
+        if (existingLeft == null)
+        {
+            GameObject leftObj = new GameObject("LeftEndpoint");
+            _leftEndpoint = leftObj.transform;
+            _leftEndpoint.SetParent(transform);
+        }
+        else
+        {
+            _leftEndpoint = existingLeft;
+        }
+        
+        // Find or create right endpoint
+        Transform existingRight = transform.Find("RightEndpoint");
+        if (existingRight == null)
+        {
+            GameObject rightObj = new GameObject("RightEndpoint");
+            _rightEndpoint = rightObj.transform;
+            _rightEndpoint.SetParent(transform);
+        }
+        else
+        {
+            _rightEndpoint = existingRight;
+        }
+        
+        // Update positions
+        UpdateEndpoints();
+    }
+    
+    private void UpdateEndpoints()
+    {
+        if (_leftEndpoint == null || _rightEndpoint == null)
+            return;
+        
+        // Calculate rotation
+        Quaternion rotation = Quaternion.Euler(0f, rotationAngle, 0f);
+        
+        // Calculate local positions and apply rotation
+        Vector3 leftLocal = Vector3.left * (wallDistance / 2f);
+        Vector3 rightLocal = Vector3.right * (wallDistance / 2f);
+        
+        Vector3 rotatedLeft = rotation * leftLocal;
+        Vector3 rotatedRight = rotation * rightLocal;
+        
+        // Set endpoint positions
+        _leftEndpoint.localPosition = rotatedLeft;
+        _rightEndpoint.localPosition = rotatedRight;
+    }
+    
     private void UpdateColliders()
     {
         // Use the specified lightning height for colliders
@@ -123,6 +186,9 @@ public class LightningWall : MonoBehaviour
         
         // Calculate depth based on wall distance (proportional scaling)
         float colliderDepth = Mathf.Max(0.5f, wallDistance * 0.2f);
+        
+        // Calculate rotation
+        Quaternion rotation = Quaternion.Euler(0f, rotationAngle, 0f);
         
         // Update damage collider - trigger zone that detects player contact
         if (damageCollider != null)
@@ -134,6 +200,9 @@ public class LightningWall : MonoBehaviour
                 boxCollider.size = new Vector3(wallDistance, totalHeight, colliderDepth);
                 boxCollider.center = Vector3.zero;
                 boxCollider.isTrigger = true; // Ensure it's a trigger
+                
+                // Apply rotation
+                damageCollider.transform.localRotation = rotation;
             }
         }
         
@@ -147,6 +216,9 @@ public class LightningWall : MonoBehaviour
                 boxCollider.size = new Vector3(wallDistance, totalHeight, colliderDepth * 0.5f);
                 boxCollider.center = Vector3.zero;
                 boxCollider.isTrigger = false; // Ensure it's solid
+                
+                // Apply rotation
+                blockingCollider.transform.localRotation = rotation;
             }
         }
         
@@ -155,6 +227,7 @@ public class LightningWall : MonoBehaviour
         {
             editorGuide.transform.localScale = new Vector3(wallDistance, totalHeight, 0.1f);
             editorGuide.transform.localPosition = Vector3.zero;
+            editorGuide.transform.localRotation = rotation;
             
             // Only show in editor, not during play
             if (!Application.isPlaying)
@@ -321,9 +394,12 @@ public class LightningWall : MonoBehaviour
     
     private void GenerateAllLightningBolts()
     {
-        // Calculate endpoints based on distance
-        Vector3 startPos = transform.position + Vector3.left * (wallDistance / 2f);
-        Vector3 endPos = transform.position + Vector3.right * (wallDistance / 2f);
+        if (_leftEndpoint == null || _rightEndpoint == null)
+            return;
+        
+        // Get world positions from endpoint transforms
+        Vector3 startPos = _leftEndpoint.position;
+        Vector3 endPos = _rightEndpoint.position;
         
         // Generate each bolt with Y offset to fill the height
         for (int i = 0; i < _calculatedBoltCount; i++)
@@ -517,21 +593,40 @@ public class LightningWall : MonoBehaviour
 
     public Vector3 GetClosestWallPosition(Vector3 playerPos)
     {
-        // Return closest endpoint position
-        Vector3 leftPos = transform.position + Vector3.left * (wallDistance / 2f);
-        Vector3 rightPos = transform.position + Vector3.right * (wallDistance / 2f);
+        if (_leftEndpoint == null || _rightEndpoint == null)
+        {
+            // Fallback to calculated positions
+            Quaternion rotation = Quaternion.Euler(0f, rotationAngle, 0f);
+            Vector3 leftPos = transform.position + rotation * (Vector3.left * (wallDistance / 2f));
+            Vector3 rightPos = transform.position + rotation * (Vector3.right * (wallDistance / 2f));
+            
+            float distLeft = Vector3.Distance(playerPos, leftPos);
+            float distRight = Vector3.Distance(playerPos, rightPos);
+            
+            return distLeft < distRight ? leftPos : rightPos;
+        }
         
-        float distLeft = Vector3.Distance(playerPos, leftPos);
-        float distRight = Vector3.Distance(playerPos, rightPos);
+        // Return closest endpoint position using transforms
+        Vector3 leftPosition = _leftEndpoint.position;
+        Vector3 rightPosition = _rightEndpoint.position;
         
-        return distLeft < distRight ? leftPos : rightPos;
+        float distLeft2 = Vector3.Distance(playerPos, leftPosition);
+        float distRight2 = Vector3.Distance(playerPos, rightPosition);
+        
+        return distLeft2 < distRight2 ? leftPosition : rightPosition;
     }
 
     private void OnDrawGizmos()
     {
-        // Calculate endpoint positions
-        Vector3 leftPos = transform.position + Vector3.left * (wallDistance / 2f);
-        Vector3 rightPos = transform.position + Vector3.right * (wallDistance / 2f);
+        // Calculate rotation
+        Quaternion rotation = Quaternion.Euler(0f, rotationAngle, 0f);
+        
+        // Calculate endpoint positions with rotation
+        Vector3 leftLocal = Vector3.left * (wallDistance / 2f);
+        Vector3 rightLocal = Vector3.right * (wallDistance / 2f);
+        
+        Vector3 leftPos = transform.position + rotation * leftLocal;
+        Vector3 rightPos = transform.position + rotation * rightLocal;
         
         // Draw line between endpoints
         Gizmos.color = Application.isPlaying && _isActive ? Color.cyan : Color.gray;
@@ -542,11 +637,11 @@ public class LightningWall : MonoBehaviour
         Gizmos.DrawWireSphere(leftPos, 0.2f);
         Gizmos.DrawWireSphere(rightPos, 0.2f);
         
-        // Draw height area
+        // Draw rotated height area using matrix transformation
         Gizmos.color = new Color(1f, 0f, 1f, 0.3f);
-        Vector3 center = transform.position;
-        Vector3 size = new Vector3(wallDistance, lightningHeight, 0.5f);
-        Gizmos.DrawWireCube(center, size);
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(wallDistance, lightningHeight, 0.5f));
+        Gizmos.matrix = Matrix4x4.identity;
     }
     
     private void OnValidate()
@@ -556,11 +651,14 @@ public class LightningWall : MonoBehaviour
         boltSpacing = Mathf.Max(0.1f, boltSpacing);
         wallDistance = Mathf.Max(1f, wallDistance);
         
-        // Update colliders when values change in editor
-        if (Application.isPlaying)
+        // Update endpoints when rotation or distance changes
+        if (_leftEndpoint != null && _rightEndpoint != null)
         {
-            UpdateColliders();
+            UpdateEndpoints();
         }
+        
+        // Update colliders when values change
+        UpdateColliders();
     }
     
     /// <summary>
