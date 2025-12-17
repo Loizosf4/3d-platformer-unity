@@ -178,11 +178,11 @@ MonoBehaviour:
   topParticleSize: 0.4
   topRotationSpeed: 8
   topRadiusAtBottomHeight: 3
-  topRadiusAtTopHeight: 10
+  topRadiusAtTopHeight: 15
   topBottomHeight: 12
   topTopHeight: 17
-  topColorMin: {r: 0.6, g: 0.6, b: 0.6, a: 0.3}
-  topColorMax: {r: 0.1981132, g: 0.18783374, b: 0.18783374, a: 0.5}
+  topColorMin: {r: 1, g: 1, b: 1, a: 0.3}
+  topColorMax: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 0.5}
   bodyParticleCount: 2000
   bodyParticleSize: 0.5
   bodyRotationSpeed: 8
@@ -191,8 +191,8 @@ MonoBehaviour:
   bodyBottomHeight: 0
   bodyTopHeight: 10
   bodyUpwardSpeed: 2
-  bodyColorMin: {r: 0.6, g: 0.6, b: 0.6, a: 0.3}
-  bodyColorMax: {r: 0.2, g: 0.1882353, b: 0.1882353, a: 0.5}
+  bodyColorMin: {r: 1, g: 1, b: 1, a: 0.3}
+  bodyColorMax: {r: 0.36078432, g: 0.36078432, b: 0.36078432, a: 0.5}
   baseParticleCount: 100
   baseParticleSize: 0.8
   baseRotationSpeed: 8
@@ -200,8 +200,8 @@ MonoBehaviour:
   baseMaxRadius: 3
   baseRadialSpeed: 3
   baseHeight: 0.1
-  baseColorMin: {r: 0.6, g: 0.6, b: 0.6, a: 0.3}
-  baseColorMax: {r: 0.2, g: 0.1882353, b: 0.1882353, a: 0.5}
+  baseColorMin: {r: 1, g: 1, b: 1, a: 0.3}
+  baseColorMax: {r: 0.36078432, g: 0.36078432, b: 0.36078432, a: 0.5}
 --- !u!1 &3456789012345678906
 GameObject:
   m_ObjectHideFlags: 0

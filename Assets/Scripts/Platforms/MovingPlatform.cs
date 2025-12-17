@@ -176,14 +176,48 @@ public class MovingPlatform : MonoBehaviour
         return false;
     }
     
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+        {
+            _playerOnPlatform = collision.transform;
+            _playerMotor = collision.collider.GetComponent<PlayerMotorCC>();
+            if (_playerMotor != null)
+            {
+                _playerMotor.SetOnPlatform(transform);
+            }
+        }
+    }
+    
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player") && _playerMotor != null)
+        {
+            _playerMotor.SetPlatformMovement(_deltaMovement);
+        }
+    }
+    
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player") && _playerOnPlatform == collision.transform)
+        {
+            if (_playerMotor != null)
+            {
+                _playerMotor.ClearPlatform(_platformVelocity);
+            }
+            _playerMotor = null;
+            _playerOnPlatform = null;
+        }
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
-        // Alternative detection using trigger
+        // Alternative detection using trigger - only attach if player is grounded
         if (other.CompareTag("Player"))
         {
             _playerOnPlatform = other.transform;
             _playerMotor = other.GetComponent<PlayerMotorCC>();
-            if (_playerMotor != null)
+            if (_playerMotor != null && _playerMotor.IsGrounded)
             {
                 _playerMotor.SetOnPlatform(transform);
             }
@@ -194,12 +228,13 @@ public class MovingPlatform : MonoBehaviour
     {
         if (other.CompareTag("Player") && _playerOnPlatform == other.transform)
         {
-            if (_playerMotor != null)
+            // Only clear if player is actually leaving the platform (not just becoming airborne briefly)
+            if (_playerMotor != null && !IsPlayerOnPlatform(other.transform))
             {
                 _playerMotor.ClearPlatform(_platformVelocity);
+                _playerMotor = null;
+                _playerOnPlatform = null;
             }
-            _playerOnPlatform = null;
-            _playerMotor = null;
         }
     }
 
