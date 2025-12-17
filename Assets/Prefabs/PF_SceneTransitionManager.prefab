@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c0349edcfe269f4bbf159732f0614f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeOutTime: 0.25
-  fadeInTime: 0.25
+  fadeOutTime: 0.2
+  fadeInTime: 3
+  postSpawnLockTime: 0

@@ -2,6 +2,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Cinemachine;
+
 
 public class SceneTransitionManager : MonoBehaviour
 {
@@ -11,10 +13,30 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private float fadeOutTime = 0.25f;
     [SerializeField] private float fadeInTime = 0.25f;
 
+    [SerializeField] private float postSpawnLockTime = 0.35f; // tweak 0.2–1.0
+
+
     private Canvas _fadeCanvas;
     private Image _fadeImage;
 
     private bool _isTransitioning;
+
+    private bool _didInitialSpawn;
+
+    private void Start()
+    {
+        // First time you press Play, there is no transition routine,
+        // so we must place the player at the scene’s default spawn once.
+        if (_didInitialSpawn) return;
+
+        var player = GameObject.FindGameObjectWithTag("Player");
+        PlacePlayerAtSpawn(player, spawnId: null); // null => uses default spawn
+        ResetFreeLookBehindPlayer(player);
+        _didInitialSpawn = true;
+
+        // Optional: also reset camera state here (see Fix 3)
+    }
+
 
     private void Awake()
     {
@@ -57,10 +79,15 @@ public class SceneTransitionManager : MonoBehaviour
         locker = player != null ? player.GetComponent<PlayerControlLock>() : null;
 
         PlacePlayerAtSpawn(player, spawnId);
+        ResetFreeLookBehindPlayer(player);
 
         yield return FadeTo(0f, fadeInTime);
 
+        if (postSpawnLockTime > 0f)
+            yield return new WaitForSecondsRealtime(postSpawnLockTime);
+
         if (locker != null) locker.SetLocked(false);
+
 
         _isTransitioning = false;
     }
@@ -161,4 +188,31 @@ public class SceneTransitionManager : MonoBehaviour
         c.a = Mathf.Clamp01(a);
         _fadeImage.color = c;
     }
+
+    private void ResetFreeLookBehindPlayer(GameObject player)
+    {
+        if (player == null) return;
+
+        var freeLook = FindObjectOfType<CinemachineFreeLook>(true);
+        if (freeLook == null) return;
+
+        // Ensure it follows the player’s CameraTarget if present
+        var motor = player.GetComponent<PlayerMotorCC>();
+        // If you don’t want to expose cameraTarget, we can just find the child:
+        var ct = player.transform.Find("CameraTarget");
+        var target = ct != null ? ct : player.transform;
+
+        freeLook.Follow = target;
+        freeLook.LookAt = target;
+
+        // Reset Cinemachine’s “memory”
+        freeLook.PreviousStateIsValid = false;
+
+        // Make it start “behind” player: align X axis with player yaw
+        freeLook.m_XAxis.Value = player.transform.eulerAngles.y;
+
+        // Optional: mid height (0.5 is center)
+        freeLook.m_YAxis.Value = 0.5f;
+    }
+
 }
