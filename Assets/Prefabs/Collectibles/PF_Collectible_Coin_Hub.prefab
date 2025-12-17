@@ -162,11 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fbff397fe198774297ed23286037e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< Updated upstream
-  rotationDegreesPerSecond: {x: 0, y: 0, z: 100}
-=======
   rotationDegreesPerSecond: {x: 0, y: 0, z: 120}
->>>>>>> Stashed changes
   bobHeight: 0.15
   bobSpeed: 2
 --- !u!33 &4630103638261691957
