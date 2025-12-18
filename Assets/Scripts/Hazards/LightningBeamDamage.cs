@@ -105,29 +105,36 @@ public class LightningBeamDamage : MonoBehaviour
         var motor = other.GetComponentInParent<PlayerMotorCC>();
         if (motor == null) return;
         
-        // The wall runs left-right (X-axis), so we need to push along Z-axis (perpendicular to wall)
+        // Get the wall's perpendicular normal direction
+        Vector3 wallNormal = controller.GetWallNormal();
+        
         // Get player position and wall position
         Vector3 playerPos = other.transform.position;
         Vector3 wallPos = controller.transform.position;
         
-        // Calculate which side of the wall the player is on (Z-axis direction)
+        // Determine which side of the wall the player is on
         Vector3 wallToPlayer = playerPos - wallPos;
-        float zDirection = Mathf.Sign(wallToPlayer.z);
         
-        // If player is very close to wall center (within 0.1 units), default to pushing forward
-        if (Mathf.Abs(wallToPlayer.z) < 0.1f)
+        // Project onto the wall normal (flatten Y to only check horizontal position)
+        Vector3 wallToPlayerHorizontal = new Vector3(wallToPlayer.x, 0f, wallToPlayer.z);
+        Vector3 wallNormalHorizontal = new Vector3(wallNormal.x, 0f, wallNormal.z).normalized;
+        
+        float dot = Vector3.Dot(wallToPlayerHorizontal, wallNormalHorizontal);
+        
+        // Push in the wall normal direction, on the side the player is on
+        Vector3 pushDirection = wallNormalHorizontal * Mathf.Sign(dot);
+        
+        // If player is exactly on the wall center, push backward (negative normal)
+        if (Mathf.Abs(dot) < 0.01f)
         {
-            zDirection = 1f; // Push forward by default
+            pushDirection = -wallNormalHorizontal;
         }
         
-        // Push direction is perpendicular to the wall (along Z-axis)
-        Vector3 pushDirection = controller.transform.forward * zDirection;
-        
-        // Add upward component for better feel
-        pushDirection.y = 0.5f;
+        // Add tiny upward component
+        pushDirection.y = 0.1f;
         pushDirection.Normalize();
         
-        Debug.Log($"PUSHBACK: playerPos={playerPos}, wallPos={wallPos}, zDir={zDirection}, pushDir={pushDirection}, force={force}");
+        Debug.Log($"PUSHBACK: playerPos={playerPos}, wallPos={wallPos}, wallNormal={wallNormal}, wallNormalH={wallNormalHorizontal}, dot={dot}, pushDir={pushDirection}, force={force}");
         
         motor.AddDirectionalForce(pushDirection * force);
     }

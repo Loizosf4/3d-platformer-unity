@@ -39,8 +39,8 @@ public class HailShooterEnemy : MonoBehaviour
     [Tooltip("Tag to check for player stomp")]
     [SerializeField] private string playerTag = "Player";
     
-    [Tooltip("Collider on top of enemy for stomp detection")]
-    [SerializeField] private Collider stompCollider;
+    [Tooltip("Minimum Y velocity (negative = falling) required for stomp")]
+    [SerializeField] private float stompVelocityThreshold = -2f;
     
     [Header("Visual")]
     [Tooltip("Renderer to show/hide")]
@@ -71,6 +71,9 @@ public class HailShooterEnemy : MonoBehaviour
         {
             enemyRenderer = GetComponentInChildren<Renderer>();
         }
+        
+        // Create a stomp detection collider on top
+        CreateStompCollider();
         
         _nextFireTime = Time.time + fireRate;
     }
@@ -124,9 +127,17 @@ public class HailShooterEnemy : MonoBehaviour
     
     private void ShootAtPlayer()
     {
+        if (hailstonePrefab == null)
+        {
+            Debug.LogError("HailShooterEnemy: Cannot shoot - hailstonePrefab is null!");
+            return;
+        }
+        
         // Aim at player's body (1 unit above their position) instead of their feet
         Vector3 targetPosition = _playerTransform.position + Vector3.up * 1f;
         Vector3 directionToPlayer = (targetPosition - shootPoint.position).normalized;
+        
+        Debug.Log($"HailShooterEnemy: SHOOTING {hailstonesPerBurst} hailstones at player. From {shootPoint.position} towards {targetPosition}");
         
         for (int i = 0; i < hailstonesPerBurst; i++)
         {
@@ -141,80 +152,130 @@ public class HailShooterEnemy : MonoBehaviour
             Quaternion spreadRotation = Quaternion.AngleAxis(angleOffset, Vector3.up);
             Vector3 spreadDirection = spreadRotation * directionToPlayer;
             
+            // Add small random offset to spawn position to prevent overlap
+            Vector3 spawnOffset = Random.insideUnitSphere * 0.1f;
+            spawnOffset.y = 0; // Keep on same height
+            Vector3 spawnPosition = shootPoint.position + spawnOffset;
+            
             // Spawn hailstone
-            GameObject hailstone = Instantiate(hailstonePrefab, shootPoint.position, Quaternion.identity);
+            GameObject hailstone = Instantiate(hailstonePrefab, spawnPosition, Quaternion.identity);
             
-            // Apply velocity
+            Debug.Log($"HailShooterEnemy: Spawned hailstone #{i} at {shootPoint.position}");
+            
+            // Get or add Rigidbody
             Rigidbody rb = hailstone.GetComponent<Rigidbody>();
-            if (rb != null)
+            if (rb == null)
             {
-                rb.velocity = spreadDirection * projectileSpeed;
+                rb = hailstone.AddComponent<Rigidbody>();
+                rb.mass = 0.1f;
+                Debug.Log("HailShooterEnemy: Added Rigidbody to hailstone");
             }
             
-            // Add damage component if not already present
-            DamageOnTouch damageComp = hailstone.GetComponent<DamageOnTouch>();
-            if (damageComp == null)
+            // Apply velocity and enable gravity
+            rb.velocity = spreadDirection * projectileSpeed;
+            rb.useGravity = true;
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            
+            Debug.Log($"HailShooterEnemy: Rigidbody setup - velocity={rb.velocity}, gravity={rb.useGravity}, kinematic={rb.isKinematic}");
+            
+            // Ensure we have a SOLID collider for physics (hitting ground/walls)
+            SphereCollider solidCol = hailstone.GetComponent<SphereCollider>();
+            if (solidCol == null)
             {
-                damageComp = hailstone.AddComponent<DamageOnTouch>();
+                solidCol = hailstone.AddComponent<SphereCollider>();
+                solidCol.radius = 0.15f;
+                Debug.Log("HailShooterEnemy: Added SphereCollider to hailstone");
+            }
+            else
+            {
+                Debug.Log($"HailShooterEnemy: Found existing SphereCollider, isTrigger was: {solidCol.isTrigger}");
             }
             
-            // Add damage source if not present
-            DamageSource damageSource = hailstone.GetComponent<DamageSource>();
-            if (damageSource == null)
+            solidCol.isTrigger = false; // Solid collider for physics
+            Debug.Log($"HailShooterEnemy: Set solidCol.isTrigger = false. Now is: {solidCol.isTrigger}");
+            
+            // Add a SECOND trigger collider on a child object for damage detection
+            GameObject triggerChild = new GameObject("DamageTrigger");
+            triggerChild.transform.SetParent(hailstone.transform);
+            triggerChild.transform.localPosition = Vector3.zero;
+            
+            SphereCollider triggerCol = triggerChild.AddComponent<SphereCollider>();
+            triggerCol.radius = 0.2f; // Slightly larger than solid collider
+            triggerCol.isTrigger = true; // Trigger for damage detection
+            
+            Debug.Log($"HailShooterEnemy: Created child trigger collider on {triggerChild.name}");
+            
+            // Add damage components to the trigger child
+            DamageOnTouch damageComp = triggerChild.AddComponent<DamageOnTouch>();
+            DamageSource damageSource = triggerChild.AddComponent<DamageSource>();
+            
+            // Add script to destroy on collision with ground/walls (but not player)
+            HailstoneDestroyer destroyer = hailstone.AddComponent<HailstoneDestroyer>();
+            destroyer.playerTag = playerTag;
+            
+            // Ignore collision between hailstone and this shooter
+            Collider shooterCollider = GetComponent<Collider>();
+            if (shooterCollider != null)
             {
-                damageSource = hailstone.AddComponent<DamageSource>();
+                Physics.IgnoreCollision(solidCol, shooterCollider);
+                Debug.Log("HailShooterEnemy: Ignoring collision between hailstone and shooter");
             }
             
-            // Destroy hailstone after lifetime to prevent clutter
-            Destroy(hailstone, 5f);
+            Debug.Log($"HailShooterEnemy: Hailstone fully configured. Active={hailstone.activeSelf}, Name={hailstone.name}");
         }
         
         Debug.Log($"HailShooterEnemy: Fired {hailstonesPerBurst} hailstones at player");
     }
     
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
         if (!_isActive) return;
         
         // Check if player stomped on top
-        if (other.CompareTag(playerTag))
+        if (collision.gameObject.CompareTag(playerTag))
         {
+            Debug.Log($"HailShooterEnemy: Collision with player!");
+            
             // Get player motor
-            var motor = other.GetComponent<PlayerMotorCC>();
+            var motor = collision.gameObject.GetComponent<PlayerMotorCC>();
             if (motor == null)
-                motor = other.GetComponentInParent<PlayerMotorCC>();
+                motor = collision.gameObject.GetComponentInParent<PlayerMotorCC>();
             
             if (motor != null)
             {
-                // Calculate positions
-                Vector3 playerPos = motor.transform.position;
-                Vector3 enemyPos = transform.position;
+                // Check if player is falling and hit from above
+                bool isFalling = motor.VerticalVelocity < stompVelocityThreshold;
                 
-                // Get the bottom of the player (CharacterController center - height/2)
-                CharacterController playerCC = other as CharacterController;
-                float playerBottom = playerPos.y;
-                if (playerCC != null)
+                // Check contact normal - if pointing mostly upward, player hit from above
+                bool hitFromAbove = false;
+                foreach (ContactPoint contact in collision.contacts)
                 {
-                    playerBottom = playerPos.y - (playerCC.height / 2f) + playerCC.center.y;
+                    if (contact.normal.y > 0.5f) // Normal pointing up means player hit from above
+                    {
+                        hitFromAbove = true;
+                        Debug.Log($"HailShooterEnemy: Contact normal Y={contact.normal.y:F2}");
+                        break;
+                    }
                 }
                 
-                // Get the top of the enemy (using the stomp collider position)
-                float enemyTop = enemyPos.y + 0.5f; // Stomp collider is at y: 0.55
+                Debug.Log($"HailShooterEnemy: isFalling={isFalling} (vel={motor.VerticalVelocity:F2}), hitFromAbove={hitFromAbove}");
                 
-                // Check if player is falling (negative vertical velocity) and their feet are near the top of enemy
-                bool isFalling = motor.VerticalVelocity < 0;
-                bool isAboveEnemy = playerBottom > enemyTop - 0.2f; // Small tolerance
-                
-                if (isFalling && isAboveEnemy)
+                if (isFalling && hitFromAbove)
                 {
-                    Debug.Log($"HailShooterEnemy: Player stomped on enemy! (playerBottom: {playerBottom:F2}, enemyTop: {enemyTop:F2}, vertVel: {motor.VerticalVelocity:F2})");
+                    Debug.Log("HailShooterEnemy: STOMPED! Defeating enemy.");
                     DefeatEnemy();
                     
-                    // Give player a small bounce
-                    motor.AddUpwardVelocityThisFrame(8f);
+                    // Give player a bounce
+                    motor.AddUpwardVelocityThisFrame(10f);
                 }
             }
         }
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        // This is just for debug logging now
+        Debug.Log($"HailShooterEnemy: Trigger entered by {other.gameObject.name}, tag={other.tag}");
     }
     
     private void DefeatEnemy()
@@ -236,6 +297,55 @@ public class HailShooterEnemy : MonoBehaviour
         
         // Destroy after a short delay
         Destroy(gameObject, 0.5f);
+    }
+    
+    private void CreateStompCollider()
+    {
+        // Create a child object for stomp detection
+        GameObject stompDetector = new GameObject("StompDetector");
+        stompDetector.transform.SetParent(transform);
+        stompDetector.transform.localPosition = new Vector3(0, 0.6f, 0); // On top of cube
+        stompDetector.layer = gameObject.layer;
+        
+        // Add a trigger collider for stomping (works with CharacterController)
+        BoxCollider stompCol = stompDetector.AddComponent<BoxCollider>();
+        stompCol.size = new Vector3(1.2f, 0.3f, 1.2f);
+        stompCol.isTrigger = true; // MUST be trigger for CharacterController
+        
+        // Add a component to forward trigger events to parent
+        StompDetector detector = stompDetector.AddComponent<StompDetector>();
+        detector.enemy = this;
+        
+        Debug.Log("HailShooterEnemy: Created stomp detector on top");
+    }
+    
+    public void OnPlayerStomp(Collider playerCollider)
+    {
+        if (!_isActive) return;
+        
+        Debug.Log("HailShooterEnemy: OnPlayerStomp called!");
+        
+        // Get player motor
+        var motor = playerCollider.GetComponent<PlayerMotorCC>();
+        if (motor == null)
+            motor = playerCollider.GetComponentInParent<PlayerMotorCC>();
+        
+        if (motor != null)
+        {
+            // Check if player is falling
+            bool isFalling = motor.VerticalVelocity < stompVelocityThreshold;
+            
+            Debug.Log($"HailShooterEnemy: isFalling={isFalling} (vel={motor.VerticalVelocity:F2})");
+            
+            if (isFalling)
+            {
+                Debug.Log("HailShooterEnemy: STOMPED! Defeating enemy.");
+                DefeatEnemy();
+                
+                // Give player a bounce
+                motor.AddUpwardVelocityThisFrame(10f);
+            }
+        }
     }
     
     private void OnDrawGizmosSelected()

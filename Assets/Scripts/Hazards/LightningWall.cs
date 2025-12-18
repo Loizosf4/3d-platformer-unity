@@ -4,7 +4,6 @@ using UnityEngine;
 /// Lightning obstacle that cycles on/off, damaging the player when active.
 /// Uses procedural lightning bolts between two endpoints.
 /// </summary>
-[ExecuteAlways]
 public class LightningWall : MonoBehaviour
 {
     [Header("Endpoints")]
@@ -196,6 +195,9 @@ public class LightningWall : MonoBehaviour
             BoxCollider boxCollider = damageCollider as BoxCollider;
             if (boxCollider != null)
             {
+                // Reset transform scale to (1,1,1) so collider.size is accurate
+                damageCollider.transform.localScale = Vector3.one;
+                
                 // Size scales with both wallDistance (X) and lightningHeight (Y), depth is proportional
                 boxCollider.size = new Vector3(wallDistance, totalHeight, colliderDepth);
                 boxCollider.center = Vector3.zero;
@@ -212,6 +214,9 @@ public class LightningWall : MonoBehaviour
             BoxCollider boxCollider = blockingCollider as BoxCollider;
             if (boxCollider != null)
             {
+                // Reset transform scale to (1,1,1) so collider.size is accurate
+                blockingCollider.transform.localScale = Vector3.one;
+                
                 // Slightly thinner than damage collider
                 boxCollider.size = new Vector3(wallDistance, totalHeight, colliderDepth * 0.5f);
                 boxCollider.center = Vector3.zero;
@@ -225,7 +230,7 @@ public class LightningWall : MonoBehaviour
         // Update editor guide to match lightning dimensions
         if (editorGuide != null && editorGuide.transform != null)
         {
-            editorGuide.transform.localScale = new Vector3(wallDistance, totalHeight, 0.1f);
+            editorGuide.transform.localScale = new Vector3(1, 1, 0.1f);
             editorGuide.transform.localPosition = Vector3.zero;
             editorGuide.transform.localRotation = rotation;
             
@@ -614,6 +619,16 @@ public class LightningWall : MonoBehaviour
         float distRight2 = Vector3.Distance(playerPos, rightPosition);
         
         return distLeft2 < distRight2 ? leftPosition : rightPosition;
+    }
+    
+    /// <summary>
+    /// Get the wall's perpendicular direction (the normal facing forward/backward)
+    /// </summary>
+    public Vector3 GetWallNormal()
+    {
+        // The wall spans left-right (X-axis), so the normal is the rotated forward direction (Z-axis)
+        Quaternion rotation = Quaternion.Euler(0f, rotationAngle, 0f);
+        return rotation * Vector3.forward;
     }
 
     private void OnDrawGizmos()

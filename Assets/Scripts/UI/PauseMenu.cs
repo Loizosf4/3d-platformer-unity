@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// Simple pause menu that freezes the game and shows pause UI
+/// Simple pause menu that disables player controls and shows pause UI
 /// Press P or Esc to toggle pause
 /// </summary>
 public class PauseMenu : MonoBehaviour
@@ -17,11 +17,13 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private string mainMenuSceneName = "MainMenu";
     
     [Header("Input Settings")]
-    [Tooltip("Drag your IA_Player input actions asset here (optional - will also check legacy input)")]
+    [Tooltip("Drag your IA_Player input actions asset here")]
     [SerializeField] private InputActionAsset inputActions;
     
     private bool _isPaused = false;
     private InputAction _pauseAction;
+    private PlayerInputReader _playerInput;
+    private PlayerMotorCC _playerMotor;
     
     private void Awake()
     {
@@ -38,6 +40,14 @@ public class PauseMenu : MonoBehaviour
                 }
             }
         }
+        
+        // Find player components
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            _playerInput = player.GetComponentInChildren<PlayerInputReader>();
+            _playerMotor = player.GetComponent<PlayerMotorCC>();
+        }
     }
     
     private void Start()
@@ -47,9 +57,6 @@ public class PauseMenu : MonoBehaviour
         {
             pauseMenuPanel.SetActive(false);
         }
-        
-        // Ensure game is running
-        Time.timeScale = 1f;
     }
     
     private void Update()
@@ -96,14 +103,20 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     private void Pause()
     {
-        Time.timeScale = 0f; // Freeze game
+        // Disable player controls instead of Time.timeScale
+        if (_playerInput != null) _playerInput.enabled = false;
+        if (_playerMotor != null) _playerMotor.enabled = false;
         
         if (pauseMenuPanel != null)
         {
             pauseMenuPanel.SetActive(true);
         }
         
-        Debug.Log("Game Paused");
+        // Ensure cursor is visible and unlocked
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        
+        Debug.Log("Game Paused - Player disabled");
     }
     
     /// <summary>
@@ -112,14 +125,17 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         _isPaused = false;
-        Time.timeScale = 1f; // Resume game
+        
+        // Re-enable player controls
+        if (_playerInput != null) _playerInput.enabled = true;
+        if (_playerMotor != null) _playerMotor.enabled = true;
         
         if (pauseMenuPanel != null)
         {
             pauseMenuPanel.SetActive(false);
         }
         
-        Debug.Log("Game Resumed");
+        Debug.Log("Game Resumed - Player enabled");
     }
     
     private void OnDestroy()
@@ -144,7 +160,10 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void OnExitToMainMenuClicked()
     {
-        Time.timeScale = 1f; // Reset time scale before loading
+        // Re-enable player before leaving (cleanup)
+        if (_playerInput != null) _playerInput.enabled = true;
+        if (_playerMotor != null) _playerMotor.enabled = true;
+        
         Debug.Log($"Loading main menu: {mainMenuSceneName}");
         SceneManager.LoadScene(mainMenuSceneName);
     }
@@ -154,7 +173,6 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void OnExitToDesktopClicked()
     {
-        Time.timeScale = 1f; // Reset time scale before quitting
         Debug.Log("Exiting to desktop...");
         
 #if UNITY_EDITOR
