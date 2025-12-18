@@ -91,7 +91,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2.15
-  m_Radius: 0.52
+  m_Radius: 0.49
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -149,7 +149,7 @@ MonoBehaviour:
   wallLayers:
     serializedVersion: 2
     m_Bits: 512
-  wallCheckDistance: 0.6
+  wallCheckDistance: 1
   wallCheckHeightOffset: 0.9
   wallCoyoteTime: 0.12
   wallJumpHorizontalForce: 8
