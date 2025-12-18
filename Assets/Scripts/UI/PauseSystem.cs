@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -37,6 +38,10 @@ public class PauseSystem : MonoBehaviour
 
     private void OnEnable()
     {
+        // NEW: listen for scene loads
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // existing pause input hookup
         if (pauseAction != null && pauseAction.action != null)
         {
             pauseAction.action.Enable();
@@ -44,14 +49,20 @@ public class PauseSystem : MonoBehaviour
         }
     }
 
+
     private void OnDisable()
     {
+        // NEW: stop listening for scene loads
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        // existing pause input unhook
         if (pauseAction != null && pauseAction.action != null)
         {
             pauseAction.action.performed -= OnPausePerformed;
             pauseAction.action.Disable();
         }
     }
+
 
     private void OnPausePerformed(InputAction.CallbackContext ctx)
     {
@@ -118,5 +129,41 @@ public class PauseSystem : MonoBehaviour
             pauseAction.action.Enable();
         }
     }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == mainMenuSceneName)
+            CleanupForMainMenu();
+    }
+
+    private void CleanupForMainMenu()
+    {
+        // ensure time isn't frozen
+        Time.timeScale = 1f;
+        _isPaused = false;
+
+        // remove spawned pause UI if any
+        if (_spawnedMenu != null)
+            Destroy(_spawnedMenu);
+
+        // destroy gameplay persistent systems (adjust types if your names differ)
+        DestroyIfExists<SceneTransitionManager>();
+        DestroyIfExists<RespawnManager>();
+        //DestroyIfExists<GameState>();
+        DestroyIfExists<HUDController>();
+        DestroyIfExists<CameraRigBinder>();
+
+        // finally destroy PauseSystem itself
+        Destroy(gameObject);
+    }
+
+    private void DestroyIfExists<T>() where T : Component
+    {
+        var obj = FindObjectOfType<T>(true);
+        if (obj != null)
+            Destroy(obj.gameObject);
+    }
+
+
 
 }
