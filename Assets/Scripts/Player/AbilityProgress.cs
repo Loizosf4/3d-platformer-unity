@@ -2,57 +2,60 @@ using UnityEngine;
 
 public class AbilityProgress : MonoBehaviour
 {
-    [Header("Unlock State (Save Later)")]
-    [SerializeField] private bool hasDoubleJump = false;
-    [SerializeField] private bool hasDash = false;
-    [SerializeField] private bool hasWallJump = false;
-
     private PlayerMotorCC _motor;
 
     private void Awake()
     {
         _motor = GetComponent<PlayerMotorCC>();
-        ApplyToMotor();
+        ApplyFromPlayerStats();
     }
 
-    public bool HasDoubleJump => hasDoubleJump;
-    public bool HasDash => hasDash;
-    public bool HasWallJump => hasWallJump;
+    private void OnEnable()
+    {
+        // Re-apply when player spawns/enables
+        ApplyFromPlayerStats();
+    }
 
+    public bool HasDoubleJump => PlayerStats.Instance != null && PlayerStats.Instance.HasDoubleJump;
+    public bool HasDash => PlayerStats.Instance != null && PlayerStats.Instance.HasDash;
+    public bool HasWallJump => PlayerStats.Instance != null && PlayerStats.Instance.HasWallJump;
+
+    // These are still called by your pickups (so you don't have to rewrite pickup code)
     public void UnlockDoubleJump()
     {
-        hasDoubleJump = true;
-        ApplyToMotor();
+        PlayerStats.Instance?.UnlockDoubleJump();
+        ApplyFromPlayerStats();
     }
 
     public void UnlockDash()
     {
-        hasDash = true;
-        ApplyToMotor();
+        PlayerStats.Instance?.UnlockDash();
+        ApplyFromPlayerStats();
     }
 
     public void UnlockWallJump()
     {
-        hasWallJump = true;
-        Debug.Log("[AbilityProgress] UnlockWallJump called!");
-        ApplyToMotor();
+        PlayerStats.Instance?.UnlockWallJump();
+        ApplyFromPlayerStats();
     }
 
-    private void ApplyToMotor()
+    private void ApplyFromPlayerStats()
     {
         if (_motor == null)
         {
-            Debug.LogError("[AbilityProgress] _motor is NULL! Cannot apply abilities.");
+            Debug.LogError("[AbilityProgress] PlayerMotorCC missing on player.");
             return;
         }
 
-        // These methods will be added to the motor in the next step.
-        if (hasDoubleJump) _motor.UnlockDoubleJump();
-        if (hasDash) _motor.UnlockDash();
-        if (hasWallJump)
+        if (PlayerStats.Instance == null)
         {
-            Debug.Log("[AbilityProgress] Calling _motor.UnlockWallJump()");
-            _motor.UnlockWallJump();
+            Debug.LogWarning("[AbilityProgress] PlayerStats.Instance is null (Bootstrapper not spawned yet?)");
+            return;
         }
+
+        // Apply to motor based on persistent stats
+        if (PlayerStats.Instance.HasDoubleJump) _motor.UnlockDoubleJump();
+        if (PlayerStats.Instance.HasDash) _motor.UnlockDash();
+        if (PlayerStats.Instance.HasWallJump) _motor.UnlockWallJump();
     }
 }

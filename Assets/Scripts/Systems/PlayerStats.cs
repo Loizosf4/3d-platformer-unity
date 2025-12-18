@@ -51,6 +51,17 @@ public class PlayerStats : MonoBehaviour
     [Tooltip("Volume for hurt sound (0-1).")]
     [SerializeField, Range(0f, 1f)] private float hurtVolume = 0.8f;
 
+    [Header("Abilities")]
+    [SerializeField] private bool hasDoubleJump = false;
+    [SerializeField] private bool hasDash = false;
+    [SerializeField] private bool hasWallJump = false;
+
+    public bool HasDoubleJump => hasDoubleJump;
+    public bool HasDash => hasDash;
+    public bool HasWallJump => hasWallJump;
+
+    public event Action OnAbilitiesChanged;
+
 
     // ===== Public read-only accessors (useful for UI later) =====
     public int CurrentHearts => currentHearts;
@@ -61,6 +72,28 @@ public class PlayerStats : MonoBehaviour
     public CheckpointData LastCheckpoint => lastCheckpoint;
 
     public bool IsMaxHealthUpgraded => maxHearts >= MaxHeartsCap;
+
+    public void UnlockDoubleJump()
+    {
+        if (hasDoubleJump) return;
+        hasDoubleJump = true;
+        OnAbilitiesChanged?.Invoke();
+    }
+
+    public void UnlockDash()
+    {
+        if (hasDash) return;
+        hasDash = true;
+        OnAbilitiesChanged?.Invoke();
+    }
+
+    public void UnlockWallJump()
+    {
+        if (hasWallJump) return;
+        hasWallJump = true;
+        OnAbilitiesChanged?.Invoke();
+    }
+
 
     // ===== Unity lifecycle =====
     private void Awake()
