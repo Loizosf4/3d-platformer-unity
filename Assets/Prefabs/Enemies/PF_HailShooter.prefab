@@ -64,6 +64,12 @@ MonoBehaviour:
   playerTag: Player
   stompVelocityThreshold: -2
   enemyRenderer: {fileID: 8521789012345678905}
+  shootSound: {fileID: 8300000, guid: c0b23448c101bfd4eacbe5118c01f4c5, type: 3}
+  shootVolume: 0.8
+  spatialBlend: 1
+  projectileHitSound: {fileID: 8300000, guid: 0ea50fcdcb579b74199bb314be41e6a7, type: 3}
+  hitVolume: 0.7
+  hitSpatialBlend: 1
 --- !u!33 &8521789012345678904
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -20,6 +20,37 @@ public class GravityFlipVolume : MonoBehaviour
     [Header("Optional VFX")]
     [SerializeField] private ParticleSystem upParticles;
 
+    [Header("Audio")]
+    [Tooltip("Looping sound played while player is inside the volume.")]
+    [SerializeField] private AudioClip ambientSound;
+    [Tooltip("Volume for ambient sound (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float ambientVolume = 0.5f;
+    [Tooltip("Spatial blend. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float spatialBlend = 1f;
+
+    private AudioSource _audioSource;
+
+    private void Awake()
+    {
+        if (ambientSound != null)
+        {
+            _audioSource = gameObject.AddComponent<AudioSource>();
+            _audioSource.clip = ambientSound;
+            _audioSource.loop = true;
+            _audioSource.volume = ambientVolume;
+            _audioSource.spatialBlend = spatialBlend;
+
+            if (AudioManager.Instance != null && AudioManager.Instance.audioMixer != null)
+            {
+                var sfxGroup = AudioManager.Instance.audioMixer.FindMatchingGroups("SFX");
+                if (sfxGroup != null && sfxGroup.Length > 0)
+                    _audioSource.outputAudioMixerGroup = sfxGroup[0];
+            }
+
+            _audioSource.Play();
+        }
+    }
+
     private void Reset()
     {
         // Ensure collider is trigger

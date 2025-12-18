@@ -127,3 +127,6 @@ MonoBehaviour:
   readyColor: {r: 0, g: 1, b: 0, a: 1}
   compressedColor: {r: 1, g: 1, b: 0, a: 1}
   cooldownColor: {r: 1, g: 0, b: 0, a: 1}
+  bounceSound: {fileID: 8300000, guid: 8140b1b83d5b3184a9e48692235c79f0, type: 3}
+  bounceVolume: 0.784
+  spatialBlend: 1

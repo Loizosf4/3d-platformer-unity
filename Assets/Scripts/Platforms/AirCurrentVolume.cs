@@ -23,9 +23,19 @@ public class AirCurrentVolume : MonoBehaviour
     
     [Tooltip("Show multiple arrows to visualize the volume.")]
     [SerializeField] private bool showDetailedGizmos = true;
+
+    [Header("Audio")]
+    [Tooltip("Looping sound played while player is inside the air current.")]
+    [SerializeField] private AudioClip windSound;
+    [Tooltip("Volume for wind sound (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float windVolume = 0.5f;
+    [Tooltip("Spatial blend. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float spatialBlend = 1f;
     
     private Collider _collider;
     private Vector3 _worldPushDirection;
+    private AudioSource _audioSource;
+    private bool _playerInside;
 
     private void Reset()
     {
@@ -41,6 +51,24 @@ public class AirCurrentVolume : MonoBehaviour
     {
         _collider = GetComponent<Collider>();
         UpdateWorldDirection();
+
+        if (windSound != null)
+        {
+            _audioSource = gameObject.AddComponent<AudioSource>();
+            _audioSource.clip = windSound;
+            _audioSource.loop = true;
+            _audioSource.volume = windVolume;
+            _audioSource.spatialBlend = spatialBlend;
+
+            if (AudioManager.Instance != null && AudioManager.Instance.audioMixer != null)
+            {
+                var sfxGroup = AudioManager.Instance.audioMixer.FindMatchingGroups("SFX");
+                if (sfxGroup != null && sfxGroup.Length > 0)
+                    _audioSource.outputAudioMixerGroup = sfxGroup[0];
+            }
+
+            _audioSource.Play();
+        }
     }
 
     private void Update()
@@ -61,6 +89,14 @@ public class AirCurrentVolume : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        var motor = other.GetComponentInParent<PlayerMotorCC>();
+        if (motor == null) return;
+
+        _playerInside = true;
+    }
+
     private void OnTriggerStay(Collider other)
     {
         var motor = other.GetComponentInParent<PlayerMotorCC>();
@@ -69,6 +105,14 @@ public class AirCurrentVolume : MonoBehaviour
         // Apply directional push force
         Vector3 pushForce = _worldPushDirection * pushStrength * Time.deltaTime;
         motor.AddDirectionalForce(pushForce);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        var motor = other.GetComponentInParent<PlayerMotorCC>();
+        if (motor == null) return;
+
+        _playerInside = false;
     }
 
     private void OnDrawGizmos()

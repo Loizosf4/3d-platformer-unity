@@ -93,6 +93,18 @@ public class ThunderCloud : MonoBehaviour
     
     [Tooltip("Sound played during warning")]
     [SerializeField] private AudioClip warningSound;
+
+    [Tooltip("Volume for strike sound (0-1)")]
+    [SerializeField, Range(0f, 1f)] private float strikeVolume = 1f;
+
+    [Tooltip("Volume for warning sound (0-1)")]
+    [SerializeField, Range(0f, 1f)] private float warningVolume = 0.8f;
+
+    [Tooltip("Spatial blend. 0 = 2D, 1 = 3D")]
+    [SerializeField, Range(0f, 1f)] private float spatialBlend = 1f;
+
+    [Tooltip("Max distance for 3D audio")]
+    [SerializeField] private float audioMaxDistance = 50f;
     
     // State
     private enum State { Idle, Warning, Striking }
@@ -106,6 +118,14 @@ public class ThunderCloud : MonoBehaviour
     private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
+        
+        // Configure AudioSource
+        if (_audioSource != null)
+        {
+            _audioSource.spatialBlend = spatialBlend;
+            _audioSource.maxDistance = audioMaxDistance;
+            _audioSource.playOnAwake = false;
+        }
         
         // Get cloud material for color changes
         if (cloudRenderer != null && cloudRenderer.material != null)
@@ -441,7 +461,7 @@ public class ThunderCloud : MonoBehaviour
         
         // Play warning sound
         if (_audioSource != null && warningSound != null)
-            _audioSource.PlayOneShot(warningSound);
+            _audioSource.PlayOneShot(warningSound, warningVolume);
     }
     
     private void ExecuteStrike()
@@ -493,7 +513,7 @@ public class ThunderCloud : MonoBehaviour
         
         // Play strike sound
         if (_audioSource != null && strikeSound != null)
-            _audioSource.PlayOneShot(strikeSound);
+            _audioSource.PlayOneShot(strikeSound, strikeVolume);
     }
     
     private void GenerateLightningBolt(Vector3 start, Vector3 end)

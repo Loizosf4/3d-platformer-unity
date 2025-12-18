@@ -73,6 +73,28 @@ public class LightningWall : MonoBehaviour
     
     [Tooltip("Solid collider that blocks player movement when lightning is active")]
     [SerializeField] private Collider blockingCollider;
+
+    [Header("Audio")]
+    [Tooltip("Looping sound played while lightning is active.")]
+    [SerializeField] private AudioClip lightningLoopSound;
+    
+    [Tooltip("Sound played when lightning turns on.")]
+    [SerializeField] private AudioClip activationSound;
+    
+    [Tooltip("Sound played when lightning turns off.")]
+    [SerializeField] private AudioClip deactivationSound;
+    
+    [Tooltip("Volume for lightning loop (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float loopVolume = 0.7f;
+    
+    [Tooltip("Volume for activation/deactivation sounds (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float stingerVolume = 0.8f;
+    
+    [Tooltip("Spatial blend. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float spatialBlend = 1f;
+    
+    [Tooltip("Max distance for 3D audio.")]
+    [SerializeField] private float audioMaxDistance = 30f;
     
     // Runtime data
     private LineRenderer[] _lightningBolts;
@@ -88,9 +110,24 @@ public class LightningWall : MonoBehaviour
     // Endpoint transforms for rotation
     private Transform _leftEndpoint;
     private Transform _rightEndpoint;
+    
+    // Audio
+    private AudioSource _loopSource;
 
     private void Start()
     {
+        // Setup audio loop
+        if (lightningLoopSound != null)
+        {
+            _loopSource = gameObject.AddComponent<AudioSource>();
+            _loopSource.clip = lightningLoopSound;
+            _loopSource.loop = true;
+            _loopSource.playOnAwake = false;
+            _loopSource.volume = loopVolume;
+            _loopSource.spatialBlend = spatialBlend;
+            _loopSource.maxDistance = audioMaxDistance;
+        }
+        
         // Create endpoint transforms if they don't exist
         CreateEndpoints();
         
@@ -512,6 +549,37 @@ public class LightningWall : MonoBehaviour
     private void UpdateVisuals()
     {
         bool showLightning = _isActive;
+        bool wasActive = _lightningBolts != null && _lightningBolts.Length > 0 && _lightningBolts[0] != null && _lightningBolts[0].enabled;
+        
+        // Handle audio state changes
+        if (showLightning && !wasActive)
+        {
+            // Lightning turning ON
+            if (_loopSource != null && !_loopSource.isPlaying)
+            {
+                _loopSource.Play();
+            }
+            
+            // Play activation stinger
+            if (activationSound != null && AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayAtPosition(activationSound, transform.position, stingerVolume, spatialBlend);
+            }
+        }
+        else if (!showLightning && wasActive)
+        {
+            // Lightning turning OFF
+            if (_loopSource != null && _loopSource.isPlaying)
+            {
+                _loopSource.Stop();
+            }
+            
+            // Play deactivation stinger
+            if (deactivationSound != null && AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayAtPosition(deactivationSound, transform.position, stingerVolume, spatialBlend);
+            }
+        }
         
         // Lightning bolts with flicker
         if (_lightningBolts != null)

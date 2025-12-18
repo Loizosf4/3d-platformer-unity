@@ -28,7 +28,16 @@ public class SpeedBoostZone : MonoBehaviour
     [Tooltip("Extra padding added to auto-fitted collider (useful for larger detection area)")]
     [SerializeField] private Vector3 colliderPadding = new Vector3(0.2f, 0.5f, 0.2f);
 
+    [Header("Audio")]
+    [Tooltip("Sound played when player enters the speed boost zone.")]
+    [SerializeField] private AudioClip boostSound;
+    [Tooltip("Volume for boost sound (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float boostVolume = 0.8f;
+    [Tooltip("Spatial blend. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float spatialBlend = 1f;
+
     private Collider _collider;
+    private bool _playerInZone;
 
     private void Awake()
     {
@@ -99,7 +108,29 @@ public class SpeedBoostZone : MonoBehaviour
         PlayerMotorCC motor = FindPlayerInZone();
         if (motor != null)
         {
+            // Player entered zone
+            if (!_playerInZone)
+            {
+                _playerInZone = true;
+                
+                // Play boost sound
+                if (boostSound != null && AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayAtPosition(
+                        boostSound,
+                        transform.position,
+                        boostVolume,
+                        spatialBlend
+                    );
+                }
+            }
+            
             motor.ApplySpeedMultiplier(boostAmount, lingerDuration);
+        }
+        else
+        {
+            // Player left zone
+            _playerInZone = false;
         }
     }
 

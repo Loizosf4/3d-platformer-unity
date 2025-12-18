@@ -101,6 +101,9 @@ MonoBehaviour:
   zoneSize: {x: 5, y: 2, z: 5}
   zoneCenter: {x: 0, y: 0, z: 0}
   colliderPadding: {x: 0.2, y: 0.5, z: 0.2}
+  boostSound: {fileID: 0}
+  boostVolume: 0.8
+  spatialBlend: 1
 --- !u!1 &8564517308469842691
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,3 +359,6 @@ MonoBehaviour:
   zoneSize: {x: 4.58, y: 2, z: 5}
   zoneCenter: {x: 0, y: 0, z: 0}
   colliderPadding: {x: 0.2, y: 0.5, z: 0.2}
+  boostSound: {fileID: 8300000, guid: cd7aeb3c50d6d4d45a16711788fdce4c, type: 3}
+  boostVolume: 0.869
+  spatialBlend: 1

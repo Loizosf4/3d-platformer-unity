@@ -2276,6 +2276,13 @@ MonoBehaviour:
   editorGuide: {fileID: 4521789012345678931}
   damageCollider: {fileID: 4521789012345678932}
   blockingCollider: {fileID: 4521789012345678935}
+  lightningLoopSound: {fileID: 8300000, guid: b25560f05e0ed7d4eb7738027a5b8510, type: 3}
+  activationSound: {fileID: 0}
+  deactivationSound: {fileID: 0}
+  loopVolume: 0.497
+  stingerVolume: 0.8
+  spatialBlend: 1
+  audioMaxDistance: 30
 --- !u!1 &4521789012345678909
 GameObject:
   m_ObjectHideFlags: 0

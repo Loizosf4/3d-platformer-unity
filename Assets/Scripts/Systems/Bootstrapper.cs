@@ -14,8 +14,16 @@ public class Bootstrapper : MonoBehaviour
     [SerializeField] private GameObject sceneTransitionManagerPrefab; // PF_SceneTransitionManager
     [SerializeField] private GameObject respawnManagerPrefab; // PF_RespawnManager
 
+    [Header("Audio (Optional)")]
+    [Tooltip("Persistent AudioManager prefab. Leave empty to disable audio system.")]
+    [SerializeField] private GameObject audioManagerPrefab; // PF_AudioManager
+
     private void Awake()
     {
+        // Initialize audio system FIRST (so it's ready for other systems)
+        if (AudioManager.Instance == null && audioManagerPrefab != null)
+            Instantiate(audioManagerPrefab);
+
         if (PlayerStats.Instance == null && gameStatePrefab != null)
             Instantiate(gameStatePrefab);
 

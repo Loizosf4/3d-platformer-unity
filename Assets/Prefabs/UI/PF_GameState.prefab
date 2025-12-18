@@ -58,6 +58,9 @@ MonoBehaviour:
     sceneName: 
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
+  hasCheckpoint: 0
+  hurtSound: {fileID: 8300000, guid: 0ea50fcdcb579b74199bb314be41e6a7, type: 3}
+  hurtVolume: 0.834
 --- !u!114 &4637573048507402883
 MonoBehaviour:
   m_ObjectHideFlags: 0

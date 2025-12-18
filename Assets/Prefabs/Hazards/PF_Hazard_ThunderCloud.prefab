@@ -79,8 +79,12 @@ MonoBehaviour:
   groundIndicator: {fileID: 8901234567890123476}
   lightningColor: {r: 0.8, g: 0.9, b: 1, a: 1}
   warningColor: {r: 1, g: 1, b: 0.5, a: 1}
-  strikeSound: {fileID: 0}
+  strikeSound: {fileID: 8300000, guid: e63093e7d72803f4aa170597b05e4244, type: 3}
   warningSound: {fileID: 0}
+  strikeVolume: 0.638
+  warningVolume: 0.8
+  spatialBlend: 0.849
+  audioMaxDistance: 50
 --- !u!82 &8901234567890123459
 AudioSource:
   m_ObjectHideFlags: 0

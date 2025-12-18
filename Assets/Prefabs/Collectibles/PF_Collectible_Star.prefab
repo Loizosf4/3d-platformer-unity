@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 9194890817518329093}
   - component: {fileID: 3601798991701859516}
   - component: {fileID: 2706624173901740953}
+  - component: {fileID: -8782915119741018488}
   m_Layer: 0
   m_Name: PF_Collectible_Star
   m_TagString: Untagged
@@ -171,3 +172,23 @@ MonoBehaviour:
   rotationDegreesPerSecond: {x: 0, y: 120, z: 0}
   bobHeight: 0.15
   bobSpeed: 2
+--- !u!114 &-8782915119741018488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5729187112962351466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fde523b573a43d443a2f3fa8a2644d89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ambientLoopClip: {fileID: 0}
+  ambientVolume: 0.3
+  playAmbientOnStart: 1
+  ambientSpatialBlend: 1
+  ambientMaxDistance: 15
+  pickupSound: {fileID: 8300000, guid: ee6392ca45777e740b1fe7fc6ad276f1, type: 3}
+  pickupVolume: 0.8
+  pickupSpatialBlend: 0.5

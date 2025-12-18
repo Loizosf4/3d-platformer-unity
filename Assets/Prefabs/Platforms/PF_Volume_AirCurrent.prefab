@@ -4930,3 +4930,6 @@ MonoBehaviour:
   pushStrength: 10
   gizmoColor: {r: 0.5, g: 0.8, b: 1, a: 0.6}
   showDetailedGizmos: 1
+  windSound: {fileID: 8300000, guid: 91ba1cf2cf9b6c64293ae0a53433888e, type: 3}
+  windVolume: 0.673
+  spatialBlend: 0.734

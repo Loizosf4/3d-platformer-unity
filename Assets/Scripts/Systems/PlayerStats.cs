@@ -45,6 +45,12 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private bool hasCheckpoint = false;
     public bool HasCheckpoint => hasCheckpoint;
 
+    [Header("Audio")]
+    [Tooltip("Sound played when player takes damage.")]
+    [SerializeField] private AudioClip hurtSound;
+    [Tooltip("Volume for hurt sound (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float hurtVolume = 0.8f;
+
 
     // ===== Public read-only accessors (useful for UI later) =====
     public int CurrentHearts => currentHearts;
@@ -127,6 +133,12 @@ public class PlayerStats : MonoBehaviour
         currentHearts = Mathf.Clamp(currentHearts - amount, 0, maxHearts);
 
         Debug.Log($"[PlayerStats] TakeDamage -> Hearts now {currentHearts}");
+
+        // Play hurt sound
+        if (hurtSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(hurtSound, hurtVolume);
+        }
 
         OnHeartsChanged?.Invoke(currentHearts, maxHearts);
     }

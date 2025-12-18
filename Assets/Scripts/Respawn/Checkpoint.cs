@@ -17,6 +17,14 @@ public class Checkpoint : MonoBehaviour
     [SerializeField] private Color inactiveColor = new Color(1f, 1f, 1f, 1f);
     [SerializeField] private Color activeColor = new Color(0.3f, 1f, 0.3f, 1f);
 
+    [Header("Audio")]
+    [Tooltip("Sound played when checkpoint is activated.")]
+    [SerializeField] private AudioClip activationSound;
+    [Tooltip("Volume for activation sound (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float activationVolume = 0.8f;
+    [Tooltip("Spatial blend. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float spatialBlend = 0.7f;
+
     private bool _activated;
 
     private void Reset()
@@ -72,7 +80,18 @@ public class Checkpoint : MonoBehaviour
         if (feedbackRenderer != null)
             feedbackRenderer.material.color = activeColor;
 
-        _activated = true; // optional: keep as “ever activated” if you want
+        // Play checkpoint activation sound
+        if (activationSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayAtPosition(
+                activationSound,
+                transform.position,
+                activationVolume,
+                spatialBlend
+            );
+        }
+
+        _activated = true; // optional: keep as "ever activated" if you want
     }
 
 }

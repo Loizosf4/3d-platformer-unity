@@ -16,6 +16,14 @@ public class AbilityPickup : MonoBehaviour
     [SerializeField] private string promptText = "Press E / East to collect";
     [SerializeField] private bool destroyOnCollect = true;
 
+    [Header("Audio")]
+    [Tooltip("Sound played when ability is collected.")]
+    [SerializeField] private AudioClip collectSound;
+    [Tooltip("Volume for collect sound (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float collectVolume = 1f;
+    [Tooltip("Spatial blend. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float spatialBlend = 0.5f;
+
     private AbilityProgress _playerProgressInRange;
     private PlayerInputReader _playerInputInRange;
 
@@ -64,6 +72,17 @@ public class AbilityPickup : MonoBehaviour
 
     private void Collect(AbilityProgress progress)
     {
+        // Play collect sound
+        if (collectSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayAtPosition(
+                collectSound,
+                transform.position,
+                collectVolume,
+                spatialBlend
+            );
+        }
+
         switch (ability)
         {
             case AbilityType.DoubleJump:

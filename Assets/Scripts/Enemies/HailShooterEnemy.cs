@@ -45,6 +45,22 @@ public class HailShooterEnemy : MonoBehaviour
     [Header("Visual")]
     [Tooltip("Renderer to show/hide")]
     [SerializeField] private Renderer enemyRenderer;
+
+    [Header("Audio")]
+    [Tooltip("Sound played when shooting hailstones.")]
+    [SerializeField] private AudioClip shootSound;
+    [Tooltip("Volume for shoot sound (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float shootVolume = 0.8f;
+    [Tooltip("Spatial blend. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float spatialBlend = 1f;
+
+    [Header("Projectile Hit Audio")]
+    [Tooltip("Sound played when hailstone hits the player.")]
+    [SerializeField] private AudioClip projectileHitSound;
+    [Tooltip("Volume for hit sound (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float hitVolume = 0.7f;
+    [Tooltip("Spatial blend for hit sound. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float hitSpatialBlend = 1f;
     
     // Runtime
     private Transform _playerTransform;
@@ -82,7 +98,6 @@ public class HailShooterEnemy : MonoBehaviour
     {
         if (!_isActive || hailstonePrefab == null)
         {
-            Debug.LogWarning($"HailShooterEnemy: Not active or missing prefab. Active={_isActive}, Prefab={hailstonePrefab != null}");
             return;
         }
         
@@ -93,7 +108,6 @@ public class HailShooterEnemy : MonoBehaviour
             if (player != null)
             {
                 _playerTransform = player.transform;
-                Debug.Log("HailShooterEnemy: Found player!");
             }
             else
             {
@@ -116,8 +130,6 @@ public class HailShooterEnemy : MonoBehaviour
         
         bool inRange = horizontalDistance <= detectionRadius && verticalDistance <= detectionHeight;
         
-        Debug.Log($"HailShooterEnemy: hDist={horizontalDistance:F2}/{detectionRadius}, vDist={verticalDistance:F2}/{detectionHeight}, inRange={inRange}, canFire={Time.time >= _nextFireTime}");
-        
         if (inRange && Time.time >= _nextFireTime)
         {
             ShootAtPlayer();
@@ -129,15 +141,23 @@ public class HailShooterEnemy : MonoBehaviour
     {
         if (hailstonePrefab == null)
         {
-            Debug.LogError("HailShooterEnemy: Cannot shoot - hailstonePrefab is null!");
             return;
+        }
+        
+        // Play shoot sound
+        if (shootSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayAtPosition(
+                shootSound,
+                shootPoint.position,
+                shootVolume,
+                spatialBlend
+            );
         }
         
         // Aim at player's body (1 unit above their position) instead of their feet
         Vector3 targetPosition = _playerTransform.position + Vector3.up * 1f;
         Vector3 directionToPlayer = (targetPosition - shootPoint.position).normalized;
-        
-        Debug.Log($"HailShooterEnemy: SHOOTING {hailstonesPerBurst} hailstones at player. From {shootPoint.position} towards {targetPosition}");
         
         for (int i = 0; i < hailstonesPerBurst; i++)
         {
@@ -160,15 +180,12 @@ public class HailShooterEnemy : MonoBehaviour
             // Spawn hailstone
             GameObject hailstone = Instantiate(hailstonePrefab, spawnPosition, Quaternion.identity);
             
-            Debug.Log($"HailShooterEnemy: Spawned hailstone #{i} at {shootPoint.position}");
-            
             // Get or add Rigidbody
             Rigidbody rb = hailstone.GetComponent<Rigidbody>();
             if (rb == null)
             {
                 rb = hailstone.AddComponent<Rigidbody>();
                 rb.mass = 0.1f;
-                Debug.Log("HailShooterEnemy: Added Rigidbody to hailstone");
             }
             
             // Apply velocity and enable gravity
@@ -176,23 +193,15 @@ public class HailShooterEnemy : MonoBehaviour
             rb.useGravity = true;
             rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
             
-            Debug.Log($"HailShooterEnemy: Rigidbody setup - velocity={rb.velocity}, gravity={rb.useGravity}, kinematic={rb.isKinematic}");
-            
             // Ensure we have a SOLID collider for physics (hitting ground/walls)
             SphereCollider solidCol = hailstone.GetComponent<SphereCollider>();
             if (solidCol == null)
             {
                 solidCol = hailstone.AddComponent<SphereCollider>();
                 solidCol.radius = 0.15f;
-                Debug.Log("HailShooterEnemy: Added SphereCollider to hailstone");
-            }
-            else
-            {
-                Debug.Log($"HailShooterEnemy: Found existing SphereCollider, isTrigger was: {solidCol.isTrigger}");
             }
             
             solidCol.isTrigger = false; // Solid collider for physics
-            Debug.Log($"HailShooterEnemy: Set solidCol.isTrigger = false. Now is: {solidCol.isTrigger}");
             
             // Add a SECOND trigger collider on a child object for damage detection
             GameObject triggerChild = new GameObject("DamageTrigger");
@@ -203,10 +212,9 @@ public class HailShooterEnemy : MonoBehaviour
             triggerCol.radius = 0.2f; // Slightly larger than solid collider
             triggerCol.isTrigger = true; // Trigger for damage detection
             
-            Debug.Log($"HailShooterEnemy: Created child trigger collider on {triggerChild.name}");
-            
             // Add damage components to the trigger child
             DamageOnTouch damageComp = triggerChild.AddComponent<DamageOnTouch>();
+            damageComp.SetHitSound(projectileHitSound, hitVolume, hitSpatialBlend);
             DamageSource damageSource = triggerChild.AddComponent<DamageSource>();
             
             // Add script to destroy on collision with ground/walls (but not player)
@@ -218,13 +226,8 @@ public class HailShooterEnemy : MonoBehaviour
             if (shooterCollider != null)
             {
                 Physics.IgnoreCollision(solidCol, shooterCollider);
-                Debug.Log("HailShooterEnemy: Ignoring collision between hailstone and shooter");
             }
-            
-            Debug.Log($"HailShooterEnemy: Hailstone fully configured. Active={hailstone.activeSelf}, Name={hailstone.name}");
         }
-        
-        Debug.Log($"HailShooterEnemy: Fired {hailstonesPerBurst} hailstones at player");
     }
     
     private void OnCollisionEnter(Collision collision)
@@ -234,8 +237,6 @@ public class HailShooterEnemy : MonoBehaviour
         // Check if player stomped on top
         if (collision.gameObject.CompareTag(playerTag))
         {
-            Debug.Log($"HailShooterEnemy: Collision with player!");
-            
             // Get player motor
             var motor = collision.gameObject.GetComponent<PlayerMotorCC>();
             if (motor == null)
@@ -253,16 +254,12 @@ public class HailShooterEnemy : MonoBehaviour
                     if (contact.normal.y > 0.5f) // Normal pointing up means player hit from above
                     {
                         hitFromAbove = true;
-                        Debug.Log($"HailShooterEnemy: Contact normal Y={contact.normal.y:F2}");
                         break;
                     }
                 }
                 
-                Debug.Log($"HailShooterEnemy: isFalling={isFalling} (vel={motor.VerticalVelocity:F2}), hitFromAbove={hitFromAbove}");
-                
                 if (isFalling && hitFromAbove)
                 {
-                    Debug.Log("HailShooterEnemy: STOMPED! Defeating enemy.");
                     DefeatEnemy();
                     
                     // Give player a bounce
@@ -272,17 +269,9 @@ public class HailShooterEnemy : MonoBehaviour
         }
     }
     
-    private void OnTriggerEnter(Collider other)
-    {
-        // This is just for debug logging now
-        Debug.Log($"HailShooterEnemy: Trigger entered by {other.gameObject.name}, tag={other.tag}");
-    }
-    
     private void DefeatEnemy()
     {
         _isActive = false;
-        
-        Debug.Log("HailShooterEnemy: Defeated by player stomp!");
         
         // Hide visuals
         if (enemyRenderer != null)
@@ -315,15 +304,11 @@ public class HailShooterEnemy : MonoBehaviour
         // Add a component to forward trigger events to parent
         StompDetector detector = stompDetector.AddComponent<StompDetector>();
         detector.enemy = this;
-        
-        Debug.Log("HailShooterEnemy: Created stomp detector on top");
     }
     
     public void OnPlayerStomp(Collider playerCollider)
     {
         if (!_isActive) return;
-        
-        Debug.Log("HailShooterEnemy: OnPlayerStomp called!");
         
         // Get player motor
         var motor = playerCollider.GetComponent<PlayerMotorCC>();
@@ -335,11 +320,8 @@ public class HailShooterEnemy : MonoBehaviour
             // Check if player is falling
             bool isFalling = motor.VerticalVelocity < stompVelocityThreshold;
             
-            Debug.Log($"HailShooterEnemy: isFalling={isFalling} (vel={motor.VerticalVelocity:F2})");
-            
             if (isFalling)
             {
-                Debug.Log("HailShooterEnemy: STOMPED! Defeating enemy.");
                 DefeatEnemy();
                 
                 // Give player a bounce

@@ -61,8 +61,11 @@ MonoBehaviour:
   visualRotationSpeed: 180
   vortexParticles: {fileID: 0}
   showGizmos: 1
+  windLoopSound: {fileID: 8300000, guid: 72fa99ae9519c174cb6a0631ab1dfb9c, type: 3}
+  windVolume: 0.829
+  windSpatialBlend: 1
   releaseSound: {fileID: 0}
-  windLoopSound: {fileID: 0}
+  releaseVolume: 0.8
 --- !u!82 &3456789012345678904
 AudioSource:
   m_ObjectHideFlags: 0

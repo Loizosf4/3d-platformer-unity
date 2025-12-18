@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 7173408560574863026}
   - component: {fileID: 5082118932128534892}
   - component: {fileID: 7888828999258412883}
+  - component: {fileID: 7845898195869669666}
   m_Layer: 8
   m_Name: PF_Player
   m_TagString: Player
@@ -225,6 +226,31 @@ MonoBehaviour:
   headOffset: {x: 0, y: 0, z: 0}
   headBone: {fileID: 0}
   showDebug: 0
+--- !u!114 &7845898195869669666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5737800785262966541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f74651b6bf630844cb1af4d13f955266, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  motor: {fileID: 0}
+  jumpSound: {fileID: 8300000, guid: 47b8c5aea4111074d93e6c17cef593e3, type: 3}
+  doubleJumpSound: {fileID: 8300000, guid: 47b8c5aea4111074d93e6c17cef593e3, type: 3}
+  wallJumpSound: {fileID: 0}
+  jumpVolume: 0.161
+  dashSound: {fileID: 8300000, guid: a785610138af6a04888f85daa20462c2, type: 3}
+  dashVolume: 0.161
+  footstepSounds:
+  - {fileID: 8300000, guid: 752ba24a652b8ed4580849f953c5efdc, type: 3}
+  minSpeedForFootsteps: 0.01
+  stepInterval: 0.1
+  footstepVolume: 1
+  enableFootsteps: 0
 --- !u!1001 &3705482245526739496
 PrefabInstance:
   m_ObjectHideFlags: 0

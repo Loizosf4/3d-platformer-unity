@@ -43,12 +43,10 @@ public class LightningBeamDamage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"LightningBeamDamage.OnTriggerEnter: {other.gameObject.name}, tag={other.tag}, controller={controller != null}, active={controller?.IsActive}");
         
         if (controller == null || !controller.IsActive) return;
         if (!other.CompareTag(playerTag)) return;
         
-        Debug.Log($"Applying damage on ENTER to {other.gameObject.name}");
         ApplyDamage(other);
         
         // Apply immediate VERY strong pushback to prevent fast players from passing through
@@ -59,7 +57,6 @@ public class LightningBeamDamage : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         if (controller == null || !controller.IsActive) return;
-        Debug.Log($"Applying damage on STAY to {other.gameObject.name}");
         if (_damageTimer > 0f) return;
         if (!other.CompareTag(playerTag)) return;
         

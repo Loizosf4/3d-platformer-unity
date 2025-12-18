@@ -122,73 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &3827220
-GameObject:
-  m_ObjectHideFlags: 17
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3827222}
-  - component: {fileID: 3827221}
-  m_Layer: 0
-  m_Name: '[default-CSGModel]'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 124
-  m_IsActive: 1
---- !u!114 &3827221
-MonoBehaviour:
-  m_ObjectHideFlags: 17
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3827220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8672dcc90e16b0a489a41edf56e016f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PrefabBehaviour: 0
-  PrefabSourceAlignment: 4
-  PrefabDestinationAlignment: 0
-  Version: 1.1
-  infiniteBrush: {fileID: 0}
-  Settings: 1025
-  VertexChannels: 14
-  ReceiveGI: 2
-  MeshColliderCookingOptions: 14
-  ShowGeneratedMeshes: 0
-  DefaultPhysicsMaterial: {fileID: 13400000, guid: 0c5fdfb44d6f19646a41a0720fbf751a, type: 2}
-  exportType: 0
-  originType: 0
-  exportColliders: 0
-  exportPath: 
-  angleError: 1
-  areaError: 1
-  hardAngle: 60
-  packMargin: 20
-  scaleInLightmap: 1
-  autoUVMaxDistance: 0.5
-  autoUVMaxAngle: 89
-  minimumChartSize: 4
---- !u!4 &3827222
-Transform:
-  m_ObjectHideFlags: 17
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3827220}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &30214511 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
@@ -455,6 +388,54 @@ MonoBehaviour:
     - EdgeIndices: 07000000060000000500000004000000
       TexGenIndex: 5
     Generation: 293
+--- !u!21 &42941034
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &52106135
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,6 +479,54 @@ Transform:
   - {fileID: 1485390700}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &80733578
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &92103422
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,7 +567,7 @@ Transform:
   m_GameObject: {fileID: 92103422}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -116.13, y: 9.2, z: -17.03}
+  m_LocalPosition: {x: -116.456, y: 9.2, z: -17.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -560,6 +589,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1387288727}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.10000001
@@ -614,6 +647,102 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
   m_PrefabInstance: {fileID: 100716646}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &115925138
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &120355317
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Default-Material_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &150881250
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -662,6 +791,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5180431005870364580, guid: d57451be471ec2441b78a43bb01348dd, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2021622890}
     - target: {fileID: 7064420296610056083, guid: d57451be471ec2441b78a43bb01348dd, type: 3}
       propertyPath: collectibleId
       value: 026c742d201b45a4bb7cb52dd223215d
@@ -680,6 +813,150 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 193536790084456621, guid: d57451be471ec2441b78a43bb01348dd, type: 3}
   m_PrefabInstance: {fileID: 150881250}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &162405155
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &182428798
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &196635610
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &211774054
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,7 +997,7 @@ Transform:
   m_GameObject: {fileID: 211774054}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.99992406, z: -0, w: -0.012324529}
-  m_LocalPosition: {x: -62.16, y: 9.56, z: -5.84}
+  m_LocalPosition: {x: -58.37673, y: 7, z: -14.565601}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1178,6 +1455,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1243126640}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -1240,6 +1521,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
   m_PrefabInstance: {fileID: 305173698}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &308761334
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Red_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.7830188, g: 0.3789468, b: 0.36565498, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!4 &331327469 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
@@ -1261,6 +1590,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1040284639}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.10000001
@@ -1367,6 +1700,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 8226935010730749526, guid: dc6111b58c028c94f93547944e4dc774, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1507448263}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1450,6 +1787,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4521789012345678931, guid: e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4521789012345678932, guid: e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3, type: 3}
       propertyPath: m_Size.x
       value: 10
@@ -1487,6 +1828,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 415730867}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -1821,6 +2166,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 560824520}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -1880,7 +2229,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
 --- !u!1 &370843459
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -1897,7 +2246,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &370843460
 Transform:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -1918,7 +2267,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &370843461
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 27
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -2063,6 +2412,18 @@ PrefabInstance:
       propertyPath: strikeInterval
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8901234567890123471, guid: 53f36af1b13bf51478e7e424f77aec27, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1697734642}
+    - target: {fileID: 8901234567890123476, guid: 53f36af1b13bf51478e7e424f77aec27, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8906791240911200251, guid: 53f36af1b13bf51478e7e424f77aec27, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1719430208}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2137,6 +2498,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 5378344251713738634, guid: 887c019928722f549afb1d9bb12e83a9, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 115925138}
     - target: {fileID: 5729187112962351466, guid: 887c019928722f549afb1d9bb12e83a9, type: 3}
       propertyPath: m_Name
       value: PF_Collectible_Star (1)
@@ -2151,6 +2516,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4067965282104900117, guid: 887c019928722f549afb1d9bb12e83a9, type: 3}
   m_PrefabInstance: {fileID: 415709613}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &415730867
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &436983139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2218,7 +2631,7 @@ PrefabInstance:
     - target: {fileID: 8675309123456789015, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: db8c288a0efc2f84580e20a6203035f2, type: 2}
+      objectReference: {fileID: 908909499}
     - target: {fileID: 8675309123456789017, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -2252,6 +2665,54 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
+--- !u!21 &458751772
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!4 &512602736 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
@@ -2273,6 +2734,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1154744098}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -2332,7 +2797,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
 --- !u!1 &515562653
 GameObject:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -2351,7 +2816,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &515562654
 Transform:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -2366,7 +2831,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &515562655
 MeshRenderer:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -2408,7 +2873,7 @@ MeshRenderer:
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &515562656
 MeshFilter:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -2435,7 +2900,7 @@ MonoBehaviour:
     meshQuery:
       layers: 16777223
       maskAndChannels: 234881031
-    surfaceParameter: 27422
+    surfaceParameter: 44110
     meshQueryIndex: 6
     subMeshQueryIndex: 0
     geometryHashValue: -4054734487968599348
@@ -2780,6 +3245,102 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!21 &560824520
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &562141574
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Default-Material_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &571667864
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2796,6 +3357,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 905038518}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -2858,6 +3423,102 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
   m_PrefabInstance: {fileID: 571667864}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &586203946
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &593301483
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &607294969
 GameObject:
   m_ObjectHideFlags: 0
@@ -3135,6 +3796,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1481819075}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.10000001
@@ -3194,6 +3859,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
   m_PrefabInstance: {fileID: 1042649727}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &667238735
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &675244236
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3323,11 +4036,63 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7744152105397274567, guid: a5461e008d9908c4f9c6df2b8014d506, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 779120911}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5461e008d9908c4f9c6df2b8014d506, type: 3}
+--- !u!21 &702731473
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!4 &733294748 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4521789012345678902, guid: e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3, type: 3}
@@ -3338,6 +4103,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
   m_PrefabInstance: {fileID: 370263912}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &779120911
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Default-Material_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &804959562
 GameObject:
   m_ObjectHideFlags: 0
@@ -3634,6 +4447,7 @@ MonoBehaviour:
   cameraRigPrefab: {fileID: 5683379039542738558, guid: 925969d63de11f441808022d999829de, type: 3}
   sceneTransitionManagerPrefab: {fileID: 5626936425612911877, guid: 0635836304f06e040bccf1685ae7087c, type: 3}
   respawnManagerPrefab: {fileID: 1451929080653034009, guid: 8e51996ebdd50404da420b5ebedae28f, type: 3}
+  audioManagerPrefab: {fileID: 4877429839178132515, guid: 0d59907d6ca7bce488c9f1d83e9fd3a3, type: 3}
 --- !u!4 &853311970
 Transform:
   m_ObjectHideFlags: 0
@@ -3725,7 +4539,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 120355317}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4031,54 +4845,6 @@ MonoBehaviour:
     - EdgeIndices: 07000000060000000500000004000000
       TexGenIndex: 5
     Generation: 2
---- !u!21 &877083281
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: M_Water_Toon_Toon_Toon_Toon
-  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - OUTLINE_ON
-  - _OUTLINEMODE_NORMAL
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: f27dc88838e993a4488d7fc0cff74f7d, type: 3}
-        m_Scale: {x: 10, y: 10}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _HighlightSoftness: 0.01
-    - _HighlightThreshold: 0.8
-    - _OutlineEnabled: 1
-    - _OutlineMode: 0
-    - _OutlineWidth: 0.005
-    - _RimIntensity: 0.5
-    - _RimPower: 3
-    - _ShadowSoftness: 0.01
-    - _ShadowThreshold: 0.5
-    - _ShadowTolerance: 0.08
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &903762488
 GameObject:
   m_ObjectHideFlags: 0
@@ -4340,6 +5106,102 @@ MonoBehaviour:
     - EdgeIndices: 07000000060000000500000004000000
       TexGenIndex: 5
     Generation: 2
+--- !u!21 &905038518
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &908909499
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &908947350
 GameObject:
   m_ObjectHideFlags: 0
@@ -4603,7 +5465,7 @@ MonoBehaviour:
     Generation: 124
 --- !u!1 &972648448
 GameObject:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -4621,7 +5483,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &972648449
 Transform:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -4636,7 +5498,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &972648450
 MeshCollider:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -4677,7 +5539,7 @@ MonoBehaviour:
     meshQuery:
       layers: 33554440
       maskAndChannels: 8
-    surfaceParameter: 27410
+    surfaceParameter: 44150
     meshQueryIndex: 2
     subMeshQueryIndex: 0
     geometryHashValue: 4520779008349347886
@@ -4756,6 +5618,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 8675309123456789015, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1320415958}
     - target: {fileID: 8675309123456789017, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -4796,6 +5662,102 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1153249365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &1035199465
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Default-Material_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &1040284639
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &1041038691
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4860,6 +5822,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 5378344251713738634, guid: 887c019928722f549afb1d9bb12e83a9, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1538944368}
     - target: {fileID: 5729187112962351466, guid: 887c019928722f549afb1d9bb12e83a9, type: 3}
       propertyPath: m_Name
       value: PF_Collectible_Star
@@ -4885,6 +5851,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1409520567}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -5267,6 +6237,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 8675309123456789015, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 702731473}
     - target: {fileID: 8675309123456789017, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -5622,6 +6596,10 @@ PrefabInstance:
       propertyPath: projectileSpeed
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 8521789012345678905, guid: 271bc775f314aaa438c24fe2afee278c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1671299826}
     - target: {fileID: 8521789012345678906, guid: 271bc775f314aaa438c24fe2afee278c, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -5658,6 +6636,10 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 2.02
       objectReference: {fileID: 0}
+    - target: {fileID: 8521789012345678922, guid: 271bc775f314aaa438c24fe2afee278c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5684,6 +6666,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1640376046}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -5793,6 +6779,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 8226935010730749526, guid: dc6111b58c028c94f93547944e4dc774, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1035199465}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5819,6 +6809,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 593301483}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -6204,7 +7198,7 @@ PrefabInstance:
     - target: {fileID: 8675309123456789015, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: db8c288a0efc2f84580e20a6203035f2, type: 2}
+      objectReference: {fileID: 1591464680}
     - target: {fileID: 8675309123456789017, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -6547,6 +7541,54 @@ Transform:
   - {fileID: 150881251}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &1106885486
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_HintBlue_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.68956923, g: 0.9811321, b: 0.93930995, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1124191625
 GameObject:
   m_ObjectHideFlags: 0
@@ -6808,6 +7850,54 @@ MonoBehaviour:
     - EdgeIndices: 07000000060000000500000004000000
       TexGenIndex: 5
     Generation: 558
+--- !u!21 &1130163568
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!4 &1139999008 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8675309123456789013, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
@@ -6855,9 +7945,57 @@ Transform:
   - {fileID: 553528894}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &1154744098
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1158084862
 GameObject:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -6876,7 +8014,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &1158084863
 Transform:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -6891,7 +8029,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1158084864
 MeshRenderer:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -6933,7 +8071,7 @@ MeshRenderer:
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1158084865
 MeshFilter:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -6960,7 +8098,7 @@ MonoBehaviour:
     meshQuery:
       layers: 16777223
       maskAndChannels: 234881031
-    surfaceParameter: 27318
+    surfaceParameter: 44104
     meshQueryIndex: 1
     subMeshQueryIndex: 0
     geometryHashValue: -1617928733039071602
@@ -6970,6 +8108,54 @@ MonoBehaviour:
   HasGeneratedNormals: 0
   HasUV2: 0
   LightingHashValue: 0
+--- !u!21 &1161444356
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Default-Material_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!43 &1173400765
 Mesh:
   m_ObjectHideFlags: 0
@@ -7843,6 +9029,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1130163568}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -7939,6 +9129,102 @@ Transform:
   - {fileID: 1937290951}
   m_Father: {fileID: 1090594365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &1243126640
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &1243695556
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!43 &1264334870
 Mesh:
   m_ObjectHideFlags: 0
@@ -8120,6 +9406,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1243695556}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -8500,7 +9790,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 877083281}
+  - {fileID: 1994735473}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8559,6 +9849,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedX: 0.002
   speedY: 0.004
+--- !u!21 &1320415958
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!43 &1323696744
 Mesh:
   m_ObjectHideFlags: 16
@@ -8729,6 +10067,71 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8521789012345678902, guid: 271bc775f314aaa438c24fe2afee278c, type: 3}
   m_PrefabInstance: {fileID: 2105188708}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1344445431
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3710834971260152738, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_Name
+      value: PF_SceneMusicController
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398577664695706531, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: sceneMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 64c752e5bd3f3984bb8babef0642524a, type: 3}
+    - target: {fileID: 7398577664695706531, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: musicVolume
+      value: 0.302
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732119581664497858, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -73.57444
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732119581664497858, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 18.242811
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732119581664497858, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -36.2084
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732119581664497858, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732119581664497858, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732119581664497858, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732119581664497858, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732119581664497858, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732119581664497858, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732119581664497858, guid: bd60d183524d269448a58505f052ee25, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bd60d183524d269448a58505f052ee25, type: 3}
 --- !u!4 &1359760950 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
@@ -8801,6 +10204,10 @@ PrefabInstance:
     - target: {fileID: 4521789012345678930, guid: e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521789012345678931, guid: e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4521789012345678932, guid: e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3, type: 3}
       propertyPath: m_Size.x
@@ -9089,6 +10496,54 @@ MonoBehaviour:
     - EdgeIndices: 07000000060000000500000004000000
       TexGenIndex: 5
     Generation: 2
+--- !u!21 &1387288727
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!4 &1402503171 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
@@ -9110,6 +10565,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 667238735}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -9167,9 +10626,105 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+--- !u!21 &1409520567
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &1415813178
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1455175206
 GameObject:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -9188,7 +10743,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &1455175207
 Transform:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -9203,7 +10758,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1455175208
 MeshRenderer:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -9245,7 +10800,7 @@ MeshRenderer:
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1455175209
 MeshFilter:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -9272,7 +10827,7 @@ MonoBehaviour:
     meshQuery:
       layers: 16777223
       maskAndChannels: 234881031
-    surfaceParameter: 27436
+    surfaceParameter: 43936
     meshQueryIndex: 0
     subMeshQueryIndex: 0
     geometryHashValue: 5028482111132284197
@@ -9282,6 +10837,54 @@ MonoBehaviour:
   HasGeneratedNormals: 0
   HasUV2: 0
   LightingHashValue: 0
+--- !u!21 &1463025431
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1466086249
 GameObject:
   m_ObjectHideFlags: 0
@@ -9543,6 +11146,54 @@ MonoBehaviour:
     - EdgeIndices: 07000000060000000500000004000000
       TexGenIndex: 5
     Generation: 2
+--- !u!21 &1481819075
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &1485390699
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9607,6 +11258,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7744152105397274567, guid: a5461e008d9908c4f9c6df2b8014d506, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 562141574}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10139,6 +11794,54 @@ MonoBehaviour:
     - EdgeIndices: 07000000060000000500000004000000
       TexGenIndex: 5
     Generation: 2
+--- !u!21 &1507448263
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Default-Material_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &1538100782
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10155,6 +11858,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2084226962}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -10212,6 +11919,54 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+--- !u!21 &1538944368
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1542279470
 GameObject:
   m_ObjectHideFlags: 0
@@ -10664,6 +12419,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 4464269474023359335, guid: 8686201ef960385469215aa797700267, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1106885486}
     - target: {fileID: 6764565608401217362, guid: 8686201ef960385469215aa797700267, type: 3}
       propertyPath: boostAmount
       value: 23
@@ -10672,6 +12431,10 @@ PrefabInstance:
       propertyPath: lingerDuration
       value: 0.43
       objectReference: {fileID: 0}
+    - target: {fileID: 7073844403860707596, guid: 8686201ef960385469215aa797700267, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 308761334}
     - target: {fileID: 9200822221794151690, guid: 8686201ef960385469215aa797700267, type: 3}
       propertyPath: m_Name
       value: PF_Platform_Speedboost
@@ -10681,6 +12444,101 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8686201ef960385469215aa797700267, type: 3}
+--- !u!1 &1565519618
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1565519619}
+  - component: {fileID: 1565519620}
+  m_Layer: 0
+  m_Name: '[generated-meshes]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1565519619
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1565519618}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1687226577}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1565519620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1565519618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c3643d4978096d4880d7edbf4f65a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Version: 1
+  owner: {fileID: 1687226576}
+  helperSurfaces: []
+--- !u!21 &1591464680
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1614492084
 GameObject:
   m_ObjectHideFlags: 0
@@ -11203,6 +13061,102 @@ MonoBehaviour:
     - EdgeIndices: 07000000060000000500000004000000
       TexGenIndex: 5
     Generation: 2
+--- !u!21 &1640376046
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &1671299826
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Black_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1676372970
 GameObject:
   m_ObjectHideFlags: 0
@@ -11480,6 +13434,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 42941034}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -11542,6 +13500,102 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
   m_PrefabInstance: {fileID: 1679095950}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1687226574
+GameObject:
+  m_ObjectHideFlags: 17
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1687226577}
+  - component: {fileID: 1687226576}
+  - component: {fileID: 1687226575}
+  m_Layer: 0
+  m_Name: '[default-CSGModel]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 124
+  m_IsActive: 1
+--- !u!54 &1687226575
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687226574}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!114 &1687226576
+MonoBehaviour:
+  m_ObjectHideFlags: 17
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687226574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8672dcc90e16b0a489a41edf56e016f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrefabBehaviour: 0
+  PrefabSourceAlignment: 4
+  PrefabDestinationAlignment: 0
+  Version: 1.1
+  infiniteBrush: {fileID: 0}
+  Settings: 1025
+  VertexChannels: 14
+  ReceiveGI: 2
+  MeshColliderCookingOptions: 14
+  ShowGeneratedMeshes: 0
+  DefaultPhysicsMaterial: {fileID: 13400000, guid: 0c5fdfb44d6f19646a41a0720fbf751a, type: 2}
+  exportType: 0
+  originType: 0
+  exportColliders: 0
+  exportPath: 
+  angleError: 1
+  areaError: 1
+  hardAngle: 60
+  packMargin: 20
+  scaleInLightmap: 1
+  autoUVMaxDistance: 0.5
+  autoUVMaxAngle: 89
+  minimumChartSize: 4
+--- !u!4 &1687226577
+Transform:
+  m_ObjectHideFlags: 17
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687226574}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1565519619}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1692125241
 GameObject:
   m_ObjectHideFlags: 0
@@ -11867,6 +13921,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 8675309123456789015, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 162405155}
     - target: {fileID: 8675309123456789017, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -11905,6 +13963,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8675309123456789013, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
   m_PrefabInstance: {fileID: 1696930677}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &1697734642
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Lightning_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.5, g: 0.8, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1699573810
 GameObject:
   m_ObjectHideFlags: 0
@@ -12166,6 +14272,102 @@ MonoBehaviour:
     - EdgeIndices: 07000000060000000500000004000000
       TexGenIndex: 5
     Generation: 2
+--- !u!21 &1715991603
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &1719430208
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.43396223, g: 0.43396223, b: 0.43396223, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!4 &1722657982 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 515878993034515075, guid: 8686201ef960385469215aa797700267, type: 3}
@@ -12235,6 +14437,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 8675309123456789015, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1891813506}
     - target: {fileID: 8675309123456789017, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -12332,6 +14538,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 5378344251713738634, guid: 887c019928722f549afb1d9bb12e83a9, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 182428798}
     - target: {fileID: 5729187112962351466, guid: 887c019928722f549afb1d9bb12e83a9, type: 3}
       propertyPath: m_Name
       value: PF_Collectible_Star (1)
@@ -12367,6 +14577,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1836605371}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -12706,6 +14920,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 586203946}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -13045,6 +15263,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1463025431}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -13267,6 +15489,102 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!21 &1836605371
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &1837745460
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Black_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!4 &1864572455 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
@@ -13274,7 +15592,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1870213776
 GameObject:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -13293,7 +15611,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &1870213777
 Transform:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -13308,7 +15626,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1870213778
 MeshRenderer:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -13350,7 +15668,7 @@ MeshRenderer:
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1870213779
 MeshFilter:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -13377,7 +15695,7 @@ MonoBehaviour:
     meshQuery:
       layers: 16777223
       maskAndChannels: 234881031
-    surfaceParameter: 27442
+    surfaceParameter: 44036
     meshQueryIndex: 7
     subMeshQueryIndex: 0
     geometryHashValue: -9056225881014902191
@@ -13408,6 +15726,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Collectible_Coin_Hub (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6624171498954583251, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 196635610}
     - target: {fileID: 7641363524834270068, guid: ab9f06c280431c443a804b3b2d67351a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -13529,6 +15851,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 8675309123456789015, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 458751772}
     - target: {fileID: 8675309123456789017, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -13632,6 +15958,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 48.534, y: -222.291, z: -19.01}
+--- !u!21 &1891813506
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!4 &1919219150 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8675309123456789013, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
@@ -13704,7 +16078,7 @@ PrefabInstance:
     - target: {fileID: 8675309123456789015, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: db8c288a0efc2f84580e20a6203035f2, type: 2}
+      objectReference: {fileID: 1980601443}
     - target: {fileID: 8675309123456789017, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -14073,6 +16447,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 8675309123456789015, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1415813178}
     - target: {fileID: 8675309123456789017, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -14084,7 +16462,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
 --- !u!1 &1961065659
 GameObject:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -14102,7 +16480,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &1961065660
 Transform:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -14117,7 +16495,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1961065661
 MeshCollider:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -14158,7 +16536,7 @@ MonoBehaviour:
     meshQuery:
       layers: 33554440
       maskAndChannels: 8
-    surfaceParameter: 27410
+    surfaceParameter: 44150
     meshQueryIndex: 2
     subMeshQueryIndex: 0
     geometryHashValue: 4520779008349347886
@@ -14168,6 +16546,54 @@ MonoBehaviour:
   HasGeneratedNormals: 0
   HasUV2: 0
   LightingHashValue: 4520779008349347886
+--- !u!21 &1980601443
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stylized Stone Gray_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b6211a21e342be349a47f1548c29cf3e, type: 3}
+        m_Scale: {x: 0.15, y: 0.15}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &1983311005
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14236,6 +16662,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7744152105397274567, guid: a5461e008d9908c4f9c6df2b8014d506, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1161444356}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14246,6 +16676,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 653779414722055411, guid: a5461e008d9908c4f9c6df2b8014d506, type: 3}
   m_PrefabInstance: {fileID: 1983311005}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &1994735473
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_Water_Toon_Toon_Toon_Toon_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: f27dc88838e993a4488d7fc0cff74f7d, type: 3}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!43 &2009938518
 Mesh:
   m_ObjectHideFlags: 16
@@ -14724,6 +17202,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7011559734662009618, guid: 3828d073437db3f41b5eb9c6da6db660, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1715991603}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14734,6 +17216,163 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5559832944386543498, guid: 3828d073437db3f41b5eb9c6da6db660, type: 3}
   m_PrefabInstance: {fileID: 2015871254}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &2021622890
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Red_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.9622641, g: 0.004538993, b: 0.004538993, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
+--- !u!1001 &2044215903
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5527351974240959521, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -69.104935
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527351974240959521, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -12.800003
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527351974240959521, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 21.022427
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527351974240959521, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527351974240959521, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527351974240959521, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527351974240959521, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527351974240959521, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527351974240959521, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527351974240959521, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7307157184914137697, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: hurtSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 0ea50fcdcb579b74199bb314be41e6a7, type: 3}
+    - target: {fileID: 8131553549817815961, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+      propertyPath: m_Name
+      value: PF_GameState
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 70d71085d3622d34a87137d0aef16937, type: 3}
+--- !u!21 &2084226962
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MAT_Yellow_Toon_Toon
+  m_Shader: {fileID: 4800000, guid: a3213c92c43004e4a8a9600e4d35ecdb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - _OUTLINEMODE_NORMAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _HighlightSoftness: 0.01
+    - _HighlightThreshold: 0.8
+    - _OutlineEnabled: 1
+    - _OutlineMode: 0
+    - _OutlineWidth: 0.0013
+    - _RimIntensity: 0
+    - _RimPower: 3
+    - _ShadowSoftness: 0.01
+    - _ShadowThreshold: 0.5
+    - _ShadowTolerance: 0
+    m_Colors:
+    - _Color: {r: 0.8784314, g: 0.846467, b: 0.08627445, a: 1}
+    - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.3, g: 0.3, b: 0.4, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &2088204785
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14801,7 +17440,7 @@ PrefabInstance:
     - target: {fileID: 8675309123456789015, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: db8c288a0efc2f84580e20a6203035f2, type: 2}
+      objectReference: {fileID: 80733578}
     - target: {fileID: 8675309123456789017, guid: f1e2d3c4b5a6978869504132a3b4c5d6, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -14896,6 +17535,10 @@ PrefabInstance:
       propertyPath: projectileSpeed
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 8521789012345678905, guid: 271bc775f314aaa438c24fe2afee278c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1837745460}
     - target: {fileID: 8521789012345678906, guid: 271bc775f314aaa438c24fe2afee278c, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -14931,6 +17574,10 @@ PrefabInstance:
     - target: {fileID: 8521789012345678907, guid: 271bc775f314aaa438c24fe2afee278c, type: 3}
       propertyPath: m_Center.z
       value: 2.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8521789012345678922, guid: 271bc775f314aaa438c24fe2afee278c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15117,4 +17764,6 @@ SceneRoots:
   - {fileID: 1153249365}
   - {fileID: 1319735691}
   - {fileID: 675244236}
-  - {fileID: 3827222}
+  - {fileID: 1344445431}
+  - {fileID: 2044215903}
+  - {fileID: 1687226577}

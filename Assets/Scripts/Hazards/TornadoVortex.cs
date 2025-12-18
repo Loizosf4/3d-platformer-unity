@@ -50,11 +50,17 @@ public class TornadoVortex : MonoBehaviour
     [SerializeField] private bool showGizmos = true;
     
     [Header("Audio")]
-    [Tooltip("Sound played when player reaches the top")]
-    [SerializeField] private AudioClip releaseSound;
-    
     [Tooltip("Looping wind sound for the vortex")]
     [SerializeField] private AudioClip windLoopSound;
+    [Tooltip("Volume for wind loop (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float windVolume = 0.5f;
+    [Tooltip("Spatial blend for wind. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float windSpatialBlend = 1f;
+
+    [Tooltip("Sound played when player reaches the top")]
+    [SerializeField] private AudioClip releaseSound;
+    [Tooltip("Volume for release sound (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float releaseVolume = 0.8f;
     
     // Runtime state
     private Transform playerTransform;
@@ -81,9 +87,16 @@ public class TornadoVortex : MonoBehaviour
         {
             audioSource.clip = windLoopSound;
             audioSource.loop = true;
-            audioSource.spatialBlend = 1f; // 3D sound
+            audioSource.spatialBlend = windSpatialBlend;
             audioSource.maxDistance = pullRadius * 2f;
-            audioSource.volume = 0f; // Start silent, will fade in when player approaches
+            audioSource.volume = windVolume;
+
+            if (AudioManager.Instance != null && AudioManager.Instance.audioMixer != null)
+            {
+                var sfxGroup = AudioManager.Instance.audioMixer.FindMatchingGroups("SFX");
+                if (sfxGroup != null && sfxGroup.Length > 0)
+                    audioSource.outputAudioMixerGroup = sfxGroup[0];
+            }
         }
     }
     
@@ -201,7 +214,14 @@ public class TornadoVortex : MonoBehaviour
         // Play sound effect when player reaches top (once per entry)
         if (playerHeight >= tornadoHeight && releaseSound != null && !hasPlayedReleaseSound)
         {
-            AudioSource.PlayClipAtPoint(releaseSound, transform.position, 0.5f);
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayAtPosition(releaseSound, transform.position, releaseVolume, windSpatialBlend);
+            }
+            else
+            {
+                AudioSource.PlayClipAtPoint(releaseSound, transform.position, releaseVolume);
+            }
             hasPlayedReleaseSound = true;
         }
     }

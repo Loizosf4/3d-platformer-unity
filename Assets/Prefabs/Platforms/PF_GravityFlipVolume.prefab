@@ -100,6 +100,9 @@ MonoBehaviour:
   flipPlayerUpsideDown: 1
   flipRotationSpeed: 360
   upParticles: {fileID: 7279609623848970059}
+  ambientSound: {fileID: 8300000, guid: 71114d9fe99bc2644a7d09a5ed00f3d4, type: 3}
+  ambientVolume: 0.754
+  spatialBlend: 0.668
 --- !u!1 &3061686549901384450
 GameObject:
   m_ObjectHideFlags: 0

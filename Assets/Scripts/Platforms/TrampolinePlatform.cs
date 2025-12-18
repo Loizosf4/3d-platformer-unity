@@ -37,6 +37,14 @@ public class TrampolinePlatform : MonoBehaviour
     [Tooltip("Color during cooldown")]
     [SerializeField] private Color cooldownColor = Color.red;
 
+    [Header("Audio")]
+    [Tooltip("Sound played when player bounces off the trampoline.")]
+    [SerializeField] private AudioClip bounceSound;
+    [Tooltip("Volume for bounce sound (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float bounceVolume = 0.8f;
+    [Tooltip("Spatial blend. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float spatialBlend = 1f;
+
     // Internal state
     private Vector3 _originalPosition;
     private Vector3 _originalScale;
@@ -258,6 +266,12 @@ public class TrampolinePlatform : MonoBehaviour
     private void LaunchPlayer()
     {
         _hasLaunched = true;
+        
+        // Play bounce sound
+        if (bounceSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayAtPosition(bounceSound, transform.position, bounceVolume, spatialBlend);
+        }
         
         // Find the player and launch them
         Vector3 center = _platformBounds.center + Vector3.up * (_platformBounds.extents.y + 0.1f);

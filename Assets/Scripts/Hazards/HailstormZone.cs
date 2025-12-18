@@ -63,6 +63,13 @@ public class HailstormZone : MonoBehaviour
     [SerializeField] private LayerMask groundLayers = 1;
     
     [Header("Audio")]
+    [Tooltip("Looping ambient sound while hailstorm is active.")]
+    [SerializeField] private AudioClip ambientLoopSound;
+    [Tooltip("Volume for ambient loop (0-1).")]
+    [SerializeField, Range(0f, 1f)] private float ambientVolume = 0.5f;
+    [Tooltip("Spatial blend for ambient. 0 = 2D, 1 = 3D.")]
+    [SerializeField, Range(0f, 1f)] private float ambientSpatialBlend = 0.8f;
+
     [Tooltip("Sound when hail hits player")]
     [SerializeField] private AudioClip hitPlayerSound;
     
@@ -81,6 +88,23 @@ public class HailstormZone : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         if (_audioSource == null)
             _audioSource = gameObject.AddComponent<AudioSource>();
+
+        // Setup ambient loop if provided
+        if (ambientLoopSound != null)
+        {
+            _audioSource.clip = ambientLoopSound;
+            _audioSource.loop = true;
+            _audioSource.playOnAwake = false;
+            _audioSource.volume = ambientVolume;
+            _audioSource.spatialBlend = ambientSpatialBlend;
+
+            if (AudioManager.Instance != null && AudioManager.Instance.audioMixer != null)
+            {
+                var sfxGroup = AudioManager.Instance.audioMixer.FindMatchingGroups("SFX");
+                if (sfxGroup != null && sfxGroup.Length > 0)
+                    _audioSource.outputAudioMixerGroup = sfxGroup[0];
+            }
+        }
         
         // Create default hailstone prefab if none provided
         if (hailstonePrefab == null)
@@ -170,6 +194,9 @@ public class HailstormZone : MonoBehaviour
     {
         _isActive = true;
         _spawnTimer = spawnInterval;
+
+        if (ambientLoopSound != null && _audioSource != null && !_audioSource.isPlaying)
+            _audioSource.Play();
     }
     
     public void StopHailstorm()
@@ -183,6 +210,9 @@ public class HailstormZone : MonoBehaviour
                 Destroy(hail);
         }
         _activeHailstones.Clear();
+
+        if (_audioSource != null && _audioSource.isPlaying)
+            _audioSource.Stop();
     }
     
     public void OnHailHitPlayer(Vector3 position, PlayerHealthController health)

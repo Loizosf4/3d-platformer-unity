@@ -152,6 +152,9 @@ MonoBehaviour:
   feedbackRenderer: {fileID: 7744152105397274567}
   inactiveColor: {r: 1, g: 1, b: 1, a: 1}
   activeColor: {r: 0.3, g: 1, b: 0.3, a: 1}
+  activationSound: {fileID: 8300000, guid: 9f6472856761ccc4b988a1941ac9c7f8, type: 3}
+  activationVolume: 0.8
+  spatialBlend: 0.7
 --- !u!1 &2573617604069140966
 GameObject:
   m_ObjectHideFlags: 0
