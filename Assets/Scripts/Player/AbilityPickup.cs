@@ -14,6 +14,8 @@ public class AbilityPickup : MonoBehaviour
     [Header("Pickup")]
     [SerializeField] private AbilityType ability = AbilityType.DoubleJump;
     [SerializeField] private string promptText = "Press E / East to collect";
+    private GUIStyle _promptStyle;
+
     [SerializeField] private bool destroyOnCollect = true;
 
     [Header("Audio")]
@@ -103,6 +105,8 @@ public class AbilityPickup : MonoBehaviour
     }
 
     // Simple editor-only hint (no UI system yet)
+    //private GUIStyle _promptStyle;
+
     private void OnGUI()
     {
         if (_playerProgressInRange == null) return;
@@ -110,10 +114,21 @@ public class AbilityPickup : MonoBehaviour
         var cam = Camera.main;
         if (cam == null) return;
 
+        // Only create GUI style inside OnGUI
+        if (_promptStyle == null)
+        {
+            _promptStyle = new GUIStyle(GUI.skin.label);
+            _promptStyle.fontSize = 25; // make bigger here
+            _promptStyle.alignment = TextAnchor.MiddleCenter;
+            _promptStyle.normal.textColor = Color.white;
+        }
+
         Vector3 screen = cam.WorldToScreenPoint(transform.position + Vector3.up * 1.2f);
         if (screen.z <= 0f) return;
 
-        var rect = new Rect(screen.x - 120f, Screen.height - screen.y - 20f, 240f, 24f);
-        GUI.Label(rect, promptText);
+        var rect = new Rect(screen.x - 180f, Screen.height - screen.y - 30f, 360f, 50f);
+        GUI.Label(rect, promptText, _promptStyle);
     }
+
+
 }

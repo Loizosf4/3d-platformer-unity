@@ -5036,7 +5036,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ability: 1
-  promptText: Press E / East to collect
+  promptText: Press E / East to collect DASH
   destroyOnCollect: 1
   collectSound: {fileID: 8300000, guid: 5577aa949e685d94c8f2bfdce01b6622, type: 3}
   collectVolume: 0.467
