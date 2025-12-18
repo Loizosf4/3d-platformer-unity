@@ -136,17 +136,17 @@ MonoBehaviour:
   deceleration: 100
   airControlMultiplier: 0.6
   rotationSpeed: 20
-  doubleJumpUnlocked: 1
+  doubleJumpUnlocked: 0
   extraJumpsAllowed: 1
   gravity: -35
   jumpHeight: 2.8
-  dashUnlocked: 1
+  dashUnlocked: 0
   dashSpeed: 45
   dashDuration: 0.12
   dashCooldown: 0.6
   dashUsesMoveInput: 1
   dashPreserveVerticalVelocity: 0
-  wallJumpUnlocked: 1
+  wallJumpUnlocked: 0
   wallLayers:
     serializedVersion: 2
     m_Bits: 512
