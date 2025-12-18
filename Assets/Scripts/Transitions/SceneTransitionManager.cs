@@ -150,6 +150,8 @@ public class SceneTransitionManager : MonoBehaviour
 
         _fadeImage = imgGO.AddComponent<Image>();
         _fadeImage.color = Color.black;
+        _fadeImage.raycastTarget = false;
+
 
         RectTransform rt = _fadeImage.rectTransform;
         rt.anchorMin = Vector2.zero;

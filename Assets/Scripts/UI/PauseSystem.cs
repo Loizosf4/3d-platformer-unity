@@ -97,9 +97,26 @@ public class PauseSystem : MonoBehaviour
         if (_spawnedMenu != null)
             Destroy(_spawnedMenu);
 
+        if (playerInputToDisable != null)
+            playerInputToDisable.enabled = true;
+
         if (!string.IsNullOrEmpty(mainMenuSceneName))
             SceneManager.LoadScene(mainMenuSceneName);
         else
             Debug.LogWarning("[PauseSystem] mainMenuSceneName is empty. Set it in the Inspector.");
     }
+
+    private void Start()
+    {
+        EnsurePauseActionEnabled();
+    }
+
+    private void EnsurePauseActionEnabled()
+    {
+        if (pauseAction != null && pauseAction.action != null)
+        {
+            pauseAction.action.Enable();
+        }
+    }
+
 }
