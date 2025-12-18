@@ -145,7 +145,7 @@ MonoBehaviour:
   dashCooldown: 0.6
   dashUsesMoveInput: 1
   dashPreserveVerticalVelocity: 0
-  wallJumpUnlocked: 0
+  wallJumpUnlocked: 1
   wallLayers:
     serializedVersion: 2
     m_Bits: 1
