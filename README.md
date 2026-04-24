@@ -155,14 +155,12 @@ Finally, working in a two-person team on a shared Unity project exposed me to th
 > Add screenshots here by replacing the placeholders below.
 > Recommended: one image per section (main menu, starting area, ability unlock room, main area, HUD, toon shader close-up).
 
-```
 ![Main Menu](screenshots/main_menu.png)
 ![Starting Area](screenshots/starting_area.png)
 ![Double Jump Tutorial](screenshots/double_jump_room.png)
 ![Wall Jump Tutorial](screenshots/wall_jump_room.png)
 ![Main Area](screenshots/main_area.png)
 ![Toon Shader Detail](screenshots/toon_shader.png)
-```
 
 To capture screenshots in the Unity Editor, use **Window → General → Game View** at your target resolution, then take a screenshot with your OS tool or use Unity's `ScreenCapture.CaptureScreenshot()` in a quick editor script.
 
